@@ -30,7 +30,8 @@
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
-    "test": "vitest"
+    "test": "vitest run --coverage ; yarn open-coverage",
+    "open-coverage": "tsx ./scripts/open-coverage.ts"
   },
   "dependencies": {
     "@clerk/nuxt": "1.7.5",
