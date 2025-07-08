@@ -6,6 +6,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       reporter: ["text", "html"],
+      include: ["server/repositories/**/*.ts"],
     },
   },
   resolve: {
