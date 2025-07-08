@@ -21,7 +21,7 @@ export interface IWorkspace {
   members?: TArray<IWorkspaceMember>;
 }
 export type IWorkspaceCreate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "companyInfo" | "productOrService" | "values" | "createdAt" | "updatedAt" | "members">;
-export type IWorkspaceUpdate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "createdAt" | "updatedAt" | "members">;
+export type IWorkspaceUpdate = Partial<Omit<IWorkspace, "id" | "picture" | "ownerId" | "createdAt" | "updatedAt" | "members">>;
 
 export interface IWorkspaceMember {
   workspaceId: number;
