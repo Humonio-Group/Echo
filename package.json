@@ -32,6 +32,7 @@
     "db:seed": "prisma db seed"
   },
   "dependencies": {
+    "@clerk/nuxt": "1.7.5",
     "@nuxt/eslint": "1.5.2",
     "@nuxt/image": "1.10.0",
     "@nuxtjs/color-mode": "3.5.2",

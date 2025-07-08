@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@nuxtjs/google-fonts",
     "@pinia/nuxt",
+    "@clerk/nuxt",
   ],
   devtools: { enabled: true },
   css: ["./base.css"],
@@ -20,8 +21,14 @@ export default defineNuxtConfig({
     fallback: "light",
   },
   runtimeConfig: {
+    clerk: {
+      secretKey: "",
+    },
     public: {
       environment: "",
+      clerk: {
+        publishableKey: "",
+      },
     },
   },
   compatibilityDate: "2025-05-15",
