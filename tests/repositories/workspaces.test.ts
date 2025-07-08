@@ -18,142 +18,88 @@ describe("workspace respository", () => {
     vi.clearAllMocks();
   });
 
-  it("should create a workspace with a default admin user", async () => {
-    const expectedWorkspace = {
-      id: 1,
-      name: "testing",
-      description: "testing",
-      companyInfo: "",
-      productOrService: "",
-      values: "",
-      ownerId: "testing",
-      createdAt: "",
-      updatedAt: "",
-      members: [
-        {
-          workspaceId: 1,
-          userId: "testing",
-          role: "admin",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    };
-    const mockUserId = "testing";
-    const mockData = {
-      name: "testing",
-      description: "testing",
-    };
+  describe("workspaceRepository.create", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
 
-    (prisma.workspace.create as any).mockResolvedValue(expectedWorkspace);
-
-    const result = await workspaces.create(mockUserId, mockData);
-
-    expect(prisma.workspace.create).toHaveBeenCalledWith({
-      data: {
-        ...mockData,
-        ownerId: mockUserId,
-        members: {
-          create: {
-            userId: mockUserId,
+    it("should create a workspace with a default admin user", async () => {
+      const expectedWorkspace = {
+        id: 1,
+        name: "testing",
+        description: "testing",
+        companyInfo: "",
+        productOrService: "",
+        values: "",
+        ownerId: "testing",
+        createdAt: "",
+        updatedAt: "",
+        members: [
+          {
+            workspaceId: 1,
+            userId: "testing",
             role: "admin",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        ],
+      };
+      const mockUserId = "testing";
+      const mockData = {
+        name: "testing",
+        description: "testing",
+      };
+
+      (prisma.workspace.create as any).mockResolvedValue(expectedWorkspace);
+
+      const result = await workspaces.create(mockUserId, mockData);
+
+      expect(prisma.workspace.create).toHaveBeenCalledWith({
+        data: {
+          ...mockData,
+          ownerId: mockUserId,
+          members: {
+            create: {
+              userId: mockUserId,
+              role: "admin",
+            },
           },
         },
-      },
-      include: { members: true },
+        include: { members: true },
+      });
+      expect(result).toEqual(expectedWorkspace);
     });
-    expect(result).toEqual(expectedWorkspace);
   });
 
-  it("should not find the workspace with the specified id", async () => {
-    (prisma.workspace.findUnique as any).mockResolvedValue(false);
-
-    expect(await workspaces.exists(2)).toBe(false);
-  });
-
-  it("should update a workspace with the new data", async () => {
-    const expectedWorkspace = {
-      id: 1,
-      name: "testing",
-      description: "testing - bis",
-      companyInfo: "",
-      productOrService: "",
-      values: "",
-      ownerId: "testing",
-      createdAt: "",
-      updatedAt: "",
-      members: [
-        {
-          workspaceId: 1,
-          userId: "testing",
-          role: "admin",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    };
-    const mockWorkspaceId = 1;
-    const mockData = {
-      description: "testing - bis",
-    };
-
-    (prisma.workspace.findUnique as any).mockResolvedValue(true);
-    (prisma.workspace.update as any).mockResolvedValue(expectedWorkspace);
-
-    const result = await workspaces.update(mockWorkspaceId, mockData);
-
-    expect(prisma.workspace.update).toHaveBeenCalledWith({
-      where: {
-        id: mockWorkspaceId,
-      },
-      data: mockData,
-      include: { members: true },
+  describe("workspaceRepository.exists", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
     });
-    expect(result).toEqual(expectedWorkspace);
-  });
 
-  it("should delete a workspace and return its data", async () => {
-    const expectedWorkspace = {
-      id: 1,
-      name: "testing",
-      description: "testing - bis",
-      companyInfo: "",
-      productOrService: "",
-      values: "",
-      ownerId: "testing",
-      createdAt: "",
-      updatedAt: "",
-      members: [
-        {
-          workspaceId: 1,
-          userId: "testing",
-          role: "admin",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    };
-    const mockWorkspaceId = 1;
+    it("should not find the workspace with the specified id", async () => {
+      (prisma.workspace.findUnique as any).mockResolvedValue(false);
 
-    (prisma.workspace.findUnique as any).mockResolvedValue(true);
-    (prisma.workspace.delete as any).mockResolvedValue(expectedWorkspace);
-
-    const result = await workspaces.destroy(mockWorkspaceId);
-
-    expect(prisma.workspace.delete).toBeCalledWith({
-      where: {
-        id: mockWorkspaceId,
-      },
-      include: {
-        members: true,
-      },
+      expect(await workspaces.exists(2)).toBe(false);
     });
-    expect(result).toEqual(expectedWorkspace);
   });
 
-  it("should recover a list of workspaces with basic info", async () => {
-    const expectedList = [
-      {
+  describe("workspaceRepository.update", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should throw a 'Not Found Error'", async () => {
+      const mockWorkspaceId = 1;
+      const mockData = {
+        description: "testing - bis",
+      };
+
+      (prisma.workspace.findUnique as any).mockResolvedValue(false);
+
+      await expect(() => workspaces.update(mockWorkspaceId, mockData)).rejects.toThrow("Workspace not found");
+    });
+    it("should update a workspace with the new data", async () => {
+      const expectedWorkspace = {
         id: 1,
         name: "testing",
         description: "testing - bis",
@@ -172,9 +118,43 @@ describe("workspace respository", () => {
             updatedAt: new Date(),
           },
         ],
-      },
-      {
-        id: 2,
+      };
+      const mockWorkspaceId = 1;
+      const mockData = {
+        description: "testing - bis",
+      };
+
+      (prisma.workspace.findUnique as any).mockResolvedValue(true);
+      (prisma.workspace.update as any).mockResolvedValue(expectedWorkspace);
+
+      const result = await workspaces.update(mockWorkspaceId, mockData);
+
+      expect(prisma.workspace.update).toHaveBeenCalledWith({
+        where: {
+          id: mockWorkspaceId,
+        },
+        data: mockData,
+        include: { members: true },
+      });
+      expect(result).toEqual(expectedWorkspace);
+    });
+  });
+
+  describe("workspaceRepository.delete", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should throw a 'Not Found Error'", async () => {
+      const mockWorkspaceId = 1;
+
+      (prisma.workspace.findUnique as any).mockResolvedValue(false);
+
+      await expect(() => workspaces.destroy(mockWorkspaceId)).rejects.toThrow("Workspace not found");
+    });
+    it("should delete a workspace and return its data", async () => {
+      const expectedWorkspace = {
+        id: 1,
         name: "testing",
         description: "testing - bis",
         companyInfo: "",
@@ -185,75 +165,155 @@ describe("workspace respository", () => {
         updatedAt: "",
         members: [
           {
-            workspaceId: 2,
+            workspaceId: 1,
             userId: "testing",
             role: "admin",
             createdAt: new Date(),
             updatedAt: new Date(),
           },
+        ],
+      };
+      const mockWorkspaceId = 1;
+
+      (prisma.workspace.findUnique as any).mockResolvedValue(true);
+      (prisma.workspace.delete as any).mockResolvedValue(expectedWorkspace);
+
+      const result = await workspaces.destroy(mockWorkspaceId);
+
+      expect(prisma.workspace.delete).toBeCalledWith({
+        where: {
+          id: mockWorkspaceId,
+        },
+        include: {
+          members: true,
+        },
+      });
+      expect(result).toEqual(expectedWorkspace);
+    });
+  });
+
+  describe("workspaceRepository.findForUser", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should recover a list of workspaces with basic info", async () => {
+      const expectedList = [
+        {
+          id: 1,
+          name: "testing",
+          description: "testing - bis",
+          companyInfo: "",
+          productOrService: "",
+          values: "",
+          ownerId: "testing",
+          createdAt: "",
+          updatedAt: "",
+          members: [
+            {
+              workspaceId: 1,
+              userId: "testing",
+              role: "admin",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+        },
+        {
+          id: 2,
+          name: "testing",
+          description: "testing - bis",
+          companyInfo: "",
+          productOrService: "",
+          values: "",
+          ownerId: "testing",
+          createdAt: "",
+          updatedAt: "",
+          members: [
+            {
+              workspaceId: 2,
+              userId: "testing",
+              role: "admin",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            {
+              workspaceId: 4,
+              userId: "other-user",
+              role: "member",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          ],
+        },
+      ];
+      const mockUserId = "testing";
+
+      (prisma.workspace.findMany as any).mockResolvedValue(expectedList);
+
+      const result = await workspaces.findForUser(mockUserId);
+      expect(prisma.workspace.findMany).toBeCalledWith({
+        where: {
+          members: {
+            some: {
+              userId: mockUserId,
+            },
+          },
+        },
+      });
+      expect(result).toHaveLength(2);
+      expect(result).toEqual(expectedList);
+    });
+  });
+
+  describe("workspaceRepository.find", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should throw a 'Not Found Error'", async () => {
+      const mockWorkspaceId = 1;
+
+      (prisma.workspace.findUnique as any).mockResolvedValue(false);
+
+      await expect(() => workspaces.find(mockWorkspaceId)).rejects.toThrow("Workspace not found");
+    });
+    it("should recover the targeted workspace", async () => {
+      const expectedWorkspace = {
+        id: 1,
+        name: "testing",
+        description: "testing",
+        companyInfo: "",
+        productOrService: "",
+        values: "",
+        ownerId: "testing",
+        createdAt: "",
+        updatedAt: "",
+        members: [
           {
-            workspaceId: 4,
-            userId: "other-user",
-            role: "member",
+            workspaceId: 1,
+            userId: "testing",
+            role: "admin",
             createdAt: new Date(),
             updatedAt: new Date(),
           },
         ],
-      },
-    ];
-    const mockUserId = "testing";
+      };
+      const mockWorkspaceId = 1;
 
-    (prisma.workspace.findMany as any).mockResolvedValue(expectedList);
+      (prisma.workspace.findUnique as any).mockResolvedValue(expectedWorkspace);
 
-    const result = await workspaces.findForUser(mockUserId);
-    expect(prisma.workspace.findMany).toBeCalledWith({
-      where: {
-        members: {
-          some: {
-            userId: mockUserId,
-          },
+      const result = await workspaces.find(mockWorkspaceId);
+
+      expect(prisma.workspace.findUnique).toBeCalledWith({
+        where: {
+          id: mockWorkspaceId,
         },
-      },
-    });
-    expect(result).toHaveLength(2);
-    expect(result).toEqual(expectedList);
-  });
-
-  it("should recover the targeted workspace", async () => {
-    const expectedWorkspace = {
-      id: 1,
-      name: "testing",
-      description: "testing",
-      companyInfo: "",
-      productOrService: "",
-      values: "",
-      ownerId: "testing",
-      createdAt: "",
-      updatedAt: "",
-      members: [
-        {
-          workspaceId: 1,
-          userId: "testing",
-          role: "admin",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+        include: {
+          members: true,
         },
-      ],
-    };
-    const mockWorkspaceId = 1;
-
-    (prisma.workspace.findUnique as any).mockResolvedValue(expectedWorkspace);
-
-    const result = await workspaces.find(mockWorkspaceId);
-
-    expect(prisma.workspace.findUnique).toBeCalledWith({
-      where: {
-        id: mockWorkspaceId,
-      },
-      include: {
-        members: true,
-      },
+      });
+      expect(result).toEqual(expectedWorkspace);
     });
-    expect(result).toEqual(expectedWorkspace);
   });
 });
