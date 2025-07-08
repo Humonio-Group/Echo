@@ -1,0 +1,54 @@
+{
+  "name": "echo",
+  "version": "a0.1.0",
+  "author": "Loïc MAES",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "yarn@1.22.22",
+  "repository": {
+    "url": "https://github.com/humonio-group/echo"
+  },
+  "bugs": {
+    "email": "contact@humonio.com",
+    "url": "https://github.com/humonio-group/echo/issues"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "start": "node .output/server/index.mjs",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --fix",
+    "add:component": "tsx ./scripts/shadcn-add.ts",
+    "add:module": "tsx ./scripts/nuxt-module-add.ts",
+    "db:migrate": "prisma migrate dev --name",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "1.5.2",
+    "@nuxt/image": "1.10.0",
+    "@nuxtjs/color-mode": "3.5.2",
+    "@nuxtjs/google-fonts": "3.2.0",
+    "@nuxtjs/i18n": "9.5.6",
+    "@pinia/nuxt": "0.11.1",
+    "@tailwindcss/vite": "^4.1.11",
+    "eslint": "^9.0.0",
+    "nuxt": "^3.17.6",
+    "pinia": "^3.0.3",
+    "shadcn-nuxt": "2.2.0",
+    "tailwindcss": "^4.1.11",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
