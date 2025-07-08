@@ -9,6 +9,7 @@ import "vue-sonner/style.css";
     <Toaster
       position="top-center"
       rich-colors
+      close-button
     />
     <NuxtLayout />
   </div>
