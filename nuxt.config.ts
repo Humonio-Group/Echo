@@ -19,12 +19,12 @@ export default defineNuxtConfig({
     preference: "system",
     fallback: "light",
   },
-  compatibilityDate: "2025-05-15",
   runtimeConfig: {
     public: {
       environment: "",
     },
   },
+  compatibilityDate: "2025-05-15",
   vite: {
     plugins: [
       tailwindcss(),
