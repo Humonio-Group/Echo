@@ -10,7 +10,7 @@ export default withNuxt([
     files: ["**/*.test.ts"],
     rules: {
       "import/first": "off",
-      "no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ]);
