@@ -13,7 +13,7 @@ vi.mock("~/prisma", () => ({
 import * as workspaces from "~/server/repositories/workspaces";
 import prisma from "~/prisma";
 
-describe("workspace respository", () => {
+describe("manage workspaces", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
