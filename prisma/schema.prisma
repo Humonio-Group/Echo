@@ -16,11 +16,11 @@ enum Role {
 model Workspace {
   id               Int      @id @default(autoincrement())
   name             String
-  description      String
+  description      String?
   picture          String?
-  companyInfo      String
-  productOrService String
-  values           String
+  companyInfo      String   @default("")
+  productOrService String   @default("")
+  values           String   @default("")
   ownerId          String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
