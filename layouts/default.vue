@@ -4,14 +4,14 @@
 
 <template>
   <div data-layout="default">
-    <header class="flex items-center px-4 h-16 justify-between border-b">
+    <header class="flex items-center py-4 px-6 justify-between border-b">
       <p class="font-bold">
         echo.
       </p>
 
       <UserButton />
     </header>
-    <main class="p-4">
+    <main class="py-4 px-6">
       <NuxtPage />
     </main>
   </div>
