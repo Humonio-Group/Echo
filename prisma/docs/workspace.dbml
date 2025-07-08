@@ -1,0 +1,30 @@
+TableGroup WorkspaceManagement [color: #DE65C3] {
+  workspace
+  workspaceMember
+}
+
+Enum Role {
+  member
+  admin
+}
+
+Table workspace {
+  id int pk
+  name string
+  description string
+  picture string
+  companyInfo string
+  productOrService string
+  values string
+  ownerId string
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table workspaceMember {
+  workspaceId int pk [ref: > workspace.id]
+  userId string pk
+  role Role [default: "member"]
+  createdAt datetime
+  updatedAt datetime
+}
