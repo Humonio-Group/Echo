@@ -3,6 +3,7 @@ import { LoaderCircle, Plus } from "lucide-vue-next";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
+import OptionalStatus from "~/components/shared/statuses/OptionalStatus.vue";
 
 const loading = ref<boolean>(false);
 
@@ -44,8 +45,21 @@ const submit = handleSubmit(async () => {
           <FormLabel>{{ $t("labels.fields.name") }}</FormLabel>
           <FormControl v-bind="componentField">
             <Input
-              placeholder="ex. Humonio"
-              :disabled="loading"
+              :placeholder="`ex. ${$t('brand.name')}`"
+              :disabled="loading.creatingWorkspace"
+            />
+          </FormControl>
+        </FormField>
+        <FormField
+          v-slot="{ componentField }"
+          name="description"
+        >
+          <FormLabel>{{ $t("labels.fields.description") }} <OptionalStatus /></FormLabel>
+          <FormControl v-bind="componentField">
+            <Textarea
+              :placeholder="`ex. ${$t('welcome-on', { brand: $t('brand.name') })}`"
+              class="min-h-32"
+              :disabled="loading.creatingWorkspace"
             />
           </FormControl>
         </FormField>
