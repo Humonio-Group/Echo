@@ -1,11 +1,12 @@
 import type { TArray, TNull } from "~/types/globals/utils";
-import type { IWorkspace } from "~/types/workspaces";
+import type { IWorkspace, IWorkspaceCreate } from "~/types/workspaces";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
   workspaces: TNull<TArray<IWorkspace>>;
   loading: {
     workspaces: boolean;
+    creatingWorkspace: boolean;
   };
 }
 
@@ -15,35 +16,55 @@ export const useWorkspaceStore = defineStore("workspaces", {
     workspaces: null,
     loading: {
       workspaces: false,
+      creatingWorkspace: false,
     },
   }),
   getters: {
     translate: () => useNuxtApp().$i18n.t,
     isFirstLoading: state => !state.workspaces,
-    isLoadingList: state => state.loading.workspaces,
   },
   actions: {
+    selectWorkspace(id: number) {
+      if (!this.workspaces?.length) return;
+      this.workspace = this.workspaces.find(w => w.id === id) ?? null;
+    },
     async loadWorkspaces() {
       this.loading.workspaces = true;
 
-      await useWait(useMinMaxRandom(1000, 2000));
-      this.workspaces = [
-        {
-          id: 1,
-          name: "Humonio",
-          description: null,
-          picture: null,
-          companyInfo: "Humonio",
-          productOrService: "Humonio",
-          values: "Humonio",
-          ownerId: "loicmaes",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          members: [],
-        },
-      ];
+      try {
+        const { data } = await useFetch<TArray<IWorkspace>>("/api/workspaces");
+        if (!data.value) {
+          this.workspaces = [];
+          return;
+        }
+        this.workspaces = data.value;
+      }
+      catch (e) {
+        console.error(e);
+      }
+      finally {
+        this.loading.workspaces = false;
+      }
+    },
+    async createWorkspace(body: IWorkspaceCreate) {
+      this.loading.creatingWorkspace = true;
 
-      this.loading.workspaces = false;
+      try {
+        const workspace = await $fetch<IWorkspace>("/api/workspaces", {
+          method: "POST",
+          body,
+        });
+
+        if (!this.workspaces) this.workspaces = [];
+        this.workspaces = [...this.workspaces, workspace];
+        // TODO: toast
+      }
+      catch (e) {
+        console.error(e);
+      }
+      finally {
+        this.loading.creatingWorkspace = false;
+      }
     },
   },
 });
