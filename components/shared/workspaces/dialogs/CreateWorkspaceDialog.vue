@@ -8,22 +8,31 @@ import OptionalStatus from "~/components/shared/statuses/OptionalStatus.vue";
 const open = ref<boolean>(false);
 watch(open, () => resetForm());
 
-const loading = ref<boolean>(false);
+const { user } = useUser();
 
-const { handleSubmit } = useForm({
+const store = useWorkspaceStore();
+const { loading } = storeToRefs(store);
+
+const { handleSubmit, resetForm } = useForm({
   validationSchema: toTypedSchema(z.object({
     name: z.string().min(1),
+    description: z.string().optional(),
   })),
+  initialValues: {
+    name: `${user.value?.firstName}'s Workspace`,
+    description: undefined,
+  },
 });
-const submit = handleSubmit(async () => {
-  loading.value = true;
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  loading.value = false;
+const submit = handleSubmit(async (values) => {
+  await store.createWorkspace({
+    ...values,
+    description: values.description ?? null,
+  });
 });
 </script>
 
 <template>
-  <Dialog>
+  <Dialog v-model:open="open">
     <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
@@ -72,7 +81,7 @@ const submit = handleSubmit(async () => {
             <Button
               type="button"
               variant="secondary"
-              :disabled="loading"
+              :disabled="loading.creatingWorkspace"
             >
               {{ $t("btn.cancel") }}
             </Button>
@@ -80,10 +89,10 @@ const submit = handleSubmit(async () => {
 
           <Button
             type="submit"
-            :disabled="loading"
+            :disabled="loading.creatingWorkspace"
           >
             <LoaderCircle
-              v-if="loading"
+              v-if="loading.creatingWorkspace"
               class="animate-spin"
             />
             <Plus v-else />
