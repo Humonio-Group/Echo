@@ -6,6 +6,7 @@ TableGroup WorkspaceManagement [color: #DE65C3] {
 Enum Role {
   member
   admin
+  observer
 }
 
 Table workspace {

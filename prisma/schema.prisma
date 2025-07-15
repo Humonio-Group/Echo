@@ -11,6 +11,7 @@ datasource db {
 enum Role {
   member
   admin
+  observer
 }
 
 model Workspace {

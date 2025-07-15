@@ -3,6 +3,7 @@ import type { TArray, TNull } from "~/types/globals/utils";
 export const roles = [
   "member",
   "admin",
+  "observer",
 ] as const;
 export type ERole = typeof roles[number];
 
