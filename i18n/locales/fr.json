@@ -1,3 +1,25 @@
 {
-  "hello-world": "Bonjour monde,"
+  "btn": {
+    "cancel": "Annuler",
+    "add": {
+      "default": "Ajouter",
+      "workspace": "Ajouter un espace de travail"
+    }
+  },
+  "dialogs": {
+    "workspaces": {
+      "create-workspace": {
+        "title": "Nouvel espace de travail",
+        "caption": "Un espace de travail, c’est ton point de départ pour organiser Humonio Echo selon tes besoins."
+      }
+    }
+  },
+  "labels": {
+    "empty": {
+      "workspaces": "Aucun espace de travail pour le moment..."
+    },
+    "fields": {
+      "name": "Nom"
+    }
+  }
 }
