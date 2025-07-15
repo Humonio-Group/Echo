@@ -5,6 +5,9 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 import OptionalStatus from "~/components/shared/statuses/OptionalStatus.vue";
 
+const open = ref<boolean>(false);
+watch(open, () => resetForm());
+
 const loading = ref<boolean>(false);
 
 const { handleSubmit } = useForm({
