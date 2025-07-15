@@ -51,17 +51,19 @@ const { workspaces, loading } = storeToRefs(store);
           {{ $t("labels.empty.workspaces") }}
         </p>
 
-        <CreateWorkspaceDialog>
-          <Button>
-            <Plus />
-            {{ $t("btn.add.workspace") }}
-          </Button>
-        </CreateWorkspaceDialog>
+        <template v-if="!store.isFirstLoading">
+          <CreateWorkspaceDialog>
+            <Button>
+              <Plus />
+              {{ $t("btn.add.workspace") }}
+            </Button>
+          </CreateWorkspaceDialog>
+        </template>
       </div>
     </main>
 
     <footer
-      v-if="workspaces?.length"
+      v-if="!store.isFirstLoading && workspaces?.length"
       class="flex flex-col sm:items-center py-4"
     >
       <CreateWorkspaceDialog>
