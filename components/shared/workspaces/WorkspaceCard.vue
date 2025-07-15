@@ -22,6 +22,9 @@ defineProps<{
       </p>
     </CardContent>
 
-    <!-- todo: link -->
+    <NuxtLinkLocale
+      :to="`/${workspace.id}`"
+      class="absolute inset-0 z-[1]"
+    />
   </Card>
 </template>
