@@ -5,7 +5,7 @@
 <template>
   <div
     data-layout="auth"
-    class="min-h-dvh grid place-items-center"
+    class="min-h-dvh grid place-items-center px-6"
   >
     <NuxtPage />
   </div>
