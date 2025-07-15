@@ -2,6 +2,7 @@
 import { LoaderCircle, Plus } from "lucide-vue-next";
 import WorkspaceCard from "~/components/shared/workspaces/WorkspaceCard.vue";
 import CreateWorkspaceDialog from "~/components/shared/workspaces/dialogs/CreateWorkspaceDialog.vue";
+import BrandName from "~/components/shared/statuses/BrandName.vue";
 
 definePageMeta({
   layout: "auth",
@@ -17,9 +18,7 @@ const { workspaces, loading } = storeToRefs(store);
     class="w-full max-w-lg min-h-dvh sm:min-h-auto flex flex-col gap-4"
   >
     <header class="flex items-center justify-between py-4">
-      <p class="font-bold bg-gradient-to-r from-primary to-primary-gradient text-transparent bg-clip-text">
-        echo.
-      </p>
+      <BrandName />
 
       <UserButton />
     </header>

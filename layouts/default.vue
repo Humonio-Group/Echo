@@ -1,13 +1,11 @@
 <script setup lang="ts">
-
+import BrandName from "~/components/shared/statuses/BrandName.vue";
 </script>
 
 <template>
   <div data-layout="default">
     <header class="flex items-center py-4 px-6 justify-between border-b">
-      <p class="font-bold">
-        echo.
-      </p>
+      <BrandName />
 
       <UserButton />
     </header>
