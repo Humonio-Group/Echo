@@ -1,5 +1,5 @@
 import type { TArray, TNull } from "~/types/globals/utils";
-import type { IWorkspace, IWorkspaceCreate } from "~/types/workspaces";
+import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
@@ -7,6 +7,7 @@ interface WorkspacesState {
   loading: {
     workspaces: boolean;
     creatingWorkspace: boolean;
+    savingWorkspace: boolean;
   };
 }
 
@@ -17,6 +18,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
     loading: {
       workspaces: false,
       creatingWorkspace: false,
+      savingWorkspace: false,
     },
   }),
   getters: {
@@ -69,6 +71,32 @@ export const useWorkspaceStore = defineStore("workspaces", {
       }
       finally {
         this.loading.creatingWorkspace = false;
+      }
+
+      return state;
+    },
+    async saveWorkspaceInfo(body: IWorkspaceUpdate): Promise<boolean> {
+      if (!this.workspace) return false;
+      const id = this.workspace.id;
+
+      this.loading.savingWorkspace = true;
+      let state = true;
+
+      try {
+        const workspace = await $fetch<IWorkspace>(`/api/workspaces/${id}`, {
+          method: "PUT",
+          body,
+        });
+
+        this.workspaces = this.workspaces?.map(w => w.id === id ? workspace : w) ?? [workspace];
+        this.workspace = workspace;
+        // TODO: toast
+      }
+      catch {
+        state = false;
+      }
+      finally {
+        this.loading.savingWorkspace = false;
       }
 
       return state;

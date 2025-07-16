@@ -1,6 +1,6 @@
 import type { HttpEvent } from "~/types/globals/http";
 import { StatusCode } from "~/types/globals/http";
-import type { IWorkspaceCreate } from "~/types/workspaces";
+import type { IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
 import { catchError, setOutput } from "~/server/services/globals/errors";
 import type { EchoError } from "~/types/globals/errors";
 import { EchoBadRequestError } from "~/types/globals/errors";
@@ -36,6 +36,21 @@ export async function recoverWorkspace(event: HttpEvent) {
 
   try {
     return await workspaces.find(Number(workspaceId));
+  }
+  catch (e) {
+    return catchError(event, e as EchoError);
+  }
+}
+
+export async function updateWorkspace(event: HttpEvent) {
+  const body = await readBody<IWorkspaceUpdate>(event);
+  const { id } = event.context.workspace;
+
+  try {
+    const workspace = await workspaces.update(id, body);
+
+    setOutput(event, StatusCode.ACCEPTED, `Workspace "${workspace.name}" updated`);
+    return workspace;
   }
   catch (e) {
     return catchError(event, e as EchoError);
