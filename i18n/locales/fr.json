@@ -5,6 +5,7 @@
   "welcome-on": "Bienvenue sur Humonio {brand}",
   "btn": {
     "cancel": "Annuler",
+    "save": "Enregistrer",
     "add": {
       "default": "Ajouter",
       "workspace": "Ajouter un espace de travail"
@@ -15,6 +16,10 @@
       "create-workspace": {
         "title": "Nouvel espace de travail",
         "caption": "Un espace de travail, c’est ton point de départ pour organiser Humonio Echo selon tes besoins."
+      },
+      "settings": {
+        "title": "Paramètres de l'espace de travail",
+        "caption": "Personnalise ton espace pour qu’il reflète ta manière de travailler. Nom, description, objectifs… ajuste les éléments clés avant de te lancer."
       }
     }
   },
@@ -25,7 +30,10 @@
     },
     "fields": {
       "name": "Nom",
-      "description": "Description"
+      "description": "Description",
+      "company-info": "Informations de l'entreprise",
+      "product-or-service": "Produits ou Services",
+      "values": "Valeurs"
     }
   },
   "navigation": {

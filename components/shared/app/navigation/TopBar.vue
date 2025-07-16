@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Home, Plus, Settings } from "lucide-vue-next";
 import BrandName from "~/components/shared/statuses/BrandName.vue";
+import WorkspaceSettingsDialog from "~/components/shared/workspaces/dialogs/WorkspaceSettingsDialog.vue";
 </script>
 
 <template>
@@ -58,12 +59,14 @@ import BrandName from "~/components/shared/statuses/BrandName.vue";
     </nav>
 
     <div class="flex items-center gap-2">
-      <Button
-        size="icon"
-        variant="ghost"
-      >
-        <Settings />
-      </Button>
+      <WorkspaceSettingsDialog>
+        <Button
+          size="icon"
+          variant="ghost"
+        >
+          <Settings />
+        </Button>
+      </WorkspaceSettingsDialog>
       <Button
         size="icon"
         class="hidden md:flex mr-4"
