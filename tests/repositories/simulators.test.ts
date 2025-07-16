@@ -3,9 +3,9 @@ vi.mock("~/prisma", () => ({
     simulator: {
       create: vi.fn(),
       findMany: vi.fn(),
+      findUnique: vi.fn(),
       /* TODO:
       update: vi.fn(),
-      findUnique: vi.fn(),
       delete: vi.fn(),
        */
     },
@@ -138,6 +138,70 @@ describe("manage simulators", () => {
       });
       expect(result).toHaveLength(2);
       expect(result).toEqual(expectedList);
+    });
+  });
+
+  describe("simulatorRepository.get", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should throw a not found error", async () => {
+      const mockSimulatorId = 1;
+
+      (prisma.simulator.findUnique as any).mockResolvedValue(false);
+
+      await expect(() => simulators.get(mockSimulatorId)).rejects.toThrow("Simulator not found");
+    });
+
+    it("should recover the given simulator", async () => {
+      const expectedSimulator = {
+        id: 1,
+        workspaceId: null,
+        title: "ROPE Communicant",
+        description: "Communique suivant le framework ROPE.",
+        picture: null,
+        duration: 15,
+        behaviorPrompt: "Prompt de comportement",
+        createdBy: "system",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        prepQuestions: [
+          {
+            id: 1,
+            label: "Quel est ton nom ?",
+          },
+          {
+            id: 2,
+            label: "Quel est ton prénom ?",
+          },
+        ],
+        evaluations: [
+          {
+            id: 1,
+            frameworkPrompt: "framework prompt",
+            assessmentPrompt: "assessment prompt",
+            feedbackPrompt: "feedback prompt",
+          },
+        ],
+      };
+      const mockSimulatorId = 1;
+
+      (prisma.simulator.findUnique as any).mockResolvedValue(expectedSimulator);
+
+      const result = await simulators.get(mockSimulatorId);
+
+      expect(prisma.simulator.findUnique).toHaveBeenLastCalledWith({
+        where: {
+          id: mockSimulatorId,
+          workspaceId: null,
+        },
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      });
+      expect(result).toEqual(expectedSimulator);
     });
   });
 });

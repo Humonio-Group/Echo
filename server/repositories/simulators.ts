@@ -1,6 +1,7 @@
 import type { ISimulator, ISimulatorCreate } from "~/types/simulators";
 import prisma from "~/prisma";
 import type { TArray, TNull } from "~/types/globals/utils";
+import { EchoNotFoundError } from "~/types/globals/errors";
 
 /**
  * Create a simulator
@@ -55,4 +56,25 @@ export async function getAll(workspaceId: number): Promise<TArray<ISimulator>> {
       evaluations: true,
     },
   });
+}
+
+/**
+ * Recover a public simulator template
+ * @param {number} id - Unique id of the simulator template
+ * @returns {ISimulator} - The recovered simulator
+ * @throws {EchoNotFoundError} if the queried simulator is not found
+ */
+export async function get(id: number): Promise<ISimulator> {
+  const simulator = await prisma.simulator.findUnique({
+    where: {
+      id,
+      workspaceId: null,
+    },
+    include: {
+      prepQuestions: true,
+      evaluations: true,
+    },
+  });
+  if (!simulator) throw new EchoNotFoundError("Simulator not found");
+  return simulator;
 }
