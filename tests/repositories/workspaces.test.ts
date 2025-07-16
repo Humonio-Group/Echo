@@ -65,7 +65,15 @@ describe("manage workspaces", () => {
             },
           },
         },
-        include: { members: true },
+        include: {
+          members: true,
+          simulators: {
+            include: {
+              prepQuestions: true,
+              evaluations: true,
+            },
+          },
+        },
       });
       expect(result).toEqual(expectedWorkspace);
     });
@@ -134,7 +142,15 @@ describe("manage workspaces", () => {
           id: mockWorkspaceId,
         },
         data: mockData,
-        include: { members: true },
+        include: {
+          members: true,
+          simulators: {
+            include: {
+              prepQuestions: true,
+              evaluations: true,
+            },
+          },
+        },
       });
       expect(result).toEqual(expectedWorkspace);
     });
@@ -186,6 +202,12 @@ describe("manage workspaces", () => {
         },
         include: {
           members: true,
+          simulators: {
+            include: {
+              prepQuestions: true,
+              evaluations: true,
+            },
+          },
         },
       });
       expect(result).toEqual(expectedWorkspace);
@@ -260,6 +282,15 @@ describe("manage workspaces", () => {
             },
           },
         },
+        include: {
+          members: true,
+          simulators: {
+            include: {
+              prepQuestions: true,
+              evaluations: true,
+            },
+          },
+        },
       });
       expect(result).toHaveLength(2);
       expect(result).toEqual(expectedList);
@@ -298,6 +329,7 @@ describe("manage workspaces", () => {
             updatedAt: new Date(),
           },
         ],
+        simulators: [],
       };
       const mockWorkspaceId = 1;
 
@@ -305,12 +337,18 @@ describe("manage workspaces", () => {
 
       const result = await workspaces.find(mockWorkspaceId);
 
-      expect(prisma.workspace.findUnique).toBeCalledWith({
+      expect(prisma.workspace.findUnique).toHaveBeenLastCalledWith({
         where: {
           id: mockWorkspaceId,
         },
         include: {
           members: true,
+          simulators: {
+            include: {
+              prepQuestions: true,
+              evaluations: true,
+            },
+          },
         },
       });
       expect(result).toEqual(expectedWorkspace);

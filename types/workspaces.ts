@@ -1,4 +1,5 @@
 import type { TArray, TNull } from "~/types/globals/utils";
+import type { ISimulator } from "~/types/simulators";
 
 export const roles = [
   "member",
@@ -20,9 +21,10 @@ export interface IWorkspace {
   updatedAt: Date;
 
   members?: TArray<IWorkspaceMember>;
+  simulators?: TArray<ISimulator>;
 }
-export type IWorkspaceCreate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "companyInfo" | "productOrService" | "values" | "createdAt" | "updatedAt" | "members">;
-export type IWorkspaceUpdate = Partial<Omit<IWorkspace, "id" | "picture" | "ownerId" | "createdAt" | "updatedAt" | "members">>;
+export type IWorkspaceCreate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "companyInfo" | "productOrService" | "values" | "createdAt" | "updatedAt" | "members" | "simulators">;
+export type IWorkspaceUpdate = Partial<Omit<IWorkspace, "id" | "picture" | "ownerId" | "createdAt" | "updatedAt" | "members" | "simulators">>;
 
 export interface IWorkspaceMember {
   workspaceId: number;
