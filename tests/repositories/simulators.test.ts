@@ -41,6 +41,7 @@ describe("manage simulators", () => {
         evaluations: [],
       };
       const mockUserId = "testing";
+      const mockWorkspaceId = 1;
       const mockData = {
         title: "Simulator",
         description: "Simulator",
@@ -52,10 +53,11 @@ describe("manage simulators", () => {
 
       (prisma.simulator.create as any).mockResolvedValue(expectedSimulator);
 
-      const result = await simulators.create(mockUserId, mockData);
+      const result = await simulators.create(mockUserId, mockWorkspaceId, mockData);
       expect(prisma.simulator.create).toHaveBeenCalledWith({
         data: {
           ...mockData,
+          workspaceId: mockWorkspaceId,
           createdBy: mockUserId,
           prepQuestions: {
             createMany: {

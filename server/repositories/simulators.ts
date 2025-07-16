@@ -1,17 +1,19 @@
 import type { ISimulator, ISimulatorCreate } from "~/types/simulators";
 import prisma from "~/prisma";
-import type { TArray } from "~/types/globals/utils";
+import type { TArray, TNull } from "~/types/globals/utils";
 
 /**
  * Create a simulator
  * @param {string} userId - Clerk client issuer id
+ * @param {TNull<number>} workspaceId - Current working workspace id
  * @param {ISimulatorCreate} data - Provided data
  * @returns {ISimulator} - The created simulator info
  */
-export async function create(userId: string, data: ISimulatorCreate): Promise<ISimulator> {
+export async function create(userId: string, workspaceId: TNull<number>, data: ISimulatorCreate): Promise<ISimulator> {
   return prisma.simulator.create({
     data: {
       ...data,
+      workspaceId,
       createdBy: userId,
       prepQuestions: {
         createMany: {
