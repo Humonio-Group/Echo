@@ -15,6 +15,10 @@
     "email": "contact@humonio.com",
     "url": "https://github.com/humonio-group/echo/issues"
   },
+  "prisma": {
+    "schema": "./prisma/schema.prisma",
+    "seed": "tsx ./prisma/seed.ts"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
