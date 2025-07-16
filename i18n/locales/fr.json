@@ -9,6 +9,9 @@
     "add": {
       "default": "Ajouter",
       "workspace": "Ajouter un espace de travail"
+    },
+    "delete": {
+      "workspace": "Supprimer l'espace de travail"
     }
   },
   "dialogs": {

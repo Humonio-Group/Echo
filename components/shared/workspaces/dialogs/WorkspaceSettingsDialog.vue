@@ -39,7 +39,7 @@ const { handleSubmit, resetForm } = useForm({
     values: workspace.value?.values ?? "",
   },
 });
-const submit = handleSubmit(async (values) => {
+const save = handleSubmit(async (values) => {
   open.value = !await store.saveWorkspaceInfo({
     ...values,
     description: values.description ?? null,
@@ -54,16 +54,16 @@ const submit = handleSubmit(async (values) => {
       <slot />
     </DialogTrigger>
 
-    <DialogContent class="max-h-[90dvh] flex flex-col">
+    <DialogContent class="max-h-[95dvh] flex flex-col">
       <DialogHeader>
         <DialogTitle>{{ $t("dialogs.workspaces.settings.title") }}</DialogTitle>
         <DialogDescription>{{ $t("dialogs.workspaces.settings.caption") }}</DialogDescription>
       </DialogHeader>
 
-      <div class="flex-1 overflow-y-auto">
+      <div class="flex-1 flex flex-col gap-3 overflow-y-auto">
         <form
           class="flex flex-col gap-4"
-          @submit="submit"
+          @submit="save"
         >
           <FormField
             v-slot="{ componentField }"
@@ -163,6 +163,15 @@ const submit = handleSubmit(async (values) => {
             </Button>
           </DialogFooter>
         </form>
+
+        <Button
+          size="sm"
+          variant="link"
+          class="!text-destructive"
+          disabled
+        >
+          {{ $t("btn.delete.workspace") }}
+        </Button>
       </div>
     </DialogContent>
   </Dialog>
