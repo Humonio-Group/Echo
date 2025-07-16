@@ -3,7 +3,7 @@ import { ChartArea, Gauge, LayoutDashboard, Plus, Users } from "lucide-vue-next"
 </script>
 
 <template>
-  <div class="h-16 rounded-full border px-6 flex items-center justify-between sm:gap-8 sm:w-min sm:mx-auto">
+  <div class="h-16 rounded-full bg-background border px-6 flex items-center justify-between sm:gap-8 sm:w-min sm:mx-auto">
     <Button
       size="icon"
       variant="ghost"
