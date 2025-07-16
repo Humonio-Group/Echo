@@ -5,7 +5,9 @@ import BrandName from "~/components/shared/statuses/BrandName.vue";
 
 <template>
   <div class="flex items-center justify-between md:justify-start gap-4 md:gap-12">
-    <BrandName />
+    <NuxtLinkLocale to="/">
+      <BrandName />
+    </NuxtLinkLocale>
 
     <nav class="flex-1 items-center gap-1 hidden md:flex">
       <Button

@@ -10,6 +10,8 @@ definePageMeta({
 
 const store = useWorkspaceStore();
 const { workspaces, loading } = storeToRefs(store);
+
+store.clearWorkspace();
 </script>
 
 <template>

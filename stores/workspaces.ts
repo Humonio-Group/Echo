@@ -28,6 +28,9 @@ export const useWorkspaceStore = defineStore("workspaces", {
       if (!this.workspaces?.length) return;
       this.workspace = this.workspaces.find(w => w.id === id) ?? null;
     },
+    clearWorkspace() {
+      this.workspace = null;
+    },
     async loadWorkspaces() {
       this.loading.workspaces = true;
 
