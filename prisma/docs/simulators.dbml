@@ -1,0 +1,32 @@
+TableGroup "Simulators" [color: #2D6512] {
+  simulator
+  prepQuestion
+  evaluation
+}
+
+Table simulator {
+  id int pk
+  workspaceId int [null, ref: > workspace.id]
+  title string
+  description string
+  picture string [null]
+  duration int
+  behaviorPrompt string
+  createdBy string
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table prepQuestion {
+  id int pk
+  simulatorId int [ref: > simulator.id]
+  label string
+}
+
+Table evaluation {
+  id int pk
+  simulatorId int [ref: > simulator.id]
+  frameworkPrompt string
+  assessmentPrompt string
+  feedbackPrompt string
+}
