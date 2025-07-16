@@ -27,5 +27,10 @@
       "name": "Nom",
       "description": "Description"
     }
+  },
+  "navigation": {
+    "training": "Entraînements",
+    "performance": "Performances",
+    "team": "Équipe"
   }
 }
