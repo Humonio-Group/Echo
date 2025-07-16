@@ -1,0 +1,18 @@
+import { defineConfig } from "vitest/config";
+import path from "path";
+
+export default defineConfig({
+  test: {
+    globals: true,
+    coverage: {
+      reporter: ["text", "html"],
+      include: ["server/repositories/**/*.ts"],
+    },
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./"),
+      "~": path.resolve(__dirname, "./"),
+    },
+  },
+});

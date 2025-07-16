@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,41 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// workspace
+enum Role {
+  member
+  admin
+  observer
+}
+
+model Workspace {
+  id               Int      @id @default(autoincrement())
+  name             String
+  description      String?
+  picture          String?
+  companyInfo      String   @default("")
+  productOrService String   @default("")
+  values           String   @default("")
+  ownerId          String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  members WorkspaceMember[]
+
+  @@map("workspaces")
+}
+
+model WorkspaceMember {
+  workspaceId Int
+  userId      String
+  role        Role     @default(member)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@id(name: "key", fields: [workspaceId, userId])
+  @@map("workspace_members")
 }

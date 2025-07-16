@@ -1,3 +1,61 @@
 {
-  "hello-world": "Bonjour monde,"
+  "brand": {
+    "name": "Echo"
+  },
+  "welcome-on": "Bienvenue sur Humonio {brand}",
+  "btn": {
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "add": {
+      "default": "Ajouter",
+      "workspace": "Ajouter un espace de travail"
+    },
+    "delete": {
+      "workspace": "Supprimer l'espace de travail"
+    }
+  },
+  "dialogs": {
+    "workspaces": {
+      "create-workspace": {
+        "title": "Nouvel espace de travail",
+        "caption": "Un espace de travail, c’est ton point de départ pour organiser Humonio Echo selon tes besoins."
+      },
+      "settings": {
+        "title": "Paramètres de l'espace de travail",
+        "caption": "Personnalise ton espace pour qu’il reflète ta manière de travailler. Nom, description, objectifs… ajuste les éléments clés avant de te lancer."
+      }
+    }
+  },
+  "labels": {
+    "optional": "Facultatif",
+    "empty": {
+      "workspaces": "Aucun espace de travail pour le moment..."
+    },
+    "fields": {
+      "name": "Nom",
+      "description": "Description",
+      "company-info": "Informations de l'entreprise",
+      "product-or-service": "Produits ou Services",
+      "values": "Valeurs"
+    }
+  },
+  "navigation": {
+    "training": "Entraînements",
+    "performance": "Performances",
+    "team": "Équipe"
+  },
+
+  "training": {
+    "title": "Entraînement",
+    "btn": {
+      "manage-library": "Bibliothèque"
+    },
+    "labels": {
+      "sessions": {
+        "past": "Session passée | Sessions passées",
+        "ongoing": "Session en cours | Sessions en cours",
+        "no-past": "Aucune session passée pour l'instant..."
+      }
+    }
+  }
 }
