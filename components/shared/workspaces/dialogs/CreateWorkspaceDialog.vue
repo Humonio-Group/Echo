@@ -24,10 +24,11 @@ const { handleSubmit, resetForm } = useForm({
   },
 });
 const submit = handleSubmit(async (values) => {
-  await store.createWorkspace({
+  open.value = !await store.createWorkspace({
     ...values,
     description: values.description ?? null,
   });
+  if (open.value) resetForm();
 });
 </script>
 

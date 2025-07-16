@@ -46,8 +46,9 @@ export const useWorkspaceStore = defineStore("workspaces", {
         this.loading.workspaces = false;
       }
     },
-    async createWorkspace(body: IWorkspaceCreate) {
+    async createWorkspace(body: IWorkspaceCreate): Promise<boolean> {
       this.loading.creatingWorkspace = true;
+      let state = true;
 
       try {
         const workspace = await $fetch<IWorkspace>("/api/workspaces", {
@@ -59,12 +60,15 @@ export const useWorkspaceStore = defineStore("workspaces", {
         this.workspaces = [...this.workspaces, workspace];
         // TODO: toast
       }
-      catch (e) {
-        console.error(e);
+      catch {
+        // TODO: toast
+        state = false;
       }
       finally {
         this.loading.creatingWorkspace = false;
       }
+
+      return state;
     },
   },
 });
