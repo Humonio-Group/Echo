@@ -9,19 +9,19 @@ const onMobile = isMobile();
 <template>
   <div
     data-layout="default"
-    class="flex flex-col"
+    class="flex flex-col min-h-dvh"
   >
     <header class="sticky top-0 py-3 px-4 bg-background">
       <TopBar />
     </header>
 
-    <main class="px-4">
-      <NuxtPage />
+    <main class="flex-1 flex flex-col px-4">
+      <NuxtPage class="flex-1" />
     </main>
 
     <div
       v-if="onMobile"
-      class="fixed bottom-0 inset-x-0 p-4"
+      class="sticky bottom-0 p-4"
     >
       <!-- TODO: v-if="hasRole('admin')" -->
       <MobileBar />
