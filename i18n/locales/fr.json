@@ -6,6 +6,7 @@
   "btn": {
     "cancel": "Annuler",
     "save": "Enregistrer",
+    "duplicate": "Dupliquer",
     "add": {
       "default": "Ajouter",
       "workspace": "Ajouter un espace de travail"
@@ -23,6 +24,14 @@
       "settings": {
         "title": "Paramètres de l'espace de travail",
         "caption": "Personnalise ton espace pour qu’il reflète ta manière de travailler. Nom, description, objectifs… ajuste les éléments clés avant de te lancer."
+      },
+      "library-dialog": {
+        "title": "Bibliothèque de simulateurs",
+        "caption": "Inspire-toi, duplique, et façonne des expériences adaptées à ton équipe.",
+        "tabs": {
+          "your-simulators": "Vos simulateurs",
+          "public-simulators": "Simulateurs publics"
+        }
       }
     }
   },
@@ -54,7 +63,8 @@
       "sessions": {
         "past": "Session passée | Sessions passées",
         "ongoing": "Session en cours | Sessions en cours",
-        "no-past": "Aucune session passée pour l'instant..."
+        "no-past": "Aucune session passée pour l'instant...",
+        "no-ongoing": "Aucune session en cours pour l'instant..."
       }
     }
   }

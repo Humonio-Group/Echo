@@ -26,7 +26,8 @@ model Workspace {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  members WorkspaceMember[]
+  members    WorkspaceMember[]
+  simulators Simulator[]
 
   @@map("workspaces")
 }
@@ -42,4 +43,49 @@ model WorkspaceMember {
 
   @@id(name: "key", fields: [workspaceId, userId])
   @@map("workspace_members")
+}
+
+// simulators
+model Simulator {
+  id             Int      @id @default(autoincrement())
+  workspaceId    Int?
+  title          String
+  description    String
+  picture        String?
+  duration       Int
+  behaviorPrompt String
+  createdBy      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  workspace Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  prepQuestions PrepQuestion[]
+  evaluations   Evaluation[]
+
+  @@map("simulators")
+}
+
+model PrepQuestion {
+  id          Int    @default(autoincrement())
+  simulatorId Int
+  label       String
+
+  simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
+
+  @@id([id, simulatorId])
+  @@map("prep_questions")
+}
+
+model Evaluation {
+  id               Int    @default(autoincrement())
+  simulatorId      Int
+  frameworkPrompt  String
+  assessmentPrompt String
+  feedbackPrompt   String
+
+  simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
+
+  @@id([id, simulatorId])
+  @@map("evaluations")
 }

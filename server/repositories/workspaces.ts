@@ -23,6 +23,12 @@ export async function create(userId: string, data: IWorkspaceCreate): Promise<IW
     },
     include: {
       members: true,
+      simulators: {
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      },
     },
   });
 }
@@ -43,6 +49,12 @@ export async function update(id: number, data: IWorkspaceUpdate): Promise<IWorks
     data,
     include: {
       members: true,
+      simulators: {
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      },
     },
   });
 }
@@ -61,6 +73,12 @@ export async function destroy(id: number): Promise<IWorkspace> {
     },
     include: {
       members: true,
+      simulators: {
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      },
     },
   });
 }
@@ -79,6 +97,12 @@ export async function find(id: number): Promise<IWorkspace> {
     },
     include: {
       members: true,
+      simulators: {
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      },
     },
   }) as IWorkspace;
 }
@@ -94,6 +118,15 @@ export async function findForUser(userId: string): Promise<TArray<IWorkspace>> {
       members: {
         some: {
           userId,
+        },
+      },
+    },
+    include: {
+      members: true,
+      simulators: {
+        include: {
+          prepQuestions: true,
+          evaluations: true,
         },
       },
     },
