@@ -20,7 +20,7 @@ const wsStore = useWorkspaceStore();
       <slot />
     </DialogTrigger>
 
-    <DialogContent class="md:!max-w-2xl min-h-[75dvh] max-h-[95dvh] flex flex-col">
+    <DialogContent class="md:!max-w-2xl max-h-[75dvh] flex flex-col">
       <DialogHeader>
         <DialogTitle>{{ $t("dialogs.workspaces.library-dialog.title") }}</DialogTitle>
         <DialogDescription>{{ $t("dialogs.workspaces.library-dialog.caption") }}</DialogDescription>
@@ -28,7 +28,7 @@ const wsStore = useWorkspaceStore();
 
       <Tabs
         v-model="selectedTab"
-        class="flex-1"
+        class="flex-1 overflow-hidden"
       >
         <TabsList class="w-full">
           <TabsTrigger value="private">
