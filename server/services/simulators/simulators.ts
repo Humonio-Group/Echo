@@ -39,10 +39,22 @@ export async function duplicateSimulator(event: HttpEvent) {
       behaviorPrompt,
     });
 
-    setOutput(event, StatusCode.CREATED, `Simulator ${simulatorId} dupplicated in ${workspace.name}`);
+    setOutput(event, StatusCode.CREATED, `Simulator ${simulatorId} duplicated in ${workspace.name}`);
     return simulator;
   }
   catch (e) {
+    return catchError(event, e as EchoError);
+  }
+}
+
+export async function getWorkspaceLibrary(event: HttpEvent) {
+  const workspace = event.context.workspace;
+
+  try {
+    return await simulators.getAll(workspace.id);
+  }
+  catch (e) {
+    console.error(e);
     return catchError(event, e as EchoError);
   }
 }

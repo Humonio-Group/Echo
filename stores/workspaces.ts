@@ -24,6 +24,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
   getters: {
     translate: () => useNuxtApp().$i18n.t,
     isFirstLoading: state => !state.workspaces,
+    selectedWorkspace: state => state.workspace,
   },
   actions: {
     selectWorkspace(id: number) {
@@ -100,6 +101,11 @@ export const useWorkspaceStore = defineStore("workspaces", {
       }
 
       return state;
+    },
+
+    async duplicateSimulator(simulatorId: number) {
+      await useWait(useMinMaxRandom(1000, 2000));
+      console.log(simulatorId);
     },
   },
 });
