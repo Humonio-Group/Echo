@@ -42,14 +42,7 @@ export async function create(userId: string, workspaceId: TNull<number>, data: I
 export async function getAll(workspaceId: number): Promise<TArray<ISimulator>> {
   return prisma.simulator.findMany({
     where: {
-      OR: [
-        {
-          workspaceId,
-        },
-        {
-          workspaceId: null,
-        },
-      ],
+      workspaceId,
     },
     include: {
       prepQuestions: true,
@@ -77,4 +70,20 @@ export async function get(id: number): Promise<ISimulator> {
   });
   if (!simulator) throw new EchoNotFoundError("Simulator not found");
   return simulator;
+}
+
+/**
+ * Get the public simulators (non workspace specific)
+ * @returns {TArray<ISimulator>} - the recovered simulators library
+ */
+export async function getPublicLibrary(): Promise<TArray<ISimulator>> {
+  return prisma.simulator.findMany({
+    where: {
+      workspaceId: null,
+    },
+    include: {
+      prepQuestions: true,
+      evaluations: true,
+    },
+  });
 }

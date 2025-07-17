@@ -25,6 +25,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
     translate: () => useNuxtApp().$i18n.t,
     isFirstLoading: state => !state.workspaces,
     selectedWorkspace: state => state.workspace,
+    simulators: state => state.workspace?.simulators ?? [],
   },
   actions: {
     selectWorkspace(id: number) {

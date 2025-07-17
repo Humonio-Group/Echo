@@ -48,10 +48,8 @@ export async function duplicateSimulator(event: HttpEvent) {
 }
 
 export async function getWorkspaceLibrary(event: HttpEvent) {
-  const workspace = event.context.workspace;
-
   try {
-    return await simulators.getAll(workspace.id);
+    return await simulators.getPublicLibrary();
   }
   catch (e) {
     console.error(e);

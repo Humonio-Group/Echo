@@ -84,22 +84,8 @@ describe("manage simulators", () => {
       vi.clearAllMocks();
     });
 
-    it("should recover 2 simulators, 1 in workspace and 1 out", async () => {
+    it("should recover 1 simulator", async () => {
       const expectedList = [
-        {
-          id: 1,
-          workspaceId: null,
-          title: "Simulator",
-          description: "Simulator",
-          picture: null,
-          duration: 5,
-          behaviorPrompt: "simulate",
-          createdBy: "testing",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          prepQuestions: [],
-          evaluations: [],
-        },
         {
           id: 2,
           workspaceId: 1,
@@ -122,21 +108,14 @@ describe("manage simulators", () => {
       const result = await simulators.getAll(mockWorkspaceId);
       expect(prisma.simulator.findMany).toBeCalledWith({
         where: {
-          OR: [
-            {
-              workspaceId: mockWorkspaceId,
-            },
-            {
-              workspaceId: null,
-            },
-          ],
+          workspaceId: mockWorkspaceId,
         },
         include: {
           prepQuestions: true,
           evaluations: true,
         },
       });
-      expect(result).toHaveLength(2);
+      expect(result).toHaveLength(1);
       expect(result).toEqual(expectedList);
     });
   });
@@ -202,6 +181,46 @@ describe("manage simulators", () => {
         },
       });
       expect(result).toEqual(expectedSimulator);
+    });
+  });
+
+  describe("simulatorRepository.getPublicLibrary", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should recover 1 simulator", async () => {
+      const expectedList = [
+        {
+          id: 1,
+          workspaceId: null,
+          title: "Simulator",
+          description: "Simulator",
+          picture: null,
+          duration: 5,
+          behaviorPrompt: "simulate",
+          createdBy: "testing",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          prepQuestions: [],
+          evaluations: [],
+        },
+      ];
+
+      (prisma.simulator.findMany as any).mockResolvedValue(expectedList);
+
+      const result = await simulators.getPublicLibrary();
+      expect(prisma.simulator.findMany).toBeCalledWith({
+        where: {
+          workspaceId: null,
+        },
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      });
+      expect(result).toHaveLength(1);
+      expect(result).toEqual(expectedList);
     });
   });
 });

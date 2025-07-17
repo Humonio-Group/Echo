@@ -2,14 +2,16 @@
 import SimulatorCard from "~/components/shared/simulators/SimulatorCard.vue";
 
 const selectedTab = ref<string>("private");
-
-const open = ref<boolean>(false);
-watch(open, (val) => {
-  if (!val) return;
+watch(selectedTab, (val) => {
+  if (val !== "public") return;
   store.loadLibrary();
 });
 
+const open = ref<boolean>(false);
+
 const store = useSimulatorStore();
+const { library } = storeToRefs(store);
+const wsStore = useWorkspaceStore();
 </script>
 
 <template>
@@ -42,7 +44,7 @@ const store = useSimulatorStore();
           class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] auto-rows-min gap-4 overflow-y-auto"
         >
           <SimulatorCard
-            v-for="sim in store.privateLibrary"
+            v-for="sim in wsStore.simulators"
             :key="sim.id"
             :simulator="sim"
           />
@@ -52,7 +54,7 @@ const store = useSimulatorStore();
           class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] auto-rows-min gap-4 overflow-y-auto"
         >
           <SimulatorCard
-            v-for="sim in store.publicLibrary"
+            v-for="sim in library"
             :key="sim.id"
             :simulator="sim"
             duplicable

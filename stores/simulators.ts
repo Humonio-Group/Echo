@@ -24,7 +24,8 @@ export const useSimulatorStore = defineStore("simulators", {
       this.loading.library = true;
 
       try {
-        this.library = await $fetch<TArray<ISimulator>>(`/api/simulators/library`);
+        const lib = await $fetch<TArray<ISimulator>>(`/api/simulators/library`);
+        this.library = [...(this.library ?? []), ...lib.filter(sim => !this.library?.every(s => s.id !== sim.id))];
       }
       catch (e) {
         console.error(e);
