@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CopyPlus } from "lucide-vue-next";
+import { CopyPlus, LoaderCircle } from "lucide-vue-next";
 import type { ISimulator } from "~/types/simulators";
 
 const props = defineProps<{
@@ -7,10 +7,13 @@ const props = defineProps<{
   duplicable?: boolean;
 }>();
 const emit = defineEmits<{
-  duplicated: [ISimulator];
+  duplicated: [];
 }>();
 
 const store = useWorkspaceStore();
+const { loading } = storeToRefs(store);
+
+const isLoading = computed(() => loading.value.duplicatingSimulator.includes(props.simulator.id));
 
 async function duplicate() {
   await store.duplicateSimulator(props.simulator.id);
@@ -44,9 +47,14 @@ async function duplicate() {
       <Button
         size="sm"
         class="w-full"
+        :disabled="isLoading"
         @click="duplicate"
       >
-        <CopyPlus />
+        <LoaderCircle
+          v-if="isLoading"
+          class="animate-spin"
+        />
+        <CopyPlus v-else />
         {{ $t("btn.duplicate") }}
       </Button>
     </CardFooter>

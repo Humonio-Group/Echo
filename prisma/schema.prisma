@@ -67,17 +67,18 @@ model Simulator {
 }
 
 model PrepQuestion {
-  id          Int    @id @default(autoincrement())
+  id          Int    @default(autoincrement())
   simulatorId Int
   label       String
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
 
+  @@id([id, simulatorId])
   @@map("prep_questions")
 }
 
 model Evaluation {
-  id               Int    @id @default(autoincrement())
+  id               Int    @default(autoincrement())
   simulatorId      Int
   frameworkPrompt  String
   assessmentPrompt String
@@ -85,5 +86,6 @@ model Evaluation {
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
 
+  @@id([id, simulatorId])
   @@map("evaluations")
 }

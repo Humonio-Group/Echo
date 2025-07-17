@@ -25,24 +25,35 @@ export async function createSimulator(event: HttpEvent) {
 export async function duplicateSimulator(event: HttpEvent) {
   const user = event.context.user;
   const workspace = event.context.workspace;
-  const simulatorId = getRouterParam(event, "simulatorId");
+  const { simulatorId } = await readBody<{ simulatorId: number }>(event);
 
   if (!simulatorId) return catchError(event, new EchoBadRequestError("Missing simulator id"));
 
   try {
-    const { title, description, picture, duration, behaviorPrompt } = await simulators.get(Number(simulatorId));
+    const { title, description, picture, duration, behaviorPrompt, prepQuestions, evaluations } = await simulators.get(Number(simulatorId));
     const simulator = await simulators.create(user.id, workspace.id, {
       title,
       description,
       picture,
       duration,
       behaviorPrompt,
+      prepQuestions: prepQuestions?.map(p => ({
+        id: p.id,
+        label: p.label,
+      })) ?? [],
+      evaluations: evaluations?.map(e => ({
+        id: e.id,
+        frameworkPrompt: e.frameworkPrompt,
+        assessmentPrompt: e.assessmentPrompt,
+        feedbackPrompt: e.feedbackPrompt,
+      })) ?? [],
     });
 
     setOutput(event, StatusCode.CREATED, `Simulator ${simulatorId} duplicated in ${workspace.name}`);
     return simulator;
   }
   catch (e) {
+    console.error(e);
     return catchError(event, e as EchoError);
   }
 }

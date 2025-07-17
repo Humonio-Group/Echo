@@ -1,5 +1,6 @@
 import type { TArray, TNull } from "~/types/globals/utils";
 import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
+import type { ISimulator } from "~/types/simulators";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
@@ -8,6 +9,7 @@ interface WorkspacesState {
     workspaces: boolean;
     creatingWorkspace: boolean;
     savingWorkspace: boolean;
+    duplicatingSimulator: TArray<number>;
   };
 }
 
@@ -19,6 +21,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
       workspaces: false,
       creatingWorkspace: false,
       savingWorkspace: false,
+      duplicatingSimulator: [],
     },
   }),
   getters: {
@@ -104,9 +107,30 @@ export const useWorkspaceStore = defineStore("workspaces", {
       return state;
     },
 
-    async duplicateSimulator(simulatorId: number) {
-      await useWait(useMinMaxRandom(1000, 2000));
-      console.log(simulatorId);
+    async duplicateSimulator(simulatorId: number): Promise<boolean> {
+      if (!this.workspace) return false;
+
+      this.loading.duplicatingSimulator = [...this.loading.duplicatingSimulator, simulatorId];
+      let state = true;
+
+      try {
+        const simulator = await $fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators/create-from`, {
+          method: "POST",
+          body: {
+            simulatorId,
+          },
+        });
+        this.workspace.simulators = [...this.workspace?.simulators ?? [], simulator];
+        // TODO: toast
+      }
+      catch {
+        state = false;
+      }
+      finally {
+        this.loading.duplicatingSimulator.splice(this.loading.duplicatingSimulator.indexOf(simulatorId), 1);
+      }
+
+      return state;
     },
   },
 });
