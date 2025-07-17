@@ -35,10 +35,25 @@ export default defineNuxtConfig({
     },
   },
   compatibilityDate: "2025-05-15",
+  nitro: {
+    experimental: {
+      wasm: true,
+      websocket: true,
+    },
+    websocket: {
+      maxPayload: 1048576,
+      compression: true,
+    },
+  },
   vite: {
     plugins: [
       tailwindcss(),
     ],
+    server: {
+      hmr: {
+        port: 24678,
+      },
+    },
   },
   eslint: {
     checker: true,

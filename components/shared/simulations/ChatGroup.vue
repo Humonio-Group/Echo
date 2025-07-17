@@ -19,7 +19,7 @@ const scrollTrigger = ref();
 const interval = ref();
 
 function scrollBottom() {
-  (scrollTrigger.value as HTMLElement).scrollIntoView({ behavior: "smooth" });
+  (scrollTrigger.value as HTMLElement)?.scrollIntoView({ behavior: "smooth" });
   console.log("scroll bottom of the chat");
 }
 function setupLoop() {
@@ -38,14 +38,21 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="flex-1 flex flex-col py-5 px-4 overflow-auto gap-2">
-    <ChatBubble
-      v-for="entry in messages"
-      :key="entry.id"
-      :sender-name="entry.senderId"
-      :inverted="entry.senderId !== 'ia'"
-    >
-      {{ entry.message }}
-    </ChatBubble>
+    <template v-if="messages.length">
+      <ChatBubble
+        v-for="entry in messages"
+        :key="entry.id"
+        :sender-name="entry.senderId"
+        :inverted="entry.senderId !== 'ia'"
+      >
+        {{ entry.message }}
+      </ChatBubble>
+    </template>
+    <template v-else>
+      <p class="text-lg text-muted-foreground m-auto">
+        Aucun message pour le moment...
+      </p>
+    </template>
 
     <div
       ref="scrollTrigger"

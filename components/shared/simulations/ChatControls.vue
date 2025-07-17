@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { Send } from "lucide-vue-next";
 
+const emit = defineEmits<{
+  send: [string];
+}>();
+
 const message = ref<string | undefined>();
 
 const store = useRoomStore();
@@ -8,7 +12,7 @@ const { writing } = storeToRefs(store);
 
 async function send() {
   if (!message.value?.trim().length) return;
-  store.sendMessage(message.value).then();
+  emit("send", message.value);
   message.value = undefined;
 }
 </script>

@@ -7,31 +7,21 @@ definePageMeta({
   layout: "chat",
 });
 
+const route = useRoute();
+const roomId = computed(() => route.params.simId as string);
+
 const store = useRoomStore();
 const { messages } = storeToRefs(store);
 
-onNuxtReady(() => {
-  store.connect();
-});
+const { sendMessage } = useWebSocketRoom(roomId);
+
+const { userId } = useAuth();
 </script>
 
 <template>
   <main class="flex-1 flex flex-col overflow-hidden">
-    <ChatGroup :messages="messages ?? []">
-      <ChatBubble sender-name="ia">
-        Bonjour Loïc
-      </ChatBubble>
-      <ChatBubble
-        sender-name="Loïc MAES"
-        inverted
-      >
-        Bonjour IA
-      </ChatBubble>
-      <ChatBubble sender-name="ia">
-        On va donc commencer notre entretien. C'est partit !
-      </ChatBubble>
-    </ChatGroup>
+    <ChatGroup :messages="messages ?? []" />
 
-    <ChatControls />
+    <ChatControls @send="sendMessage(userId, $event)" />
   </main>
 </template>
