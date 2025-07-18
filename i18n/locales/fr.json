@@ -46,7 +46,8 @@
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
       "values": "Valeurs"
-    }
+    },
+    "search": "Rechercher..."
   },
   "navigation": {
     "training": "Entraînements",

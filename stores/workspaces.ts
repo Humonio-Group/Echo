@@ -132,5 +132,10 @@ export const useWorkspaceStore = defineStore("workspaces", {
 
       return state;
     },
+
+    async startConversation(simulatorId: number): Promise<TNull<number>> {
+      console.log(`Creating room ${simulatorId}`);
+      return null;
+    },
   },
 });

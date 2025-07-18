@@ -2,6 +2,7 @@
 import { Home, Plus, Settings } from "lucide-vue-next";
 import BrandName from "~/components/shared/statuses/BrandName.vue";
 import WorkspaceSettingsDialog from "~/components/shared/workspaces/dialogs/WorkspaceSettingsDialog.vue";
+import CreateSimulationDialog from "~/components/shared/simulations/dialogs/CreateSimulationDialog.vue";
 </script>
 
 <template>
@@ -67,12 +68,14 @@ import WorkspaceSettingsDialog from "~/components/shared/workspaces/dialogs/Work
           <Settings />
         </Button>
       </WorkspaceSettingsDialog>
-      <Button
-        size="icon"
-        class="hidden md:flex mr-4"
-      >
-        <Plus />
-      </Button>
+      <CreateSimulationDialog>
+        <Button
+          size="icon"
+          class="hidden md:flex mr-4"
+        >
+          <Plus />
+        </Button>
+      </CreateSimulationDialog>
       <UserButton />
     </div>
   </div>
