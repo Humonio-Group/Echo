@@ -1,4 +1,5 @@
 export default defineNuxtPlugin(() => {
+  // eslint-disable-next-line
   if (true) return;
 
   // Only run in development
