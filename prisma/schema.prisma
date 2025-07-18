@@ -26,8 +26,9 @@ model Workspace {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  members    WorkspaceMember[]
-  simulators Simulator[]
+  members       WorkspaceMember[]
+  simulators    Simulator[]
+  conversations Conversation[]
 
   @@map("workspaces")
 }
@@ -62,17 +63,20 @@ model Simulator {
 
   prepQuestions PrepQuestion[]
   evaluations   Evaluation[]
+  conversations Conversation[]
 
   @@map("simulators")
 }
 
 model PrepQuestion {
   id          Int    @default(autoincrement())
-  key         String @default(uuid())
+  key         String @unique @default(uuid())
   simulatorId Int
   label       String
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
+
+  answers PrepAnswer[]
 
   @@id([id, simulatorId])
   @@map("prep_questions")
@@ -88,6 +92,71 @@ model Evaluation {
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
 
+  assessments Assessment[]
+
   @@id([id, simulatorId])
   @@map("evaluations")
+}
+
+// conversations
+enum AssessmentType {
+  text
+  graph
+}
+
+model Conversation {
+  uid         String   @id @default(uuid())
+  simulatorId Int
+  workspaceId Int
+  userId      String
+  startedAt   DateTime @default(now())
+  stoppedAt   DateTime
+
+  simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  answers     PrepAnswer[]
+  messages    Message[]
+  assessments Assessment[]
+
+  @@map("conversations")
+}
+
+model PrepAnswer {
+  id              Int    @id @default(autoincrement())
+  prepQuestionKey String
+  conversationUid String
+  answer          String
+
+  prepQuestion PrepQuestion @relation(fields: [prepQuestionKey], references: [key], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationUid], references: [uid], onDelete: Cascade)
+
+  @@map("prep_answers")
+}
+
+model Message {
+  id              Int      @id @default(autoincrement())
+  conversationUid String
+  sender          String
+  content         String
+  sentAt          DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationUid], references: [uid], onDelete: Cascade)
+
+  @@map("messages")
+}
+
+model Assessment {
+  id              Int            @id @default(autoincrement())
+  conversationUid String
+  evaluationKey   String
+  type            AssessmentType
+  data            String
+  debrief         String
+  createdAt       DateTime       @default(now())
+
+  conversation Conversation @relation(fields: [conversationUid], references: [uid], onDelete: Cascade)
+  evaluation   Evaluation   @relation(fields: [evaluationKey], references: [key], onDelete: Cascade)
+
+  @@map("assessments")
 }
