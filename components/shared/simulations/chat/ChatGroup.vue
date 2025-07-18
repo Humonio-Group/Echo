@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ChatBubble from "~/components/shared/simulations/ChatBubble.vue";
+import ChatBubble from "~/components/shared/simulations/chat/ChatBubble.vue";
 
 const props = defineProps<{
   messages: {

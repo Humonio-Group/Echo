@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import ChatBubble from "~/components/shared/simulations/ChatBubble.vue";
-import ChatGroup from "~/components/shared/simulations/ChatGroup.vue";
-import ChatControls from "~/components/shared/simulations/ChatControls.vue";
+import ChatGroup from "~/components/shared/simulations/chat/ChatGroup.vue";
+import ChatControls from "~/components/shared/simulations/chat/ChatControls.vue";
 
 definePageMeta({
   layout: "chat",
