@@ -68,6 +68,7 @@ model Simulator {
 
 model PrepQuestion {
   id          Int    @default(autoincrement())
+  key         String @default(uuid())
   simulatorId Int
   label       String
 
@@ -79,6 +80,7 @@ model PrepQuestion {
 
 model Evaluation {
   id               Int    @default(autoincrement())
+  key              String @unique @default(uuid())
   simulatorId      Int
   frameworkPrompt  String
   assessmentPrompt String

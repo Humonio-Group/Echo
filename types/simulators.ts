@@ -25,15 +25,17 @@ export type ISimulatorCreate = Omit<ISimulator, "id" | "workspaceId" | "createdB
 
 export interface IPrepQuestion {
   id: number;
+  key: string;
   simulatorId: number;
   label: string;
 
   simulator?: ISimulator;
 }
-export type IPrepQuestionCreate = Omit<IPrepQuestion, "simulatorId" | "simulator">;
+export type IPrepQuestionCreate = Omit<IPrepQuestion, "simulatorId" | "simulator" | "key">;
 
 export interface IEvaluation {
   id: number;
+  key: string;
   simulatorId: number;
   frameworkPrompt: string;
   assessmentPrompt: string;
@@ -41,4 +43,4 @@ export interface IEvaluation {
 
   simulator?: ISimulator;
 }
-export type IEvaluationCreate = Omit<IEvaluation, "simulatorId" | "simulator">;
+export type IEvaluationCreate = Omit<IEvaluation, "simulatorId" | "simulator" | "key">;

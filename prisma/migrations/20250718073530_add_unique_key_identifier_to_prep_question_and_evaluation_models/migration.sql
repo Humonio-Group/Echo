@@ -1,0 +1,3 @@
+ALTER TABLE "evaluations" ADD COLUMN "key" TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE "prep_questions" ADD COLUMN "key" TEXT NOT NULL DEFAULT '';
