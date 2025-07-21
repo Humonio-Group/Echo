@@ -31,9 +31,10 @@ export const useRoomStore = defineStore("room", {
       this.messages = null;
       this.writing = false;
     },
-    storeMessage(sender: string, message: string) {
+    storeMessage(sender: string, message: string, writing: boolean = true) {
       if (!this.messages || !this.roomId) return;
 
+      this.writing = writing;
       this.messages = [...this.messages, {
         id: this.messages.length + 1,
         senderId: sender,
