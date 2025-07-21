@@ -13,7 +13,8 @@
     },
     "delete": {
       "workspace": "Supprimer l'espace de travail"
-    }
+    },
+    "stop": "Stop"
   },
   "dialogs": {
     "workspaces": {
@@ -49,17 +50,20 @@
   "labels": {
     "optional": "Facultatif",
     "empty": {
-      "workspaces": "Aucun espace de travail pour le moment..."
+      "workspaces": "Aucun espace de travail pour le moment...",
+      "messages": "Aucun message pour le moment..."
     },
     "fields": {
       "name": "Nom",
       "description": "Description",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
-      "values": "Valeurs"
+      "values": "Valeurs",
+      "message": "Ton message... (cmd+entrer pour envoyer)"
     },
     "search": "Rechercher...",
-    "thinking": "Je réfléchi..."
+    "thinking": "Je réfléchi...",
+    "feedback": "Retour | Retours"
   },
   "navigation": {
     "training": "Entraînements",

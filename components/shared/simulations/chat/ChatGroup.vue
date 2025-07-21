@@ -39,7 +39,7 @@ onNuxtReady(() => {
     </template>
     <template v-else>
       <p class="text-lg text-muted-foreground m-auto">
-        Aucun message pour le moment...
+        {{ $t("labels.empty.messages") }}
       </p>
     </template>
 

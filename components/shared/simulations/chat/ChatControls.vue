@@ -11,6 +11,8 @@ const input = ref<HTMLTextAreaElement>();
 const store = useRoomStore();
 const { writing } = storeToRefs(store);
 
+const canSend = computed(() => !!message.value?.trim().length);
+
 const autoResize = () => {
   const textarea = input.value;
   if (!textarea) return;
@@ -53,7 +55,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     <Textarea
       ref="input"
       v-model="message"
-      placeholder="Message... (Cmd+Entrer pour envoyer)"
+      :placeholder="$t('labels.fields.message')"
       class="min-h-9 max-h-32 w-full resize-none overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border"
       :disabled="writing"
       rows="1"
@@ -62,7 +64,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     />
     <Button
       size="icon"
-      :disabled="writing"
+      :disabled="writing || !canSend"
       @click="send"
     >
       <Send />
