@@ -12,7 +12,7 @@ defineProps<{
   >
     <Avatar class="size-9 mt-2">
       <AvatarImage
-        v-if="senderName === 'ia'"
+        v-if="!senderName.startsWith('user')"
         src="/images/ia-avatar.gif"
       />
       <AvatarFallback class="text-sm">
@@ -24,7 +24,7 @@ defineProps<{
       class="py-3 px-4 w-fit max-w-[75%] bg-accent text-accent-foreground rounded-xl"
       :class="{ 'bg-gradient-to-br from-primary to-primary-gradient text-primary-foreground': inverted }"
     >
-      <p>
+      <p class="whitespace-pre-line">
         <slot />
       </p>
     </div>

@@ -6,29 +6,60 @@ const emit = defineEmits<{
 }>();
 
 const message = ref<string | undefined>();
+const input = ref<HTMLTextAreaElement>();
 
 const store = useRoomStore();
 const { writing } = storeToRefs(store);
 
+const autoResize = () => {
+  const textarea = input.value;
+  if (!textarea) return;
+
+  textarea.style.height = "auto";
+
+  const maxHeight = 128;
+  const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+
+  textarea.style.height = `${newHeight}px`;
+};
+
 async function send() {
-  if (!message.value?.trim().length) return;
-  emit("send", message.value);
+  const msg = message.value?.trim();
+  if (!msg?.length) return;
+  emit("send", msg);
   message.value = undefined;
+  nextTick(autoResize);
 }
+
+const handleInput = () => nextTick(autoResize);
+const handleKeydown = (event: KeyboardEvent) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+    event.preventDefault();
+    send();
+    return;
+  }
+};
 </script>
 
 <template>
-  <div class="flex items-center gap-2 p-4">
-    <Input
-      v-model="message"
-      placeholder="Message..."
-      :disabled="writing"
-      @keydown="(event: KeyboardEvent) => {
-        if (event.key !== 'Enter') return;
-        send();
-      }"
-    />
+  <div class="relative flex items-center gap-2 p-4">
+    <p
+      v-if="writing"
+      class="absolute left-6 top-0 -translate-y-1/2 text-xs italic font-semibold text-muted-foreground animate-pulse"
+    >
+      {{ $t("labels.thinking") }}
+    </p>
 
+    <Textarea
+      ref="input"
+      v-model="message"
+      placeholder="Message... (Cmd+Entrer pour envoyer)"
+      class="min-h-9 max-h-32 w-full resize-none overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border"
+      :disabled="writing"
+      rows="1"
+      @input="handleInput"
+      @keydown="handleKeydown"
+    />
     <Button
       size="icon"
       :disabled="writing"

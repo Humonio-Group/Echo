@@ -11,28 +11,17 @@ const props = defineProps<{
 watch(props, () => {
   setTimeout(() => {
     scrollBottom();
-    setupLoop();
   }, 10);
 });
 
 const scrollTrigger = ref();
-const interval = ref();
 
 function scrollBottom() {
   (scrollTrigger.value as HTMLElement)?.scrollIntoView({ behavior: "smooth" });
-  console.log("scroll bottom of the chat");
-}
-function setupLoop() {
-  if (interval.value) clearInterval(interval.value);
-  interval.value = setInterval(scrollBottom, 5000);
 }
 
 onNuxtReady(() => {
-  setupLoop();
-});
-onBeforeUnmount(() => {
-  if (!interval.value) return;
-  clearInterval(interval.value);
+  scrollBottom();
 });
 </script>
 
@@ -43,7 +32,7 @@ onBeforeUnmount(() => {
         v-for="entry in messages"
         :key="entry.id"
         :sender-name="entry.senderId"
-        :inverted="entry.senderId !== 'ia'"
+        :inverted="entry.senderId.startsWith('user')"
       >
         {{ entry.message }}
       </ChatBubble>
