@@ -2,7 +2,7 @@
 import {EventType, WSEvent, WSMessageEvent} from "~/types/globals/websocket";
 import gpt from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
-import conversation from "~/prompts/conversation";
+import conversation from "~/openai/prompts/conversation";
 
 const rooms = new Map<string, Set<any>>();
 
