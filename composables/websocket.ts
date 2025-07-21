@@ -81,7 +81,7 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
       case EventType.MESSAGE:
         if (!data.sender || !data.message || !data.room) break;
 
-        store.storeMessage(data.sender, data.message);
+        store.storeMessage(data.sender, data.message, false);
         break;
 
       default:
@@ -103,7 +103,6 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
 
   const sendMessage = (sender: string, text: string) => {
     store.storeMessage(sender, text);
-
     return send({
       type: EventType.MESSAGE,
       message: text,
