@@ -54,14 +54,15 @@ export async function getAll(workspaceId: number): Promise<TArray<ISimulator>> {
 /**
  * Recover a public simulator template
  * @param {number} id - Unique id of the simulator template
+ * @param {number | undefined} workspaceId - Targeted workspace id
  * @returns {ISimulator} - The recovered simulator
  * @throws {EchoNotFoundError} if the queried simulator is not found
  */
-export async function get(id: number): Promise<ISimulator> {
+export async function get(id: number, workspaceId?: number): Promise<ISimulator> {
   const simulator = await prisma.simulator.findUnique({
     where: {
       id,
-      workspaceId: null,
+      workspaceId: workspaceId ?? null,
     },
     include: {
       prepQuestions: true,
