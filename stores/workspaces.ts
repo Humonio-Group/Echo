@@ -139,9 +139,6 @@ export const useWorkspaceStore = defineStore("workspaces", {
     },
 
     async startConversation(simulatorId: number) {
-      // TODO: redirect on conversation page
-      // navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${data.id}/chat`)));
-
       toast.promise($fetch<IConversation>(`/api/workspaces/${this.workspace?.id}/conversations/create/${simulatorId}`, {
         method: "POST",
         body: {

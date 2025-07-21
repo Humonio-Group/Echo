@@ -58,7 +58,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
           type: EventType.MESSAGE,
           room: data.room,
           sender: "ai",
-          message, // (data as WSMessageEvent).message, // TODO: replace by ai response
+          message,
         } as WSMessageEvent);
       },1000);
       break;
