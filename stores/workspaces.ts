@@ -3,7 +3,6 @@ import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/wor
 import type { ISimulator } from "~/types/simulators";
 import { toast } from "vue-sonner";
 import type { IConversation } from "~/types/conversations";
-import type { FetchError } from "ofetch";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
