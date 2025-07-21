@@ -5,9 +5,7 @@ import SimulatorCard from "~/components/shared/simulators/SimulatorCard.vue";
 const store = useWorkspaceStore();
 
 async function createSimulation(id: number) {
-  const state = await store.startConversation(id);
-  if (!state) return;
-  navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${}`)));
+  await store.startConversation(id);
 }
 </script>
 
