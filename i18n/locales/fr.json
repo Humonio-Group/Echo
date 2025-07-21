@@ -33,6 +33,17 @@
           "public-simulators": "Simulateurs publics"
         }
       }
+    },
+    "conversations": {
+      "create-conversation": {
+        "title": "Nouvelle conversation",
+        "caption": "Caption",
+        "toasters": {
+          "loading": "Création de la discussion...",
+          "success": "C'est partit pour converser !",
+          "error": "Une erreur est survenue pendant la création..."
+        }
+      }
     }
   },
   "labels": {
@@ -47,7 +58,8 @@
       "product-or-service": "Produits ou Services",
       "values": "Valeurs"
     },
-    "search": "Rechercher..."
+    "search": "Rechercher...",
+    "thinking": "Je réfléchi..."
   },
   "navigation": {
     "training": "Entraînements",
