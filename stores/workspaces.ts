@@ -151,10 +151,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
           navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${data.uid}/chat`)));
           return this.translate("dialogs.conversations.create-conversation.toasters.success");
         },
-        error: (err: FetchError) => {
-          console.error(err);
-          return this.translate("dialogs.conversations.create-conversation.toasters.error");
-        },
+        error: () => this.translate("dialogs.conversations.create-conversation.toasters.error"),
       });
     },
   },
