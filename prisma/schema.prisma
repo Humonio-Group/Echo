@@ -108,6 +108,7 @@ model Conversation {
   uid         String   @id @default(uuid())
   simulatorId Int
   workspaceId Int
+  name        String
   userId      String
   startedAt   DateTime @default(now())
   stoppedAt   DateTime

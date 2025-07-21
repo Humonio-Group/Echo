@@ -12,6 +12,7 @@ export interface IConversation {
   uid: string;
   simulatorId: number;
   workspaceId: number;
+  name: string;
   userId: string;
   startedAt: Date;
   stoppedAt: Date;
@@ -23,7 +24,6 @@ export interface IConversation {
   messages?: IMessages;
   assessments?: IAssessments;
 }
-export type IConversationCreate = Omit<IConversation, "uid" | "workspaceId" | "userId" | "startedAt" | "stoppedAt" | "simulator" | "workspace" | "answers" | "messages" | "assessments">;
 
 export interface IPrepAnswer {
   id: number;
@@ -34,6 +34,7 @@ export interface IPrepAnswer {
   prepQuestion?: IPrepQuestion;
   conversation?: IConversation;
 }
+export type IPrepAnswerCreate = Omit<IPrepAnswer, "id" | "conversationUid" | "prepQuestion" | "conversation">;
 export type IPrepAnswers = TArray<IPrepAnswer>;
 
 export interface IAssessment {
