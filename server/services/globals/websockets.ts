@@ -41,26 +41,31 @@ export async function handleMessage(peer: any, data: WSEvent) {
   switch (data.type) {
     case EventType.JOIN: {
       join(peer, data.room);
-      setTimeout(async () => {
-        const message = (await gpt.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "user",
-              content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", ""),
-            }
-          ]
-        })).choices[0].message.content;
 
-        await conversations.message(data.room, "ai", message ?? "empty-message");
+      const conv = await conversations.get(data.room);
+      peer.send({
+        type: EventType.JOINED,
+        room: data.room,
+        conversation: conv,
+      });
 
-        broadcast(data.room, {
-          type: EventType.MESSAGE,
-          room: data.room,
-          sender: "ai",
-          message,
-        } as WSMessageEvent);
-      },1000);
+      if (conv.messages?.[conv.messages?.length - 1].sender === "ai") break;
+      const message = (await gpt.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "user",
+            content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", ""),
+          }
+        ]
+      })).choices[0].message.content;
+      await conversations.message(data.room, "ai", message ?? "empty-message");
+      broadcast(data.room, {
+        type: EventType.MESSAGE,
+        room: data.room,
+        sender: "ai",
+        message,
+      } as WSMessageEvent);
       break;
     }
 

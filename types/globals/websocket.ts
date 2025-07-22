@@ -1,7 +1,9 @@
 import type { TNull } from "~/types/globals/utils";
+import type { IConversation } from "~/types/conversations";
 
 export enum EventType {
   JOIN = "join",
+  JOINED = "joined",
   LEAVE = "leave",
   MESSAGE = "message",
 }
@@ -18,6 +20,10 @@ export interface WSEvent {
 
 export interface WSJoinEvent extends WSEvent {
   type: EventType.JOIN;
+}
+export interface WSJoinedEvent extends WSEvent {
+  type: EventType.JOINED;
+  conversation: IConversation;
 }
 export interface WSLeaveEvent extends WSEvent {
   type: EventType.LEAVE;

@@ -21,6 +21,6 @@ const { userId } = useAuth();
   <main class="flex-1 flex flex-col overflow-hidden">
     <ChatGroup :messages="messages ?? []" />
 
-    <ChatControls @send="sendMessage(userId, $event)" />
+    <ChatControls @send="sendMessage(userId as string, $event)" />
   </main>
 </template>

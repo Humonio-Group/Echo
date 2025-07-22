@@ -1,4 +1,5 @@
 import type { TArray, TNull } from "~/types/globals/utils";
+import type { IConversation } from "~/types/conversations";
 
 interface RoomState {
   roomId: TNull<string>;
@@ -20,7 +21,15 @@ export const useRoomStore = defineStore("room", {
     isConnected: state => !!state.roomId,
   },
   actions: {
-    // TODO: load room
+    loadRoom(conv: IConversation) {
+      this.roomId = conv.uid;
+      this.writing = false;
+      this.messages = conv.messages?.map(m => ({
+        id: m.id,
+        senderId: m.sender,
+        message: m.content,
+      })) ?? [];
+    },
     connect(roomId: string) {
       this.roomId = roomId;
       this.writing = false;

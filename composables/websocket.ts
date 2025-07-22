@@ -1,4 +1,5 @@
 import { EventType } from "~/types/globals/websocket";
+import type { WSJoinedEvent } from "~/types/globals/websocket";
 
 export const useWebSocketRoom = (id: Ref<string> | string) => {
   const socket = shallowRef<WebSocket | null>();
@@ -31,7 +32,6 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
 
       socket.value.addEventListener("open", async () => {
         store.connect(room.value);
-        console.log(`[WS] room joined ${roomId.value}`);
         send({
           type: EventType.JOIN,
           room: room.value,
@@ -49,7 +49,6 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
 
       socket.value.addEventListener("close", (/* event */) => {
         store.disconnect();
-
         /* switch (event.code) {
           case 1000: {
             console.log("[WS] Connection closed normally");
@@ -78,14 +77,21 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
   // eslint-disable-next-line
   const handleMessage = (data: any) => {
     switch (data.type) {
-      case EventType.MESSAGE:
-        if (!data.sender || !data.message || !data.room) break;
+      case EventType.JOINED: {
+        if (!data.conversation) break;
+        useRoomStore().loadRoom((data as WSJoinedEvent).conversation);
+        break;
+      }
 
+      case EventType.MESSAGE: {
+        if (!data.sender || !data.message || !data.room) break;
         store.storeMessage(data.sender, data.message, false);
         break;
+      }
 
-      default:
+      default: {
         console.warn("[WS] Unknown message type:", data.type);
+      }
     }
   };
 
