@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ChartArea, Gauge, LayoutDashboard, Plus, Users } from "lucide-vue-next";
+import CreateSimulationDialog from "~/components/shared/simulations/dialogs/CreateSimulationDialog.vue";
 </script>
 
 <template>
@@ -31,12 +32,14 @@ import { ChartArea, Gauge, LayoutDashboard, Plus, Users } from "lucide-vue-next"
       </NuxtLinkLocale>
     </Button>
 
-    <Button
-      size="icon"
-      class="rounded-full scale-175 -translate-y-3"
-    >
-      <Plus />
-    </Button>
+    <CreateSimulationDialog>
+      <Button
+        size="icon"
+        class="rounded-full scale-175 -translate-y-3"
+      >
+        <Plus />
+      </Button>
+    </CreateSimulationDialog>
 
     <Button
       size="icon"

@@ -1,0 +1,45 @@
+TableGroup Conversations [color: #EB801B] {
+  conversation
+  prepAnswer
+  message
+  assessment
+}
+
+Enum AssessmentType {
+  text
+  graph
+}
+
+Table conversation {
+  uid uuid pk
+  simulatorId int [ref: > simulator.id]
+  workspaceId int [ref: > workspace.id]
+  userId string
+  startedAt datetime
+  stoppedAt datetime
+}
+
+Table prepAnswer {
+  id int pk
+  prepQuestionKey uuid [ref: > prepQuestion.key]
+  conversationUid uuid [ref: > conversation.uid]
+  answer string
+}
+
+Table message {
+  id int pk
+  conversationUid uuid [ref: > conversation.uid]
+  sender string
+  content string
+  sentAt datetime
+}
+
+Table assessment {
+  id int pk
+  conversationUid uuid [ref: > conversation.uid]
+  evaluationKey string [ref: > evaluation.key]
+  type string
+  data string
+  debrief string
+  createdAt datetime
+}

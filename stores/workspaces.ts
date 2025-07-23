@@ -1,6 +1,8 @@
 import type { TArray, TNull } from "~/types/globals/utils";
 import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
 import type { ISimulator } from "~/types/simulators";
+import { toast } from "vue-sonner";
+import type { IConversation, IPrepAnswerCreate } from "~/types/conversations";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
@@ -10,6 +12,7 @@ interface WorkspacesState {
     creatingWorkspace: boolean;
     savingWorkspace: boolean;
     duplicatingSimulator: TArray<number>;
+    creatingConversation: boolean;
   };
 }
 
@@ -22,6 +25,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
       creatingWorkspace: false,
       savingWorkspace: false,
       duplicatingSimulator: [],
+      creatingConversation: true,
     },
   }),
   getters: {
@@ -131,6 +135,23 @@ export const useWorkspaceStore = defineStore("workspaces", {
       }
 
       return state;
+    },
+
+    async startConversation(simulatorId: number, answers: TArray<IPrepAnswerCreate>) {
+      toast.promise($fetch<IConversation>(`/api/workspaces/${this.workspace?.id}/conversations/create/${simulatorId}`, {
+        method: "POST",
+        body: {
+          answers,
+        },
+      }), {
+        loading: this.translate("dialogs.conversations.create-conversation.toasters.loading"),
+        success: (data: IConversation) => {
+          console.log(data);
+          navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${data.uid}/chat`)));
+          return this.translate("dialogs.conversations.create-conversation.toasters.success");
+        },
+        error: () => this.translate("dialogs.conversations.create-conversation.toasters.error"),
+      });
     },
   },
 });

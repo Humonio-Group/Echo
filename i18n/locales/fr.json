@@ -13,7 +13,8 @@
     },
     "delete": {
       "workspace": "Supprimer l'espace de travail"
-    }
+    },
+    "stop": "Stop"
   },
   "dialogs": {
     "workspaces": {
@@ -33,20 +34,43 @@
           "public-simulators": "Simulateurs publics"
         }
       }
+    },
+    "conversations": {
+      "create-conversation": {
+        "title": "Nouvelle conversation",
+        "caption": "Caption",
+        "toasters": {
+          "loading": "Création de la discussion...",
+          "success": "C'est partit pour converser !",
+          "error": "Une erreur est survenue pendant la création..."
+        }
+      },
+      "answer-questions": {
+        "title": "Questions préparatoires",
+        "caption": "Réponds aux questions utilisées pour cadrer ta discussion. La conversation commencera ensuite."
+      }
     }
   },
   "labels": {
     "optional": "Facultatif",
     "empty": {
-      "workspaces": "Aucun espace de travail pour le moment..."
+      "workspaces": "Aucun espace de travail pour le moment...",
+      "messages": "Aucun message pour le moment...",
+      "results": "Pas de résultats"
     },
     "fields": {
       "name": "Nom",
       "description": "Description",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
-      "values": "Valeurs"
-    }
+      "values": "Valeurs",
+      "message": "Ton message... (cmd+entrer pour envoyer)"
+    },
+    "search": "Rechercher...",
+    "thinking": "Je réfléchi...",
+    "feedback": "Retour | Retours",
+    "start": "Début",
+    "end": "Fin"
   },
   "navigation": {
     "training": "Entraînements",

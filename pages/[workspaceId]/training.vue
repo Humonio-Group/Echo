@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { Settings2 } from "lucide-vue-next";
+import { LoaderCircle, Settings2 } from "lucide-vue-next";
 import SimulatorLibrary from "~/components/shared/simulators/SimulatorLibrary.vue";
+import SimulationCard from "~/components/shared/simulations/SimulationCard.vue";
+
+const store = useConversationStore();
+const { loading } = storeToRefs(store);
+
+store.loadConversations();
 </script>
 
 <template>
@@ -23,7 +29,6 @@ import SimulatorLibrary from "~/components/shared/simulators/SimulatorLibrary.vu
 
     <main class="grid auto-rows-min md:grid-cols-2 gap-4 md:gap-8">
       <section class="flex flex-col">
-        <!-- TODO: if ongoing sessions list length > 0 -->
         <header class="pb-3 border-b">
           <h2 class="text-sm font-semibold text-muted-foreground">
             {{ $t("training.labels.sessions.ongoing") }}
@@ -31,7 +36,22 @@ import SimulatorLibrary from "~/components/shared/simulators/SimulatorLibrary.vu
         </header>
 
         <main class="flex flex-col gap-2 pt-3">
-          <p class="text-muted-foreground italic">
+          <SimulationCard
+            v-for="conv in store.ongoingConversations"
+            :key="conv.uid"
+            :conversation="conv"
+          />
+
+          <div
+            v-if="loading"
+            class="grid place-items-center py-8"
+          >
+            <LoaderCircle class="animate-spin" />
+          </div>
+          <p
+            v-else-if="!store.ongoingConversations.length"
+            class="text-muted-foreground italic"
+          >
             {{ $t("training.labels.sessions.no-ongoing") }}
           </p>
         </main>
@@ -45,7 +65,22 @@ import SimulatorLibrary from "~/components/shared/simulators/SimulatorLibrary.vu
         </header>
 
         <main class="flex flex-col gap-2 pt-3">
-          <p class="text-muted-foreground italic">
+          <SimulationCard
+            v-for="conv in store.pastConversations"
+            :key="conv.uid"
+            :conversation="conv"
+          />
+
+          <div
+            v-if="loading"
+            class="grid place-items-center py-8"
+          >
+            <LoaderCircle class="animate-spin" />
+          </div>
+          <p
+            v-else-if="!store.pastConversations.length"
+            class="text-muted-foreground italic"
+          >
             {{ $t("training.labels.sessions.no-past") }}
           </p>
         </main>

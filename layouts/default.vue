@@ -11,7 +11,7 @@ const onMobile = isMobile();
     data-layout="default"
     class="flex flex-col min-h-dvh"
   >
-    <header class="sticky top-0 py-3 px-4 bg-background">
+    <header class="sticky top-0 py-3 px-4 bg-background z-10">
       <TopBar />
     </header>
 

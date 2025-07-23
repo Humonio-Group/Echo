@@ -33,10 +33,10 @@ async function duplicate() {
       </Avatar>
     </CardHeader>
     <CardContent class="px-4">
-      <CardTitle class="text-sm">
+      <CardTitle class="text-sm truncate">
         {{ simulator.title }}
       </CardTitle>
-      <CardDescription class="text-xs">
+      <CardDescription class="text-xs line-clamp-2">
         {{ simulator.description }}
       </CardDescription>
     </CardContent>

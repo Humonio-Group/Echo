@@ -19,12 +19,14 @@ Table simulator {
 
 Table prepQuestion {
   id int pk
+  key uuid unique
   simulatorId int [ref: > simulator.id]
   label string
 }
 
 Table evaluation {
   id int pk
+  key uuid unique
   simulatorId int [ref: > simulator.id]
   frameworkPrompt string
   assessmentPrompt string
