@@ -1,7 +1,12 @@
-import type { IConversation, IMessage, IPrepAnswerCreate } from "~/types/conversations";
+import type {
+  IConversation,
+  IMessage,
+  IPrepAnswerCreate,
+} from "~/types/conversations";
 import prisma from "~/prisma";
 import type { ISimulator } from "~/types/simulators";
 import { EchoNotFoundError } from "~/types/globals/errors";
+import type { TArray } from "~/types/globals/utils";
 
 /**
  * Create a conversation with pre-filled prep answers
@@ -89,6 +94,27 @@ export async function exists(uid: string): Promise<boolean> {
       answers: true,
       messages: true,
       assessments: true,
+    },
+  });
+}
+
+/**
+ * Recover all user's conversations from a dedicated workspace
+ * @param {string} userId - User id (clerk id)
+ * @param {number} workspaceId - Workspace id
+ * @returns {TArray<IConversation>} - the list of the recovered conversations
+ */
+export async function getAll(userId: string, workspaceId: number): Promise<TArray<IConversation>> {
+  return prisma.conversation.findMany({
+    where: {
+      userId,
+      workspaceId,
+    },
+    include: {
+      simulator: true,
+      messages: true,
+      assessments: true,
+      answers: true,
     },
   });
 }

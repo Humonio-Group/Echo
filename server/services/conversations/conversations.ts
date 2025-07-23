@@ -29,3 +29,17 @@ export async function createConversation(event: HttpEvent) {
     return catchError(event, e as EchoError);
   }
 }
+
+export async function recoverUserConversations(event: HttpEvent) {
+  const user = event.context.user;
+  const workspace = event.context.workspace;
+
+  try {
+    const convs = await conversations.getAll(user.id, workspace.id);
+    setOutput(event, convs.length ? StatusCode.OK : StatusCode.NO_CONTENT);
+    return convs;
+  }
+  catch (e) {
+    return catchError(event, e as EchoError);
+  }
+}

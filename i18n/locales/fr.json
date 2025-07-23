@@ -63,7 +63,9 @@
     },
     "search": "Rechercher...",
     "thinking": "Je réfléchi...",
-    "feedback": "Retour | Retours"
+    "feedback": "Retour | Retours",
+    "start": "Début",
+    "end": "Fin"
   },
   "navigation": {
     "training": "Entraînements",

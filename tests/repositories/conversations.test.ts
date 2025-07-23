@@ -4,6 +4,7 @@ vi.mock("~/prisma", () => ({
     conversation: {
       create: vi.fn(),
       findUnique: vi.fn(),
+      findMany: vi.fn(),
     },
     message: {
       create: vi.fn(),
@@ -165,6 +166,61 @@ describe("conversationRepository", () => {
       const result = await conversations.exists("uid-conv");
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe("getAll", () => {
+    it("should return a list of conversations for a given user and workspace", async () => {
+      const mockUserId = "user-123";
+      const mockWorkspaceId = 42;
+
+      const expectedConversations = [
+        {
+          uid: "conv-1",
+          userId: mockUserId,
+          workspaceId: mockWorkspaceId,
+          simulator: { id: 1, title: "Sim 1" },
+          messages: [],
+          assessments: [],
+          answers: [],
+        },
+        {
+          uid: "conv-2",
+          userId: mockUserId,
+          workspaceId: mockWorkspaceId,
+          simulator: { id: 2, title: "Sim 2" },
+          messages: [],
+          assessments: [],
+          answers: [],
+        },
+      ];
+
+      (prisma.conversation.findMany as any).mockResolvedValue(expectedConversations);
+
+      const result = await conversations.getAll(mockUserId, mockWorkspaceId);
+
+      expect(prisma.conversation.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: mockUserId,
+          workspaceId: mockWorkspaceId,
+        },
+        include: {
+          simulator: true,
+          messages: true,
+          assessments: true,
+          answers: true,
+        },
+      });
+
+      expect(result).toEqual(expectedConversations);
+    });
+
+    it("should return an empty array if no conversations are found", async () => {
+      (prisma.conversation.findMany as any).mockResolvedValue([]);
+
+      const result = await conversations.getAll("unknown-user", 999);
+
+      expect(result).toEqual([]);
     });
   });
 });
