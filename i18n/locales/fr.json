@@ -44,6 +44,10 @@
           "success": "C'est partit pour converser !",
           "error": "Une erreur est survenue pendant la création..."
         }
+      },
+      "answer-questions": {
+        "title": "Questions préparatoires",
+        "caption": "Réponds aux questions utilisées pour cadrer ta discussion. La conversation commencera ensuite."
       }
     }
   },

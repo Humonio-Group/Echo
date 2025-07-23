@@ -2,7 +2,7 @@ import type { TArray, TNull } from "~/types/globals/utils";
 import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
 import type { ISimulator } from "~/types/simulators";
 import { toast } from "vue-sonner";
-import type { IConversation } from "~/types/conversations";
+import type { IConversation, IPrepAnswerCreate } from "~/types/conversations";
 
 interface WorkspacesState {
   workspace: TNull<IWorkspace>;
@@ -137,11 +137,11 @@ export const useWorkspaceStore = defineStore("workspaces", {
       return state;
     },
 
-    async startConversation(simulatorId: number) {
+    async startConversation(simulatorId: number, answers: TArray<IPrepAnswerCreate>) {
       toast.promise($fetch<IConversation>(`/api/workspaces/${this.workspace?.id}/conversations/create/${simulatorId}`, {
         method: "POST",
         body: {
-          answers: [],
+          answers,
         },
       }), {
         loading: this.translate("dialogs.conversations.create-conversation.toasters.loading"),

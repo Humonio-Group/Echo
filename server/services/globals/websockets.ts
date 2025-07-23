@@ -49,7 +49,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
         conversation: conv,
       });
 
-      if (conv.messages?.[conv.messages?.length - 1].sender === "ai") break;
+      if (conv.messages?.[conv.messages?.length - 1]?.sender === "ai") break;
       const message = (await gpt.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -78,6 +78,13 @@ export async function handleMessage(peer: any, data: WSEvent) {
       const payload = data as WSMessageEvent;
       await conversations.message(payload.room, payload.sender, payload.message);
       const conv = await conversations.get(data.room);
+
+      broadcast(data.room, {
+        type: EventType.MESSAGE,
+        room: data.room,
+        sender: payload.sender,
+        message: payload.message,
+      } as WSMessageEvent, peer);
 
       const aiAnswer = (await gpt.chat.completions.create({
         model: "gpt-4o-mini",

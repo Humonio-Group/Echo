@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { Search } from "lucide-vue-next";
 import SimulatorCard from "~/components/shared/simulators/SimulatorCard.vue";
+import type { TNull } from "~/types/globals/utils";
+import AnswerToSimulatorPrepQuestionsSheet
+  from "~/components/shared/simulations/dialogs/AnswerToSimulatorPrepQuestionsSheet.vue";
+import type { ISimulator } from "~/types/simulators";
 
 const store = useWorkspaceStore();
 
-async function createSimulation(id: number) {
-  await store.startConversation(id);
-}
+const selectedSimulator = ref<TNull<ISimulator>>(null);
 </script>
 
 <template>
@@ -18,8 +20,8 @@ async function createSimulation(id: number) {
 
       <DialogContent class="max-h-[75dvh] flex flex-col overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Titr</DialogTitle>
-          <DialogDescription>Desc</DialogDescription>
+          <DialogTitle>{{ $t("dialogs.conversations.create-conversation.title") }}</DialogTitle>
+          <DialogDescription>{{ $t("dialogs.conversations.create-conversation.caption") }}</DialogDescription>
         </DialogHeader>
 
         <section class="flex-1 overflow-y-auto relative flex flex-col gap-4">
@@ -38,11 +40,13 @@ async function createSimulation(id: number) {
               :key="sim.id"
               :simulator="sim"
               class="cursor-pointer outline-0 outline-primary/25 hover:outline-4 transition-all duration-150"
-              @click="createSimulation(sim.id)"
+              @click="selectedSimulator = sim"
             />
           </main>
         </section>
       </DialogContent>
     </Dialog>
+
+    <AnswerToSimulatorPrepQuestionsSheet v-model:selected-simulator="selectedSimulator" />
   </div>
 </template>
