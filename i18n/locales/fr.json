@@ -55,7 +55,8 @@
     "optional": "Facultatif",
     "empty": {
       "workspaces": "Aucun espace de travail pour le moment...",
-      "messages": "Aucun message pour le moment..."
+      "messages": "Aucun message pour le moment...",
+      "results": "Pas de résultats"
     },
     "fields": {
       "name": "Nom",

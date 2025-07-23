@@ -26,17 +26,26 @@ const end = computed(() => ({
   date: df.format(new Date(props.conversation.stoppedAt)),
   time: tf.format(new Date(props.conversation.stoppedAt)),
 }));
-const link = computed(() => `/simulations/${props.conversation.uid}/${new Date(props.conversation.stoppedAt).getTime() <= Date.now() ? "results" : "chat"}`);
+
+const hasResults = computed(() => props.conversation.assessments?.length);
+
+const link = computed(() => {
+  const base = `/simulations/${props.conversation.uid}`;
+
+  if (new Date(props.conversation.stoppedAt).getTime() > Date.now()) return `${base}/chat`;
+  if (hasResults.value) return `${base}/results`;
+  return undefined;
+});
 </script>
 
 <template>
-  <Card class="relative">
+  <Card class="relative select-none">
     <CardContent class="flex gap-4">
       <Avatar class="rounded-md shadow-sm">
         <AvatarFallback>{{ conversation.name.substring(0, 2) }}</AvatarFallback>
       </Avatar>
 
-      <div class="grid">
+      <div class="relative grid">
         <p class="font-semibold">
           {{ conversation.name }}
         </p>
@@ -44,6 +53,12 @@ const link = computed(() => `/simulations/${props.conversation.uid}/${new Date(p
           v-if="lastMessage"
           class="truncate text-sm text-muted-foreground"
         >{{ lastMessage.content }}</span>
+        <Badge
+          variant="secondary"
+          class="absolute top-0 right-0"
+        >
+          {{ $t("labels.empty.results") }}
+        </Badge>
       </div>
     </CardContent>
     <Separator />
@@ -69,6 +84,7 @@ const link = computed(() => `/simulations/${props.conversation.uid}/${new Date(p
     </CardFooter>
 
     <NuxtLinkLocale
+      v-if="link"
       :to="useWorkspacePath(link)"
       class="absolute inset-0"
     />
