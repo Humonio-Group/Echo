@@ -1,8 +1,7 @@
 /* eslint-disable */
 import {EventType, WSEvent, WSMessageEvent} from "~/types/globals/websocket";
-import gpt from "~/openai";
+import {generateAnswer, gpt, replaceVariables} from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
-import conversation from "~/openai/prompts/conversation";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -50,15 +49,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
       });
 
       if (conv.messages?.[conv.messages?.length - 1]?.sender === "ai") break;
-      const message = (await gpt.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", ""),
-          }
-        ]
-      })).choices[0].message.content;
+      const message = await generateAnswer("user", conv);
       await conversations.message(data.room, "ai", message ?? "empty-message");
       broadcast(data.room, {
         type: EventType.MESSAGE,
@@ -86,15 +77,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
         message: payload.message,
       } as WSMessageEvent, peer);
 
-      const aiAnswer = (await gpt.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", JSON.stringify(conv.messages?.map(m => ({ sender: m.sender, content: m.content })) ?? [])),
-          }
-        ]
-      })).choices[0].message.content;
+      const aiAnswer = await generateAnswer(payload.sender, conv);
       await conversations.message(payload.room, "ai", aiAnswer ?? "empty-message");
       broadcast(data.room, {
         type: EventType.MESSAGE,
