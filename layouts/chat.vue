@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { ChevronLeft, MessagesSquare, Square } from "lucide-vue-next";
+
+const store = useRoomStore();
+
+const stopRequested = ref<boolean>(false);
+
+provide<Ref<boolean, boolean>>("stopRequested", stopRequested);
 </script>
 
 <template>
@@ -29,14 +35,15 @@ import { ChevronLeft, MessagesSquare, Square } from "lucide-vue-next";
 
       <div class="flex justify-end">
         <Button
-          size="icon"
+          v-if="!store.isStopped"
           variant="ghost"
-          disabled
+          @click="stopRequested = true"
         >
           <Square />
           {{ $t("btn.stop") }}
         </Button>
         <Button
+          v-if="store.isStopped && store.hasResult"
           variant="ghost"
           disabled
         >

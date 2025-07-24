@@ -6,6 +6,7 @@ export enum EventType {
   JOINED = "joined",
   LEAVE = "leave",
   MESSAGE = "message",
+  STOP_REQUEST = "stop-request",
 }
 
 export interface PeerData {

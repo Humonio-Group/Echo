@@ -105,6 +105,11 @@ export async function handleMessage(peer: any, data: WSEvent) {
       break;
     }
 
+    case EventType.STOP_REQUEST: {
+      console.log(data.room);
+      break;
+    }
+
     default: {
       console.warn(`[WS] (${data.type}) Method not implemented.`);
       break;
