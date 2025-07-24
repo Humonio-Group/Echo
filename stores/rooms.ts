@@ -9,6 +9,7 @@ interface RoomState {
     message: string;
   }>>;
   writing: boolean;
+  conversation: TNull<IConversation>;
 }
 
 export const useRoomStore = defineStore("room", {
@@ -16,9 +17,12 @@ export const useRoomStore = defineStore("room", {
     roomId: null,
     messages: null,
     writing: false,
+    conversation: null,
   }),
   getters: {
     isConnected: state => !!state.roomId,
+    isStopped: state => state.conversation && new Date(state.conversation.stoppedAt).getTime() <= Date.now(),
+    hasResult: state => state.conversation && state.conversation.assessments?.length,
   },
   actions: {
     loadRoom(conv: IConversation) {
@@ -29,6 +33,7 @@ export const useRoomStore = defineStore("room", {
         senderId: m.sender,
         message: m.content,
       })) ?? [];
+      this.conversation = conv;
     },
     connect(roomId: string) {
       this.roomId = roomId;
