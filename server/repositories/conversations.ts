@@ -74,6 +74,8 @@ export async function get(uid: string): Promise<IConversation> {
       answers: true,
       messages: true,
       assessments: true,
+      simulator: true,
+      workspace: true,
     },
   });
   if (!conv) throw new EchoNotFoundError("Conversation not found!");

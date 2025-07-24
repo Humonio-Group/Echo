@@ -144,6 +144,8 @@ describe("conversationRepository", () => {
           answers: true,
           messages: true,
           assessments: true,
+          simulator: true,
+          workspace: true,
         },
       });
 
