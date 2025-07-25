@@ -15,14 +15,15 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       <Button
         size="icon"
         variant="ghost"
-        as-child
+        disabled
       >
-        <NuxtLinkLocale
+        <!-- <NuxtLinkLocale
           :to="useWorkspacePath('/')"
           active-class="!bg-accent !text-accent-foreground"
         >
           <Home />
-        </NuxtLinkLocale>
+        </NuxtLinkLocale> -->
+        <Home />
       </Button>
       <Button
         variant="ghost"
@@ -37,25 +38,27 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       </Button>
       <Button
         variant="ghost"
-        as-child
+        disabled
       >
-        <NuxtLinkLocale
+        <!-- <NuxtLinkLocale
           :to="useWorkspacePath('/performance')"
           active-class="!bg-accent !text-accent-foreground"
         >
           {{ $t("navigation.performance") }}
-        </NuxtLinkLocale>
+        </NuxtLinkLocale> -->
+        {{ $t("navigation.performance") }}
       </Button>
       <Button
         variant="ghost"
-        as-child
+        disabled
       >
-        <NuxtLinkLocale
+        <!-- <NuxtLinkLocale
           :to="useWorkspacePath('/team')"
           active-class="!bg-accent !text-accent-foreground"
         >
           {{ $t("navigation.team") }}
-        </NuxtLinkLocale>
+        </NuxtLinkLocale> -->
+        {{ $t("navigation.team") }}
       </Button>
     </nav>
 
