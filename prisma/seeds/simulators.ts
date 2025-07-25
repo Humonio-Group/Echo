@@ -4,33 +4,7 @@ import type { ISimulatorCreate } from "~/types/simulators";
 const data: (ISimulatorCreate & { id: number })[] = [
   {
     id: 1,
-    title: "ROPE Communicant",
-    description: "Communique suivant le framework ROPE.",
-    picture: null,
-    duration: 15,
-    behaviorPrompt: "Prompt de comportement",
-    prepQuestions: [
-      {
-        id: 1,
-        label: "Quel est ton nom ?",
-      },
-      {
-        id: 2,
-        label: "Quel est ton prénom ?",
-      },
-    ],
-    evaluations: [
-      {
-        id: 1,
-        frameworkPrompt: "framework prompt",
-        assessmentPrompt: "assessment prompt",
-        feedbackPrompt: "feedback prompt",
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "Uriel Role Play",
+    title: "Uriel testing prompt",
     description: "Role play de simulation commerciale avec interlocuteur demandant une remise.",
     picture: null,
     duration: 15,
@@ -79,23 +53,8 @@ Voici l'historique complet de la conversation : {{history}}`,
       {
         id: 1,
         frameworkPrompt: "",
-        assessmentPrompt: `Tu changes alors de rôle. Tu n’es plus Thomas Giraud, mais un **formateur senior expert en négociation commerciale B2B**, spécialisé dans l’industrie. Tu évalues le commercial de façon détaillée.
-### Barème (/20 par critère) :
-- **Capacité à questionner le besoin** : /20
-- **Capacité à valoriser l’offre** : /20
-- **Maîtrise de la pression commerciale** : /20
-- **Posture et professionnalisme** : /20
-- **Marge préservée** : /20 (selon scénario 1, 2 ou 3)
-- **Conclusion stratégique** : /20`,
-        feedbackPrompt: `### :mag: Analyse experte (environ 500 mots) :
-- **Analyse détaillée du déroulé de la négociation**
-- **Identification des erreurs** ou maladresses spécifiques
-- **Repérage des moments clés bien gérés**
-- **Suggestions concrètes d’amélioration**
-  - exemples de formulations plus efficaces
-  - questions qui auraient pu être posées
-  - erreurs de posture à corriger
-:bulb: L’objectif est d’aider le commercial à **progresser fortement**, comme dans un **debrief de haut niveau** en école de vente ou centre de formation expert.`,
+        assessmentPrompt: `Tu changes alors de rôle. Tu n’es plus Thomas Giraud, mais un **formateur senior expert en négociation commerciale B2B**, spécialisé dans l’industrie. Tu évalues le commercial de façon détaillée. ### Barème (/20 par critère) : - **Capacité à questionner le besoin** : /20 - **Capacité à valoriser l’offre** : /20 - **Maîtrise de la pression commerciale** : /20 - **Posture et professionnalisme** : /20 - **Marge préservée** : /20 (selon scénario 1, 2 ou 3) - **Conclusion stratégique** : /20  Tu réponds sans commentaire sous la forme d'un json ayant pour structure : {   "type": "graph",   "data": {     [critère]: [valeur (x/20, fait la division pour avoir un nombre < 1)],     ...   } } Je veux juste le JSON, pas de codequotes ou de commentaires !  Voici la conversation à évaluer : {{history}}`,
+        feedbackPrompt: `### :mag: Analyse experte (environ 500 mots) : - **Analyse détaillée du déroulé de la négociation** - **Identification des erreurs** ou maladresses spécifiques - **Repérage des moments clés bien gérés** - **Suggestions concrètes d’amélioration**   - exemples de formulations plus efficaces   - questions qui auraient pu être posées   - erreurs de posture à corriger :bulb: L’objectif est d’aider le commercial à **progresser fortement**, comme dans un **debrief de haut niveau** en école de vente ou centre de formation expert.  Conversation : {{history}} Notation générée : {{assessment}}  Réponds en texte brute, sans markdown !`,
       },
     ],
   },
