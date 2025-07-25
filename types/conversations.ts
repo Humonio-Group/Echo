@@ -49,6 +49,7 @@ export interface IAssessment {
   conversation?: IConversation;
   evaluation?: IEvaluation;
 }
+export type IAssessmentCreate = Omit<IAssessment, "id" | "conversationUid" | "createdAt" | "conversation" | "evaluation">;
 export type IAssessments = TArray<IAssessment>;
 
 export interface IMessage {
