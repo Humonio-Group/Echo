@@ -10,6 +10,8 @@ const emit = defineEmits<{
   duplicated: [];
 }>();
 
+const detailsOpened = ref<boolean>(false);
+
 const store = useWorkspaceStore();
 const { loading } = storeToRefs(store);
 
@@ -22,7 +24,13 @@ async function duplicate() {
 </script>
 
 <template>
-  <Card class="gap-4 py-4">
+  <Card
+    class="gap-4 py-4"
+    @click="() => {
+      if (!duplicable) return;
+      detailsOpened = true;
+    }"
+  >
     <CardHeader class="px-4 flex flex-col items-center gap-2">
       <Avatar class="size-12">
         <AvatarImage
@@ -58,5 +66,53 @@ async function duplicate() {
         {{ $t("btn.duplicate") }}
       </Button>
     </CardFooter>
+
+    <Sheet
+      v-if="duplicable"
+      v-model:open="detailsOpened"
+    >
+      <SheetContent class="overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle>{{ simulator.title }}</SheetTitle>
+          <SheetDescription>{{ simulator.description }}</SheetDescription>
+        </SheetHeader>
+
+        <div class="grid divide-y px-4">
+          <section class="grid pb-6 gap-2">
+            <p class="text-sm font-medium text-muted-foreground">
+              Behavior prompt
+            </p>
+            <p class="whitespace-pre-wrap">
+              {{ simulator.behaviorPrompt }}
+            </p>
+          </section>
+
+          <section
+            v-for="evaluation in simulator.evaluations ?? []"
+            :key="evaluation.key"
+            class="grid py-6 gap-2"
+          >
+            <p class="text-sm font-medium text-muted-foreground">
+              Framework prompt
+            </p>
+            <p class="whitespace-pre-wrap">
+              {{ evaluation.frameworkPrompt || "-" }}
+            </p>
+            <p class="text-sm font-medium text-muted-foreground">
+              Assessment prompt
+            </p>
+            <p class="whitespace-pre-wrap">
+              {{ evaluation.assessmentPrompt }}
+            </p>
+            <p class="text-sm font-medium text-muted-foreground">
+              Debrief prompt
+            </p>
+            <p class="whitespace-pre-wrap">
+              {{ evaluation.feedbackPrompt }}
+            </p>
+          </section>
+        </div>
+      </SheetContent>
+    </Sheet>
   </Card>
 </template>
