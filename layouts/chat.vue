@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ChevronLeft, MessagesSquare, Square } from "lucide-vue-next";
+import { ChevronLeft, LoaderCircle, MessageSquare, MessagesSquare, Square } from "lucide-vue-next";
+
+const store = useRoomStore();
+
+const stopRequested = ref<boolean>(false);
+
+provide<Ref<boolean, boolean>>("stopRequested", stopRequested);
+
+const route = computed(() => useRoute());
+const resultButton = computed(() => route.value.meta.resultButton);
+const room = computed(() => route.value.params.simId);
 </script>
 
 <template>
@@ -29,19 +39,37 @@ import { ChevronLeft, MessagesSquare, Square } from "lucide-vue-next";
 
       <div class="flex justify-end">
         <Button
-          size="icon"
+          v-if="!store.isStopped"
           variant="ghost"
-          disabled
+          :disabled="stopRequested"
+          @click="stopRequested = true"
         >
-          <Square />
+          <LoaderCircle
+            v-if="stopRequested"
+            class="animate-spin"
+          />
+          <Square v-else />
           {{ $t("btn.stop") }}
         </Button>
         <Button
+          v-else-if="store.isStopped && store.hasResult && resultButton"
           variant="ghost"
-          disabled
+          as-child
         >
-          <MessagesSquare />
-          {{ $t("labels.feedback", 2) }}
+          <NuxtLinkLocale :to="useWorkspacePath(`/simulations/${room}/results`)">
+            <MessagesSquare />
+            {{ $t("labels.feedback", 2) }}
+          </NuxtLinkLocale>
+        </Button>
+        <Button
+          v-else-if="store.isStopped && !resultButton"
+          variant="ghost"
+          as-child
+        >
+          <NuxtLinkLocale :to="useWorkspacePath(`/simulations/${room}/chat`)">
+            <MessageSquare />
+            {{ $t("btn.chat") }}
+          </NuxtLinkLocale>
         </Button>
       </div>
     </header>

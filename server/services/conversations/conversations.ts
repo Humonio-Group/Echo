@@ -43,3 +43,16 @@ export async function recoverUserConversations(event: HttpEvent) {
     return catchError(event, e as EchoError);
   }
 }
+
+export async function recoverConversation(event: HttpEvent) {
+  const conversationUid = getRouterParam(event, "conversationUid");
+
+  if (!conversationUid) return catchError(event, new EchoBadRequestError("Missing simulator id"));
+
+  try {
+    return await conversations.get(conversationUid);
+  }
+  catch (e) {
+    return catchError(event, e as EchoError);
+  }
+}

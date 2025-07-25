@@ -27,7 +27,9 @@ const end = computed(() => ({
   time: tf.format(new Date(props.conversation.stoppedAt)),
 }));
 
-const hasResults = computed(() => props.conversation.assessments?.length);
+const isStopped = computed(() => new Date(props.conversation.stoppedAt).getTime() <= Date.now());
+
+const hasResults = computed(() => !!props.conversation.assessments?.length);
 
 const link = computed(() => {
   const base = `/simulations/${props.conversation.uid}`;
@@ -54,6 +56,7 @@ const link = computed(() => {
           class="truncate text-sm text-muted-foreground"
         >{{ lastMessage.content }}</span>
         <Badge
+          v-if="!hasResults && isStopped"
           variant="secondary"
           class="absolute top-0 right-0"
         >

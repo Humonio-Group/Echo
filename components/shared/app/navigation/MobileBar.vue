@@ -9,14 +9,15 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
-      as-child
+      disabled
     >
-      <NuxtLinkLocale
+      <!-- <NuxtLinkLocale
         :to="useWorkspacePath('/')"
         active-class="!text-foreground"
       >
         <LayoutDashboard class="size-5" />
-      </NuxtLinkLocale>
+      </NuxtLinkLocale> -->
+      <LayoutDashboard class="size-5" />
     </Button>
     <Button
       size="icon"
@@ -45,27 +46,29 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
-      as-child
+      disabled
     >
-      <NuxtLinkLocale
+      <!-- <NuxtLinkLocale
         :to="useWorkspacePath('/performance')"
         active-class="!text-foreground"
       >
         <ChartArea class="size-5" />
-      </NuxtLinkLocale>
+      </NuxtLinkLocale> -->
+      <ChartArea class="size-5" />
     </Button>
     <Button
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
-      as-child
+      disabled
     >
-      <NuxtLinkLocale
+      <!-- <NuxtLinkLocale
         :to="useWorkspacePath('/team')"
         active-class="!text-foreground"
       >
         <Users class="size-5" />
-      </NuxtLinkLocale>
+      </NuxtLinkLocale> -->
+      <Users class="size-5" />
     </Button>
   </div>
 </template>

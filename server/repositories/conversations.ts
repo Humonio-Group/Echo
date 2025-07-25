@@ -74,6 +74,13 @@ export async function get(uid: string): Promise<IConversation> {
       answers: true,
       messages: true,
       assessments: true,
+      simulator: {
+        include: {
+          evaluations: true,
+          prepQuestions: true,
+        },
+      },
+      workspace: true,
     },
   });
   if (!conv) throw new EchoNotFoundError("Conversation not found!");
@@ -110,11 +117,53 @@ export async function getAll(userId: string, workspaceId: number): Promise<TArra
       userId,
       workspaceId,
     },
+    orderBy: [
+      {
+        startedAt: "desc",
+      },
+      {
+        stoppedAt: "desc",
+      },
+    ],
     include: {
       simulator: true,
       messages: true,
       assessments: true,
       answers: true,
+    },
+  });
+}
+
+/**
+ * Update an existing conversation to stop it at the given date
+ * @param {string} uid - Targeted conversation uid
+ * @param {Date} endDate - Date to stop the conversation at
+ * @returns {IConversation} - the updated conversation
+ * @throws {EchoNotFoundError} if the given uid doesn't belong to any active conversation
+ */
+export async function end(uid: string, endDate: Date): Promise<IConversation> {
+  if (!await exists(uid)) throw new EchoNotFoundError("Conversation not found!");
+  return prisma.conversation.update({
+    where: {
+      uid,
+      stoppedAt: {
+        gt: endDate,
+      },
+    },
+    data: {
+      stoppedAt: endDate,
+    },
+    include: {
+      answers: true,
+      messages: true,
+      assessments: true,
+      simulator: {
+        include: {
+          evaluations: true,
+          prepQuestions: true,
+        },
+      },
+      workspace: true,
     },
   });
 }

@@ -9,6 +9,15 @@ import type { ISimulator } from "~/types/simulators";
 const store = useWorkspaceStore();
 
 const selectedSimulator = ref<TNull<ISimulator>>(null);
+
+function selectSimulator(simulator: ISimulator) {
+  if (simulator.prepQuestions?.length) selectedSimulator.value = simulator;
+  else submit(simulator.id);
+}
+
+function submit(id: number) {
+  store.startConversation(id, []);
+}
 </script>
 
 <template>
@@ -40,7 +49,7 @@ const selectedSimulator = ref<TNull<ISimulator>>(null);
               :key="sim.id"
               :simulator="sim"
               class="cursor-pointer outline-0 outline-primary/25 hover:outline-4 transition-all duration-150"
-              @click="selectedSimulator = sim"
+              @click="selectSimulator(sim)"
             />
           </main>
         </section>

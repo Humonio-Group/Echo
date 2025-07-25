@@ -146,7 +146,6 @@ export const useWorkspaceStore = defineStore("workspaces", {
       }), {
         loading: this.translate("dialogs.conversations.create-conversation.toasters.loading"),
         success: (data: IConversation) => {
-          console.log(data);
           navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${data.uid}/chat`)));
           return this.translate("dialogs.conversations.create-conversation.toasters.success");
         },

@@ -14,7 +14,8 @@
     "delete": {
       "workspace": "Supprimer l'espace de travail"
     },
-    "stop": "Stop"
+    "stop": "Stop",
+    "chat": "Conversation"
   },
   "dialogs": {
     "workspaces": {

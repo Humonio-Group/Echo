@@ -9,6 +9,7 @@ interface RoomState {
     message: string;
   }>>;
   writing: boolean;
+  conversation: TNull<IConversation>;
 }
 
 export const useRoomStore = defineStore("room", {
@@ -16,19 +17,33 @@ export const useRoomStore = defineStore("room", {
     roomId: null,
     messages: null,
     writing: false,
+    conversation: null,
   }),
   getters: {
     isConnected: state => !!state.roomId,
+    isStopped: state => state.conversation && new Date(state.conversation.stoppedAt).getTime() <= Date.now(),
+    hasResult: state => state.conversation && state.conversation.assessments?.length,
   },
   actions: {
+    async fetchRoomConversation(simId: string) {
+      try {
+        const { data } = await useFetch<IConversation>(`/api/workspaces/${useWorkspaceStore().workspace?.id}/conversations/${simId}`);
+        if (!data.value) return navigateTo(useLocalePath()(useWorkspacePath("/training")));
+        this.loadRoom(data.value);
+      }
+      catch {
+        navigateTo(useLocalePath()(useWorkspacePath("/training")));
+      }
+    },
     loadRoom(conv: IConversation) {
       this.roomId = conv.uid;
-      this.writing = false;
       this.messages = conv.messages?.map(m => ({
         id: m.id,
         senderId: m.sender,
         message: m.content,
       })) ?? [];
+      this.writing = this.messages.length % 2 === 0;
+      this.conversation = conv;
     },
     connect(roomId: string) {
       this.roomId = roomId;
@@ -49,6 +64,14 @@ export const useRoomStore = defineStore("room", {
         senderId: sender,
         message,
       }];
+    },
+    stopConversationAt(date: Date) {
+      if (!this.conversation) return;
+
+      this.conversation = {
+        ...this.conversation,
+        stoppedAt: date,
+      };
     },
   },
 });

@@ -1,8 +1,14 @@
 /* eslint-disable */
-import {EventType, WSEvent, WSMessageEvent} from "~/types/globals/websocket";
-import gpt from "~/openai";
+import {
+  EventType, WSConversationAssessmentsGeneratedEvent,
+  WSConversationEndedEvent,
+  type WSConversationStopRequestEvent,
+  WSEvent,
+  WSMessageEvent
+} from "~/types/globals/websocket";
+import { generateAnswer } from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
-import conversation from "~/openai/prompts/conversation";
+import { generateConversationResults } from "~/server/services/conversations/assessments";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -30,7 +36,10 @@ export function broadcast(room: string, payload: WSEvent, except?: any) {
   const set = rooms.get(room);
   if (!set) return;
 
-  const msg = JSON.stringify(payload);
+  const msg = JSON.stringify({
+    ...payload,
+    room,
+  });
   for (const p of set) {
     if (except && p === except) continue;
     p.send(msg);
@@ -50,15 +59,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
       });
 
       if (conv.messages?.[conv.messages?.length - 1]?.sender === "ai") break;
-      const message = (await gpt.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", ""),
-          }
-        ]
-      })).choices[0].message.content;
+      const message = await generateAnswer("user", conv);
       await conversations.message(data.room, "ai", message ?? "empty-message");
       broadcast(data.room, {
         type: EventType.MESSAGE,
@@ -86,15 +87,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
         message: payload.message,
       } as WSMessageEvent, peer);
 
-      const aiAnswer = (await gpt.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: conversation.replace("{{HISTORIQUE_CONVERSATION}}", JSON.stringify(conv.messages?.map(m => ({ sender: m.sender, content: m.content })) ?? [])),
-          }
-        ]
-      })).choices[0].message.content;
+      const aiAnswer = await generateAnswer(payload.sender, conv);
       await conversations.message(payload.room, "ai", aiAnswer ?? "empty-message");
       broadcast(data.room, {
         type: EventType.MESSAGE,
@@ -102,6 +95,23 @@ export async function handleMessage(peer: any, data: WSEvent) {
         sender: "ai",
         message: aiAnswer,
       } as WSMessageEvent);
+      break;
+    }
+
+    case EventType.STOP_REQUEST: {
+      const payload = data as WSConversationStopRequestEvent;
+
+      const conv = await conversations.end(payload.room, new Date(payload.emittedAt));
+      broadcast(payload.room, {
+        type: EventType.CONV_ENDED,
+        endedAt: conv.stoppedAt,
+      } as WSConversationEndedEvent);
+
+      const assessments = await generateConversationResults(conv);
+      broadcast(payload.room, {
+        type: EventType.ASSESSMENTS_GENERATED,
+        assessments,
+      } as WSConversationAssessmentsGeneratedEvent);
       break;
     }
 

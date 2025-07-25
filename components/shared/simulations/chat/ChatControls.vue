@@ -57,14 +57,14 @@ const handleKeydown = (event: KeyboardEvent) => {
       v-model="message"
       :placeholder="$t('labels.fields.message')"
       class="min-h-9 max-h-32 w-full resize-none overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border"
-      :disabled="writing"
+      :disabled="writing || store.isStopped"
       rows="1"
       @input="handleInput"
       @keydown="handleKeydown"
     />
     <Button
       size="icon"
-      :disabled="writing || !canSend"
+      :disabled="writing || !canSend || store.isStopped"
       @click="send"
     >
       <Send />

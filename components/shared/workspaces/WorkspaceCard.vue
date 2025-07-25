@@ -23,7 +23,7 @@ defineProps<{
     </CardContent>
 
     <NuxtLinkLocale
-      :to="`/${workspace.id}`"
+      :to="`/${workspace.id}/training`"
       class="absolute inset-0 z-[1]"
     />
   </Card>
