@@ -25,6 +25,17 @@ export const useRoomStore = defineStore("room", {
     hasResult: state => state.conversation && state.conversation.assessments?.length,
   },
   actions: {
+    async fetchRoomConversation(simId: string) {
+      try {
+        const { data } = await useFetch<IConversation>(`/api/workspaces/${useWorkspaceStore().workspace?.id}/conversations/${simId}`);
+        if (!data.value) return navigateTo(useLocalePath()(useWorkspacePath("/training")));
+        this.loadRoom(data.value);
+      }
+      catch (e) {
+        console.error(e);
+        navigateTo(useLocalePath()(useWorkspacePath("/training")));
+      }
+    },
     loadRoom(conv: IConversation) {
       this.roomId = conv.uid;
       this.writing = false;

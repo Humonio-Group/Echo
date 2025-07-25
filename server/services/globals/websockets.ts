@@ -1,7 +1,15 @@
 /* eslint-disable */
-import {EventType, WSEvent, WSMessageEvent} from "~/types/globals/websocket";
+import {
+  EventType, WSConversationAssessmentsGeneratedEvent,
+  WSConversationEndedEvent,
+  type WSConversationStopRequestEvent,
+  WSEvent,
+  WSMessageEvent
+} from "~/types/globals/websocket";
 import {generateAnswer, gpt, replaceVariables} from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
+import {generateConversationResults} from "~/server/services/conversations/assessments";
+import type {IAssessments, IConversation} from "~/types/conversations";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -89,7 +97,19 @@ export async function handleMessage(peer: any, data: WSEvent) {
     }
 
     case EventType.STOP_REQUEST: {
-      console.log(data.room);
+      const payload = data as WSConversationStopRequestEvent;
+
+      const conv = await conversations.end(payload.room, new Date(payload.emittedAt));
+      broadcast(payload.room, {
+        type: EventType.CONV_ENDED,
+        endedAt: conv.stoppedAt,
+      } as WSConversationEndedEvent);
+
+      const assessments = await generateConversationResults(conv);
+      broadcast(payload.room, {
+        type: EventType.ASSESSMENTS_GENERATED,
+        assessments,
+      } as WSConversationAssessmentsGeneratedEvent);
       break;
     }
 

@@ -5,6 +5,7 @@ vi.mock("~/prisma", () => ({
       create: vi.fn(),
       findUnique: vi.fn(),
       findMany: vi.fn(),
+      update: vi.fn(),
     },
     message: {
       create: vi.fn(),
@@ -144,7 +145,12 @@ describe("conversationRepository", () => {
           answers: true,
           messages: true,
           assessments: true,
-          simulator: true,
+          simulator: {
+            include: {
+              evaluations: true,
+              prepQuestions: true,
+            },
+          },
           workspace: true,
         },
       });
@@ -223,6 +229,63 @@ describe("conversationRepository", () => {
       const result = await conversations.getAll("unknown-user", 999);
 
       expect(result).toEqual([]);
+    });
+  });
+
+  describe("end", () => {
+    it("should throw if the conversation does not exist", async () => {
+      (prisma.conversation.findUnique as any).mockResolvedValue(null);
+
+      await expect(() =>
+        conversations.end("uid-conv", new Date()),
+      ).rejects.toThrow(EchoNotFoundError);
+    });
+
+    it("should update the conversation with the new end date", async () => {
+      const mockDate = new Date("2025-07-25T10:00:00.000Z");
+
+      // Mock pour exists
+      (prisma.conversation.findUnique as any).mockResolvedValue({ uid: "uid-conv" });
+
+      const expectedUpdatedConversation = {
+        uid: "uid-conv",
+        stoppedAt: mockDate,
+        messages: [],
+        simulator: {},
+        workspace: {},
+        assessments: [],
+        answers: [],
+      };
+
+      (prisma.conversation.update as any).mockResolvedValue(expectedUpdatedConversation);
+
+      const result = await conversations.end("uid-conv", mockDate);
+
+      expect(prisma.conversation.update).toHaveBeenCalledWith({
+        where: {
+          uid: "uid-conv",
+          stoppedAt: {
+            gt: mockDate,
+          },
+        },
+        data: {
+          stoppedAt: mockDate,
+        },
+        include: {
+          answers: true,
+          messages: true,
+          assessments: true,
+          simulator: {
+            include: {
+              evaluations: true,
+              prepQuestions: true,
+            },
+          },
+          workspace: true,
+        },
+      });
+
+      expect(result).toEqual(expectedUpdatedConversation);
     });
   });
 });
