@@ -45,8 +45,6 @@ export async function recoverUserConversations(event: HttpEvent) {
 }
 
 export async function recoverConversation(event: HttpEvent) {
-  const user = event.context.user;
-  const workspace = event.context.workspace;
   const conversationUid = getRouterParam(event, "conversationUid");
 
   if (!conversationUid) return catchError(event, new EchoBadRequestError("Missing simulator id"));

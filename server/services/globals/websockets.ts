@@ -6,9 +6,9 @@ import {
   WSEvent,
   WSMessageEvent
 } from "~/types/globals/websocket";
-import {generateAnswer, gpt, replaceVariables} from "~/openai";
+import { generateAnswer } from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
-import {generateConversationResults} from "~/server/services/conversations/assessments";
+import { generateConversationResults } from "~/server/services/conversations/assessments";
 
 const rooms = new Map<string, Set<any>>();
 

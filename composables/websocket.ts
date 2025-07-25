@@ -1,5 +1,5 @@
 import { EventType } from "~/types/globals/websocket";
-import type { WSConversationEndedEvent, WSConversationAssessmentsGeneratedEvent, WSJoinedEvent } from "~/types/globals/websocket";
+import type { WSConversationAssessmentsGeneratedEvent, WSJoinedEvent } from "~/types/globals/websocket";
 
 export const useWebSocketRoom = (id: Ref<string> | string) => {
   const socket = shallowRef<WebSocket | null>();
