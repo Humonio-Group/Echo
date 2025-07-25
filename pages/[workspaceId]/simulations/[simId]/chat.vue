@@ -23,6 +23,7 @@ watch(stopRequested, (val) => {
   room.send({
     type: EventType.STOP_REQUEST,
     room: roomId.value,
+    emittedAt: new Date(),
   });
 });
 </script>
