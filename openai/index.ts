@@ -6,16 +6,20 @@ export const gpt = new OpenAI({
   apiKey: process.env.NUXT_GPT_SECRET_KEY,
 });
 
-export async function generateAnswer(userId: string, conversation: IConversation): Promise<TNull<string>> {
+export async function generate(prompt: string): Promise<TNull<string>> {
   return (await gpt.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {
         role: "user",
-        content: replaceVariables(userId, conversation),
+        content: prompt,
       },
     ],
   })).choices[0].message.content;
+}
+
+export async function generateAnswer(userId: string, conversation: IConversation): Promise<TNull<string>> {
+  return generate(replaceVariables(userId, conversation));
 }
 
 export function replaceVariables(userId: string, conversation: IConversation): string {
@@ -26,8 +30,6 @@ export function replaceVariables(userId: string, conversation: IConversation): s
   const variables = gatherVariablesValue(userId, conversation);
 
   Object.keys(variables).forEach(key => behavior = behavior.replaceAll(`{{${key}}}`, variables[key]));
-
-  console.log(behavior);
   return behavior;
 }
 
