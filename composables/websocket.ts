@@ -1,5 +1,5 @@
 import { EventType } from "~/types/globals/websocket";
-import type { WSConversationAssessmentsGeneratedEvent, WSJoinedEvent } from "~/types/globals/websocket";
+import type { WSConversationEndedEvent, WSConversationAssessmentsGeneratedEvent, WSJoinedEvent } from "~/types/globals/websocket";
 
 export const useWebSocketRoom = (id: Ref<string> | string) => {
   const socket = shallowRef<WebSocket | null>();
@@ -89,10 +89,13 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
         break;
       }
 
+      case EventType.CONV_ENDED: {
+        break;
+      }
+
       case EventType.ASSESSMENTS_GENERATED: {
         const payload = data as WSConversationAssessmentsGeneratedEvent;
-        console.log(payload);
-        // TODO: handle in front
+        navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${payload.room}/results`)));
         break;
       }
 

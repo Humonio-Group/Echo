@@ -9,7 +9,6 @@ import {
 import {generateAnswer, gpt, replaceVariables} from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
 import {generateConversationResults} from "~/server/services/conversations/assessments";
-import type {IAssessments, IConversation} from "~/types/conversations";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -37,7 +36,10 @@ export function broadcast(room: string, payload: WSEvent, except?: any) {
   const set = rooms.get(room);
   if (!set) return;
 
-  const msg = JSON.stringify(payload);
+  const msg = JSON.stringify({
+    ...payload,
+    room,
+  });
   for (const p of set) {
     if (except && p === except) continue;
     p.send(msg);

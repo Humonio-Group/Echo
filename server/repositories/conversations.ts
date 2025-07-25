@@ -117,6 +117,14 @@ export async function getAll(userId: string, workspaceId: number): Promise<TArra
       userId,
       workspaceId,
     },
+    orderBy: [
+      {
+        startedAt: "desc",
+      },
+      {
+        stoppedAt: "desc",
+      },
+    ],
     include: {
       simulator: true,
       messages: true,

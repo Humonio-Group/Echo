@@ -5,6 +5,7 @@ import branding from "~/branding";
 
 definePageMeta({
   layout: "chat",
+  resultButton: false,
 });
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler);

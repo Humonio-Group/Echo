@@ -31,19 +31,18 @@ export const useRoomStore = defineStore("room", {
         if (!data.value) return navigateTo(useLocalePath()(useWorkspacePath("/training")));
         this.loadRoom(data.value);
       }
-      catch (e) {
-        console.error(e);
+      catch {
         navigateTo(useLocalePath()(useWorkspacePath("/training")));
       }
     },
     loadRoom(conv: IConversation) {
       this.roomId = conv.uid;
-      this.writing = false;
       this.messages = conv.messages?.map(m => ({
         id: m.id,
         senderId: m.sender,
         message: m.content,
       })) ?? [];
+      this.writing = this.messages.length % 2 === 0;
       this.conversation = conv;
     },
     connect(roomId: string) {
@@ -65,6 +64,14 @@ export const useRoomStore = defineStore("room", {
         senderId: sender,
         message,
       }];
+    },
+    stopConversationAt(date: Date) {
+      if (!this.conversation) return;
+
+      this.conversation = {
+        ...this.conversation,
+        stoppedAt: date,
+      };
     },
   },
 });

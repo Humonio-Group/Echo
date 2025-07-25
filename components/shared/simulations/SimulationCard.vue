@@ -27,6 +27,8 @@ const end = computed(() => ({
   time: tf.format(new Date(props.conversation.stoppedAt)),
 }));
 
+const isStopped = computed(() => new Date(props.conversation.stoppedAt).getTime() <= Date.now());
+
 const hasResults = computed(() => !!props.conversation.assessments?.length);
 
 const link = computed(() => {
@@ -54,7 +56,7 @@ const link = computed(() => {
           class="truncate text-sm text-muted-foreground"
         >{{ lastMessage.content }}</span>
         <Badge
-          v-if="!hasResults"
+          v-if="!hasResults && isStopped"
           variant="secondary"
           class="absolute top-0 right-0"
         >

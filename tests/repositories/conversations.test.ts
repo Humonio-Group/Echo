@@ -212,6 +212,14 @@ describe("conversationRepository", () => {
           userId: mockUserId,
           workspaceId: mockWorkspaceId,
         },
+        orderBy: [
+          {
+            startedAt: "desc",
+          },
+          {
+            stoppedAt: "desc",
+          },
+        ],
         include: {
           simulator: true,
           messages: true,

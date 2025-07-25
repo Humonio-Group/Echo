@@ -5,6 +5,7 @@ import { EventType } from "~/types/globals/websocket";
 
 definePageMeta({
   layout: "chat",
+  resultButton: true,
 });
 
 const route = useRoute();
