@@ -95,6 +95,7 @@ export const useWebSocketRoom = (id: Ref<string> | string) => {
 
       case EventType.ASSESSMENTS_GENERATED: {
         const payload = data as WSConversationAssessmentsGeneratedEvent;
+        if (!payload.assessments.length) break;
         navigateTo(useLocalePath()(useWorkspacePath(`/simulations/${payload.room}/results`)));
         break;
       }
