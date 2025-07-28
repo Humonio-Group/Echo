@@ -4,10 +4,18 @@ vi.mock("~/prisma", () => ({
       create: vi.fn(),
       findMany: vi.fn(),
       findUnique: vi.fn(),
-      /* TODO:
       update: vi.fn(),
       delete: vi.fn(),
-       */
+    },
+    prepQuestion: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    evaluation: {
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
   },
 }));
@@ -221,6 +229,173 @@ describe("manage simulators", () => {
       });
       expect(result).toHaveLength(1);
       expect(result).toEqual(expectedList);
+    });
+  });
+
+  describe("simulatorRepository.update", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should update the simulator", async () => {
+      const mockId = 1;
+      const updateData = {
+        title: "Updated title",
+        description: "Updated description",
+        duration: 10,
+        picture: null,
+        behaviorPrompt: "Updated prompt",
+      };
+      const expected = {
+        ...updateData,
+        id: mockId,
+        prepQuestions: [],
+        evaluations: [],
+      };
+
+      (prisma.simulator.update as any).mockResolvedValue(expected);
+
+      const result = await simulators.update(mockId, updateData);
+      expect(prisma.simulator.update).toHaveBeenCalledWith({
+        where: { id: mockId },
+        data: updateData,
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      });
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe("simulatorRepository.destroy", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should delete the simulator", async () => {
+      const mockId = 1;
+      const expected = {
+        id: mockId,
+        prepQuestions: [],
+        evaluations: [],
+      };
+
+      (prisma.simulator.delete as any).mockResolvedValue(expected);
+
+      const result = await simulators.destroy(mockId);
+      expect(prisma.simulator.delete).toHaveBeenCalledWith({
+        where: { id: mockId },
+        include: {
+          prepQuestions: true,
+          evaluations: true,
+        },
+      });
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe("simulatorRepository.prepQuestions", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should create a prep question", async () => {
+      const simulatorId = 1;
+      const data = { label: "What is your name?" };
+      const expected = { id: 1, simulatorId, ...data };
+
+      (prisma.prepQuestion.create as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.createQuestion(simulatorId, data);
+      expect(result).toEqual(expected);
+      expect(prisma.prepQuestion.create).toHaveBeenCalledWith({
+        data: { simulatorId, label: data.label },
+      });
+    });
+
+    it("should update a prep question", async () => {
+      const key = "abc123";
+      const data = { label: "Updated question?" };
+      const expected = { key, ...data };
+
+      (prisma.prepQuestion.update as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.updateQuestion(key, data);
+      expect(result).toEqual(expected);
+      expect(prisma.prepQuestion.update).toHaveBeenCalledWith({
+        where: { key },
+        data,
+      });
+    });
+
+    it("should delete a prep question", async () => {
+      const key = "abc123";
+      const expected = { key };
+
+      (prisma.prepQuestion.delete as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.deleteQuestion(key);
+      expect(result).toEqual(expected);
+      expect(prisma.prepQuestion.delete).toHaveBeenCalledWith({
+        where: { key },
+      });
+    });
+  });
+
+  describe("simulatorRepository.evaluations", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should create an evaluation", async () => {
+      const simulatorId = 1;
+      const data = {
+        frameworkPrompt: "Framework",
+        assessmentPrompt: "Assessment",
+        feedbackPrompt: "Feedback",
+      };
+      const expected = { id: 1, simulatorId, ...data };
+
+      (prisma.evaluation.create as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.createEvaluation(simulatorId, data);
+      expect(result).toEqual(expected);
+      expect(prisma.evaluation.create).toHaveBeenCalledWith({
+        data: { simulatorId, ...data },
+      });
+    });
+
+    it("should update an evaluation", async () => {
+      const key = "eval123";
+      const data = {
+        frameworkPrompt: "Updated framework",
+        assessmentPrompt: "Updated assessment",
+        feedbackPrompt: "Updated feedback",
+      };
+      const expected = { key, ...data };
+
+      (prisma.evaluation.update as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.updateEvaluation(key, data);
+      expect(result).toEqual(expected);
+      expect(prisma.evaluation.update).toHaveBeenCalledWith({
+        where: { key },
+        data,
+      });
+    });
+
+    it("should delete an evaluation", async () => {
+      const key = "eval123";
+      const expected = { key };
+
+      (prisma.evaluation.delete as any) = vi.fn().mockResolvedValue(expected);
+
+      const result = await simulators.deleteEvaluation(key);
+      expect(result).toEqual(expected);
+      expect(prisma.evaluation.delete).toHaveBeenCalledWith({
+        where: { key },
+      });
     });
   });
 });
