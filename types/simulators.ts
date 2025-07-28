@@ -22,6 +22,12 @@ export type ISimulatorCreate = Omit<ISimulator, "id" | "workspaceId" | "createdB
   prepQuestions?: TArray<IPrepQuestionCreate>;
   evaluations?: TArray<IEvaluationCreate>;
 };
+export type ISimulatorUpdate = Pick<ISimulator, "title" | "description" | "duration" | "picture" | "behaviorPrompt"> & {
+  questionsToDelete?: TArray<string>;
+  evaluationsToDelete?: TArray<string>;
+  prepQuestions?: TArray<IPrepQuestionUpdate>;
+  evaluations?: TArray<IEvaluationUpdate>;
+};
 
 export interface IPrepQuestion {
   id: number;
@@ -31,7 +37,8 @@ export interface IPrepQuestion {
 
   simulator?: ISimulator;
 }
-export type IPrepQuestionCreate = Omit<IPrepQuestion, "simulatorId" | "simulator" | "key">;
+export type IPrepQuestionCreate = Omit<IPrepQuestion, "id" | "simulatorId" | "simulator" | "key">;
+export type IPrepQuestionUpdate = Pick<IPrepQuestion, "label"> & { key?: string };
 
 export interface IEvaluation {
   id: number;
@@ -43,4 +50,5 @@ export interface IEvaluation {
 
   simulator?: ISimulator;
 }
-export type IEvaluationCreate = Omit<IEvaluation, "simulatorId" | "simulator" | "key">;
+export type IEvaluationCreate = Omit<IEvaluation, "id" | "simulatorId" | "simulator" | "key">;
+export type IEvaluationUpdate = Pick<IEvaluation, "frameworkPrompt" | "assessmentPrompt" | "feedbackPrompt"> & { key?: string };

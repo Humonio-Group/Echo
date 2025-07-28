@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ISimulator } from "~/types/simulators";
+import type { ISimulator, ISimulatorCreate, ISimulatorUpdate } from "~/types/simulators";
 import { Plus, Trash } from "lucide-vue-next";
 import { useFieldArray, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -22,11 +22,11 @@ const form = useForm({
     description: z.string(),
     behaviorPrompt: z.string().min(1),
     prepQuestions: z.array(z.object({
-      prepQuestionKey: z.string().optional(),
+      key: z.string().optional(),
       label: z.string().min(1),
     })).optional(),
     evaluations: z.array(z.object({
-      evaluationKey: z.string().optional(),
+      key: z.string().optional(),
       frameworkPrompt: z.string().optional(),
       assessmentPrompt: z.string().optional(),
       feedbackPrompt: z.string().optional(),
@@ -37,11 +37,11 @@ const form = useForm({
     description: props.simulator?.description,
     behaviorPrompt: props.simulator?.behaviorPrompt,
     prepQuestions: props.simulator?.prepQuestions?.map(pq => ({
-      prepQuestionKey: pq.key,
+      key: pq.key,
       label: pq.label,
     })),
     evaluations: props.simulator?.evaluations?.map(ev => ({
-      evaluationKey: ev.key,
+      key: ev.key,
       frameworkPrompt: ev.frameworkPrompt,
       assessmentPrompt: ev.assessmentPrompt,
       feedbackPrompt: ev.feedbackPrompt,
@@ -52,17 +52,55 @@ const form = useForm({
 const { fields: prepQuestions, remove: removeQuestion, push: pushQuestion } = useFieldArray("prepQuestions");
 const { fields: evaluations, remove: removeEvaluation, push: pushEvaluation } = useFieldArray("evaluations");
 
-const submit = form.handleSubmit(async (values) => {
-  console.table(values);
+const store = useWorkspaceStore();
+const { loading } = storeToRefs(store);
 
-  if (editMode.value) await save();
-  else await create();
+const submit = form.handleSubmit(async (values) => {
+  if (editMode.value) await save({
+    ...values,
+    duration: 15,
+    picture: null,
+    prepQuestions: values.prepQuestions ?? [],
+    evaluations: values.evaluations?.map(e => ({
+      key: e.key,
+      frameworkPrompt: e.frameworkPrompt || "",
+      assessmentPrompt: e.assessmentPrompt || "",
+      feedbackPrompt: e.feedbackPrompt || "",
+    })) ?? [],
+  });
+  else await create({
+    ...values,
+    duration: 15,
+    picture: null,
+    prepQuestions: values.prepQuestions ?? [],
+    evaluations: values.evaluations?.map(e => ({
+      frameworkPrompt: e.frameworkPrompt ?? "",
+      assessmentPrompt: e.assessmentPrompt ?? "",
+      feedbackPrompt: e.feedbackPrompt ?? "",
+    })) ?? [],
+  });
 
   open.value = false;
 });
 
-async function create() {}
-async function save() {}
+async function create(values: ISimulatorCreate) {
+  await store.createSimulator(values);
+}
+async function save(values: ISimulatorUpdate) {
+  if (!props.simulator) return;
+
+  const finalQuestions = values.prepQuestions?.map(q => q.key) ?? [];
+  const finalEvaluations = values.evaluations?.map(e => e.key) ?? [];
+
+  const questionsToDelete = props.simulator.prepQuestions?.map(q => q.key).filter(q => !finalQuestions.includes(q));
+  const evaluationsToDelete = props.simulator.evaluations?.map(e => e.key).filter(e => !finalEvaluations.includes(e));
+
+  await store.saveSimulator(props.simulator.id, {
+    ...values,
+    questionsToDelete,
+    evaluationsToDelete,
+  });
+}
 </script>
 
 <template>
@@ -88,7 +126,10 @@ async function save() {}
           <FormItem>
             <FormLabel>{{ $t("labels.fields.title") }}</FormLabel>
             <FormControl v-bind="componentField">
-              <Input placeholder="ex. Humonio Simulator" />
+              <Input
+                placeholder="ex. Humonio Simulator"
+                :disabled="loading.creatingSimulator"
+              />
             </FormControl>
           </FormItem>
         </FormField>
@@ -99,7 +140,10 @@ async function save() {}
           <FormItem>
             <FormLabel>{{ $t("labels.fields.description") }}</FormLabel>
             <FormControl v-bind="componentField">
-              <Textarea class="min-h-32" />
+              <Textarea
+                class="min-h-32"
+                :disabled="loading.creatingSimulator"
+              />
             </FormControl>
           </FormItem>
         </FormField>
@@ -110,7 +154,10 @@ async function save() {}
           <FormItem>
             <FormLabel>{{ $t("labels.fields.behavior-prompt") }}</FormLabel>
             <FormControl v-bind="componentField">
-              <Textarea class="min-h-32" />
+              <Textarea
+                class="min-h-32"
+                :disabled="loading.creatingSimulator"
+              />
             </FormControl>
           </FormItem>
         </FormField>
@@ -128,6 +175,7 @@ async function save() {}
                 <Button
                   type="button"
                   variant="ghost"
+                  :disabled="loading.creatingSimulator"
                   @click.prevent="removeQuestion(index)"
                 >
                   <Trash />
@@ -139,7 +187,7 @@ async function save() {}
               >
                 <FormItem>
                   <FormControl v-bind="componentField">
-                    <Input />
+                    <Input :disabled="loading.creatingSimulator" />
                   </FormControl>
                 </FormItem>
               </FormField>
@@ -147,6 +195,7 @@ async function save() {}
           </FormField>
           <Button
             type="button"
+            :disabled="loading.creatingSimulator"
             @click.prevent="pushQuestion"
           >
             <Plus />
@@ -167,6 +216,7 @@ async function save() {}
                 <Button
                   type="button"
                   variant="ghost"
+                  :disabled="loading.creatingSimulator"
                   @click.prevent="removeEvaluation(index)"
                 >
                   <Trash />
@@ -180,7 +230,10 @@ async function save() {}
                   <FormItem>
                     <FormLabel>{{ $t("labels.fields.framework-prompt") }}</FormLabel>
                     <FormControl v-bind="componentField">
-                      <Textarea class="min-h-32" />
+                      <Textarea
+                        class="min-h-32"
+                        :disabled="loading.creatingSimulator"
+                      />
                     </FormControl>
                   </FormItem>
                 </FormField>
@@ -191,7 +244,10 @@ async function save() {}
                   <FormItem>
                     <FormLabel>{{ $t("labels.fields.assessment-prompt") }}</FormLabel>
                     <FormControl v-bind="componentField">
-                      <Textarea class="min-h-32" />
+                      <Textarea
+                        class="min-h-32"
+                        :disabled="loading.creatingSimulator"
+                      />
                     </FormControl>
                   </FormItem>
                 </FormField>
@@ -202,7 +258,10 @@ async function save() {}
                   <FormItem>
                     <FormLabel>{{ $t("labels.fields.feedback-prompt") }}</FormLabel>
                     <FormControl v-bind="componentField">
-                      <Textarea class="min-h-32" />
+                      <Textarea
+                        class="min-h-32"
+                        :disabled="loading.creatingSimulator"
+                      />
                     </FormControl>
                   </FormItem>
                 </FormField>
@@ -211,6 +270,7 @@ async function save() {}
           </FormField>
           <Button
             type="button"
+            :disabled="loading.creatingSimulator"
             @click.prevent="pushEvaluation"
           >
             <Plus />
@@ -223,12 +283,13 @@ async function save() {}
             <Button
               type="button"
               variant="secondary"
+              :disabled="loading.creatingSimulator"
             >
               {{ $t("btn.cancel") }}
             </Button>
           </DialogClose>
 
-          <Button>
+          <Button :disabled="loading.creatingSimulator">
             {{ $t(`btn.${editMode ? "save" : "add.default"}`) }}
           </Button>
         </DialogFooter>

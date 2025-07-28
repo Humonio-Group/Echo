@@ -1,4 +1,10 @@
-import type { ISimulator, ISimulatorCreate } from "~/types/simulators";
+import type {
+  IEvaluationCreate, IEvaluationUpdate,
+  IPrepQuestionCreate,
+  IPrepQuestionUpdate,
+  ISimulator,
+  ISimulatorCreate, ISimulatorUpdate,
+} from "~/types/simulators";
 import prisma from "~/prisma";
 import type { TArray, TNull } from "~/types/globals/utils";
 import { EchoNotFoundError } from "~/types/globals/errors";
@@ -26,6 +32,37 @@ export async function create(userId: string, workspaceId: TNull<number>, data: I
           data: data.evaluations ?? [],
         },
       },
+    },
+    include: {
+      prepQuestions: true,
+      evaluations: true,
+    },
+  });
+}
+
+export async function update(id: number, data: ISimulatorUpdate): Promise<ISimulator> {
+  return prisma.simulator.update({
+    where: {
+      id,
+    },
+    data: {
+      title: data.title,
+      description: data.description,
+      duration: data.duration,
+      picture: data.picture,
+      behaviorPrompt: data.behaviorPrompt,
+    },
+    include: {
+      prepQuestions: true,
+      evaluations: true,
+    },
+  });
+}
+
+export async function destroy(id: number): Promise<ISimulator> {
+  return prisma.simulator.delete({
+    where: {
+      id,
     },
     include: {
       prepQuestions: true,
@@ -85,6 +122,66 @@ export async function getPublicLibrary(): Promise<TArray<ISimulator>> {
     include: {
       prepQuestions: true,
       evaluations: true,
+    },
+  });
+}
+
+export async function createQuestion(simulatorId: number, data: IPrepQuestionCreate) {
+  return prisma.prepQuestion.create({
+    data: {
+      simulatorId,
+      label: data.label,
+    },
+  });
+}
+
+export async function updateQuestion(key: string, data: IPrepQuestionUpdate) {
+  return prisma.prepQuestion.update({
+    where: {
+      key,
+    },
+    data: {
+      label: data.label,
+    },
+  });
+}
+
+export async function deleteQuestion(key: string) {
+  return prisma.prepQuestion.delete({
+    where: {
+      key,
+    },
+  });
+}
+
+export async function createEvaluation(simulatorId: number, data: IEvaluationCreate) {
+  return prisma.evaluation.create({
+    data: {
+      simulatorId,
+      frameworkPrompt: data.frameworkPrompt,
+      assessmentPrompt: data.assessmentPrompt,
+      feedbackPrompt: data.feedbackPrompt,
+    },
+  });
+}
+
+export async function updateEvaluation(key: string, data: IEvaluationUpdate) {
+  return prisma.evaluation.update({
+    where: {
+      key,
+    },
+    data: {
+      frameworkPrompt: data.frameworkPrompt,
+      assessmentPrompt: data.assessmentPrompt,
+      feedbackPrompt: data.feedbackPrompt,
+    },
+  });
+}
+
+export async function deleteEvaluation(key: string) {
+  return prisma.evaluation.delete({
+    where: {
+      key,
     },
   });
 }

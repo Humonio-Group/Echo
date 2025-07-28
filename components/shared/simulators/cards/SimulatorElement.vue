@@ -24,8 +24,8 @@ async function duplicate() {
   await store.duplicateSimulator(props.simulator.id);
   emit("duplicated");
 }
-function destroy() {
-  alert("Delete request confirmed!");
+async function destroy() {
+  await store.deleteSimulator(props.simulator.id);
 }
 </script>
 

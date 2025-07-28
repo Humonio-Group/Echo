@@ -1,6 +1,6 @@
 import type { TArray, TNull } from "~/types/globals/utils";
 import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/workspaces";
-import type { ISimulator } from "~/types/simulators";
+import type { ISimulator, ISimulatorCreate, ISimulatorUpdate } from "~/types/simulators";
 import { toast } from "vue-sonner";
 import type { IConversation, IPrepAnswerCreate } from "~/types/conversations";
 
@@ -12,6 +12,7 @@ interface WorkspacesState {
     creatingWorkspace: boolean;
     savingWorkspace: boolean;
     duplicatingSimulator: TArray<number>;
+    creatingSimulator: boolean;
     creatingConversation: boolean;
   };
 }
@@ -25,6 +26,7 @@ export const useWorkspaceStore = defineStore("workspaces", {
       creatingWorkspace: false,
       savingWorkspace: false,
       duplicatingSimulator: [],
+      creatingSimulator: false,
       creatingConversation: true,
     },
   }),
@@ -135,6 +137,42 @@ export const useWorkspaceStore = defineStore("workspaces", {
       }
 
       return state;
+    },
+    async createSimulator(values: ISimulatorCreate) {
+      if (!this.workspace) return;
+
+      this.loading.creatingSimulator = true;
+
+      const simulator = await $fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators`, {
+        method: "POST",
+        body: values as { [key: string]: unknown },
+      });
+
+      this.workspace.simulators = [
+        ...this.workspace.simulators ?? [],
+        simulator,
+      ];
+      this.loading.creatingSimulator = false;
+    },
+    async saveSimulator(id: number, values: ISimulatorUpdate) {
+      if (!this.workspace) return;
+
+      this.loading.creatingSimulator = true;
+
+      const simulator = await $fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators/${id}`, {
+        method: "PUT",
+        body: values as { [key: string]: unknown },
+      });
+      this.workspace.simulators = this.workspace.simulators?.map(s => s.id === id ? simulator : s) ?? [];
+      this.loading.creatingSimulator = false;
+    },
+    async deleteSimulator(id: number) {
+      if (!this.workspace) return;
+
+      const simulator = await $fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators/${id}`, {
+        method: "DELETE",
+      });
+      this.workspace.simulators = this.workspace.simulators?.filter(s => s.id !== simulator.id) ?? [];
     },
 
     async startConversation(simulatorId: number, answers: TArray<IPrepAnswerCreate>) {
