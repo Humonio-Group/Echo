@@ -46,6 +46,13 @@
         "tabs": {
           "your-simulators": "Vos simulateurs",
           "public-simulators": "Simulateurs publics"
+        },
+        "toasters": {
+          "delete-simulator": {
+            "loading": "Suppression...",
+            "success": "Le simulateur a bien été supprimé !",
+            "error": "Une erreur est survenue lors de la suppression du simulateur..."
+          }
         }
       }
     },
@@ -67,7 +74,7 @@
     "simulators": {
       "create-simulator": {
         "title": "Nouveau simulateur",
-        "caption": "Créer un simulateur personnalisé pour évaluer tes employés."
+        "caption": "Créer un simulateur personnalisé pour évaluer tes employés.",
       }
     }
   },

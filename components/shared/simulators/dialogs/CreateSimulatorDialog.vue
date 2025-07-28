@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ISimulator, ISimulatorCreate, ISimulatorUpdate } from "~/types/simulators";
-import { Plus, Trash } from "lucide-vue-next";
+import { LoaderCircle, Plus, Trash } from "lucide-vue-next";
 import { useFieldArray, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
@@ -290,6 +290,10 @@ async function save(values: ISimulatorUpdate) {
           </DialogClose>
 
           <Button :disabled="loading.creatingSimulator">
+            <LoaderCircle
+              v-if="loading.creatingSimulator"
+              class="animate-spin"
+            />
             {{ $t(`btn.${editMode ? "save" : "add.default"}`) }}
           </Button>
         </DialogFooter>

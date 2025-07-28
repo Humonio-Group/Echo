@@ -169,10 +169,20 @@ export const useWorkspaceStore = defineStore("workspaces", {
     async deleteSimulator(id: number) {
       if (!this.workspace) return;
 
-      const simulator = await $fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators/${id}`, {
+      const base = "dialogs.workspaces.library-dialog.toasters.delete-simulator";
+
+      toast.promise($fetch<ISimulator>(`/api/workspaces/${this.workspace?.id}/simulators/${id}`, {
         method: "DELETE",
+      }), {
+        loading: this.translate(`${base}.loading`),
+        success: (simulator: ISimulator) => {
+          if (!this.workspace) return;
+
+          this.workspace.simulators = this.workspace.simulators?.filter(s => s.id !== simulator.id) ?? [];
+          return this.translate(`${base}.success`);
+        },
+        error: () => this.translate(`${base}.error`),
       });
-      this.workspace.simulators = this.workspace.simulators?.filter(s => s.id !== simulator.id) ?? [];
     },
 
     async startConversation(simulatorId: number, answers: TArray<IPrepAnswerCreate>) {
