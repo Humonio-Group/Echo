@@ -74,7 +74,7 @@
     "simulators": {
       "create-simulator": {
         "title": "Nouveau simulateur",
-        "caption": "Créer un simulateur personnalisé pour évaluer tes employés.",
+        "caption": "Créer un simulateur personnalisé pour évaluer tes employés."
       }
     }
   },
