@@ -4,20 +4,32 @@
   },
   "welcome-on": "Bienvenue sur Humonio {brand}",
   "btn": {
+    "new": "Nouveau",
     "cancel": "Annuler",
     "save": "Enregistrer",
     "duplicate": "Dupliquer",
     "add": {
       "default": "Ajouter",
-      "workspace": "Ajouter un espace de travail"
+      "workspace": "Ajouter un espace de travail",
+      "evaluation": "Ajouter une évaluation",
+      "prep-question": "Ajouter une question préparatoire"
     },
     "delete": {
+      "default": "Supprimer",
       "workspace": "Supprimer l'espace de travail"
     },
     "stop": "Stop",
-    "chat": "Conversation"
+    "chat": "Conversation",
+    "edit": "Modifier",
+    "confirm": "Confirmer"
   },
   "dialogs": {
+    "globals": {
+      "confirmation": {
+        "title": "Es-tu sûr·e ?",
+        "caption": "Cette action est irréversible. Es-tu sûr de vouloir poursuivre cette action ?"
+      }
+    },
     "workspaces": {
       "create-workspace": {
         "title": "Nouvel espace de travail",
@@ -30,6 +42,7 @@
       "library-dialog": {
         "title": "Bibliothèque de simulateurs",
         "caption": "Inspire-toi, duplique, et façonne des expériences adaptées à ton équipe.",
+        "empty": "Il n'y a aucun simulateur disponible pour l'instant...",
         "tabs": {
           "your-simulators": "Vos simulateurs",
           "public-simulators": "Simulateurs publics"
@@ -50,6 +63,12 @@
         "title": "Questions préparatoires",
         "caption": "Réponds aux questions utilisées pour cadrer ta discussion. La conversation commencera ensuite."
       }
+    },
+    "simulators": {
+      "create-simulator": {
+        "title": "Nouveau simulateur",
+        "caption": "Créer un simulateur personnalisé pour évaluer tes employés."
+      }
     }
   },
   "labels": {
@@ -61,11 +80,19 @@
     },
     "fields": {
       "name": "Nom",
+      "title": "Titre",
       "description": "Description",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
       "values": "Valeurs",
-      "message": "Ton message... (cmd+entrer pour envoyer)"
+      "message": "Ton message... (cmd+entrer pour envoyer)",
+      "behavior-prompt": "Instructions de comportement",
+      "evaluation-x": "Évaluation #{value}",
+      "framework-prompt": "Instructions de méthode",
+      "assessment-prompt": "Instructions d'évaluation",
+      "feedback-prompt": "Instructions de débriefing",
+      "prep-question-x": "Question préparatoire #{value}",
+      "label": "Intitulé"
     },
     "search": "Rechercher...",
     "thinking": "Je réfléchi...",
