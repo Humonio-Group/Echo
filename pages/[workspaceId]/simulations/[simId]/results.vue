@@ -3,6 +3,8 @@ import { Radar } from "vue-chartjs";
 import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
 import branding from "~/branding";
 
+const { t } = useI18n();
+
 definePageMeta({
   layout: "chat",
   resultButton: false,
@@ -13,6 +15,10 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler);
 const store = useRoomStore();
 const { conversation } = storeToRefs(store);
 
+useHead({
+  title: t("brand.seo.workspace.conversation.results", { brand: useBrandName(), conv_id: conversation.value?.uid }),
+});
+
 await store.fetchRoomConversation(useRoute().params.simId as string);
 
 const assessments = computed(() => conversation.value?.assessments ?? []);
@@ -20,7 +26,7 @@ const parseJSONToChartData = (json: string) => {
   const init = JSON.parse(json);
 
   const labels = Object.keys(init.data);
-  const values = Object.values(init.data).map(v => Number(v) * 20);
+  const values = Object.values(init.data).map(v => Number(v));
 
   return {
     labels,

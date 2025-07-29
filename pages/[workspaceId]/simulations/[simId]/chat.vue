@@ -3,6 +3,8 @@ import ChatGroup from "~/components/shared/simulations/chat/ChatGroup.vue";
 import ChatControls from "~/components/shared/simulations/chat/ChatControls.vue";
 import { EventType } from "~/types/globals/websocket";
 
+const { t } = useI18n();
+
 definePageMeta({
   layout: "chat",
   resultButton: true,
@@ -10,6 +12,10 @@ definePageMeta({
 
 const route = useRoute();
 const roomId = computed(() => route.params.simId as string);
+
+useHead({
+  title: t("brand.seo.workspace.conversation.chat", { brand: useBrandName(), conv_id: roomId.value }),
+});
 
 const store = useRoomStore();
 const { messages } = storeToRefs(store);

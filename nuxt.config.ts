@@ -13,6 +13,11 @@ export default defineNuxtConfig({
     "@clerk/nuxt",
   ],
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
+    },
+  },
   css: ["./base.css"],
   colorMode: {
     classPrefix: "",
