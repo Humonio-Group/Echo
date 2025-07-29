@@ -36,7 +36,7 @@ Format attendu du JSON :
   "type": "graph",
   "axes": {
     "min": 0,
-    "max": 20
+    "max": 10
   },
   "data": {
     "axis_name": 0, <- note entre min et max
@@ -48,7 +48,7 @@ Consignes :
 - Analyse uniquement la performance du commercial.
 - Note chaque axe sur l’échelle spécifiée (min, max).
 - Reste neutre, professionnel et exigeant dans l’attribution des notes.
-- Ne commente pas dans ce prompt : tu dois répondre **uniquement** avec un objet JSON valide.`;
+- Ne commente pas dans ce prompt : tu dois répondre **uniquement** avec un objet JSON valide, sans formattage Markdown.`;
 
 export const debriefPrompt = `Tu es un **formateur expert en vente B2B**, habitué à débriefer des négociations avec précision, comme dans un centre de formation ou une école de commerce.
 
