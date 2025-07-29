@@ -6,9 +6,11 @@ import {
   WSEvent,
   WSMessageEvent
 } from "~/types/globals/websocket";
-import { generateAnswer } from "~/openai";
+import { generate } from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
-import { generateConversationResults } from "~/server/services/conversations/assessments";
+import {formatMessages, generateConversationResults} from "~/server/services/conversations/assessments";
+import { conversationalPrompt, replaceVariables } from "~/openai/prompts";
+import { IMessages } from "~/types/conversations";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -59,13 +61,20 @@ export async function handleMessage(peer: any, data: WSEvent) {
       });
 
       if (conv.messages?.[conv.messages?.length - 1]?.sender === "ai") break;
-      const message = await generateAnswer("user", conv);
-      await conversations.message(data.room, "ai", message ?? "empty-message");
+
+      const generated = await conversations.message(
+        data.room,
+        "ai",
+        await generate(replaceVariables(conversationalPrompt, {
+        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
+        "conversation_history": formatMessages(conv.messages ?? []),
+      })) ?? "empty-message",
+      );
       broadcast(data.room, {
         type: EventType.MESSAGE,
         room: data.room,
-        sender: "ai",
-        message,
+        sender: generated.sender,
+        message: generated.content,
       } as WSMessageEvent);
       break;
     }
@@ -77,23 +86,30 @@ export async function handleMessage(peer: any, data: WSEvent) {
 
     case EventType.MESSAGE: {
       const payload = data as WSMessageEvent;
-      await conversations.message(payload.room, payload.sender, payload.message);
+      const sent = await conversations.message(payload.room, payload.sender, payload.message);
       const conv = await conversations.get(data.room);
 
       broadcast(data.room, {
         type: EventType.MESSAGE,
         room: data.room,
-        sender: payload.sender,
-        message: payload.message,
+        sender: sent.sender,
+        message: sent.content,
       } as WSMessageEvent, peer);
 
-      const aiAnswer = await generateAnswer(payload.sender, conv);
-      await conversations.message(payload.room, "ai", aiAnswer ?? "empty-message");
+      const generated = await conversations.message(
+        payload.room,
+        "ai",
+        await generate(replaceVariables(conversationalPrompt, {
+        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
+        "conversation_history": formatMessages(conv.messages ?? []),
+      })) ?? "empty-message"
+      );
+
       broadcast(data.room, {
         type: EventType.MESSAGE,
         room: data.room,
-        sender: "ai",
-        message: aiAnswer,
+        sender: generated.sender,
+        message: generated.content,
       } as WSMessageEvent);
       break;
     }
