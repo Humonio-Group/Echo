@@ -1,6 +1,23 @@
 {
   "brand": {
-    "name": "Echo"
+    "name": "Echo",
+    "seo": {
+      "home": "{brand} · Choisis ton espace de travail",
+      "auth": {
+        "sign-in": "{brand} · Connexion",
+        "sign-up": "{brand} · Inscription"
+      },
+      "workspace": {
+        "home": "Accueil · {workspace}",
+        "performance": "Performance · {workspace}",
+        "training": "Entraînement · {workspace}",
+        "team": "Équipe · {workspace}",
+        "conversation": {
+          "chat": "{brand} · Conversation #{conv_id}",
+          "results": "{brand} · Resultats #{conv_id}"
+        }
+      }
+    }
   },
   "welcome-on": "Bienvenue sur Humonio {brand}",
   "btn": {

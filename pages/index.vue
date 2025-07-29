@@ -4,8 +4,14 @@ import WorkspaceCard from "~/components/shared/workspaces/WorkspaceCard.vue";
 import CreateWorkspaceDialog from "~/components/shared/workspaces/dialogs/CreateWorkspaceDialog.vue";
 import BrandName from "~/components/shared/statuses/BrandName.vue";
 
+const { t } = useI18n();
+
 definePageMeta({
   layout: "auth",
+});
+
+useHead({
+  title: t("brand.seo.home", { brand: useBrandName() }),
 });
 
 const store = useWorkspaceStore();

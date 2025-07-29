@@ -3,6 +3,14 @@ import { LoaderCircle, Settings2 } from "lucide-vue-next";
 import SimulationCard from "~/components/shared/simulations/SimulationCard.vue";
 import SimulatorsLibraryDialog from "~/components/shared/simulators/dialogs/SimulatorsLibraryDialog.vue";
 
+const { t } = useI18n();
+
+const { workspace } = storeToRefs(useWorkspaceStore());
+
+useHead({
+  title: t("brand.seo.workspace.training", { workspace: workspace.value?.name }),
+});
+
 const store = useConversationStore();
 const { loading } = storeToRefs(store);
 
