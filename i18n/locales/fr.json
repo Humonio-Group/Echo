@@ -112,6 +112,7 @@
       "description": "Description",
       "duration": "Durée (en minutes)",
       "user-id": "Identifiant utilisateur (clerk)",
+      "role": "Rôle",
       "max-value": "Valeur des scores maximales",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
