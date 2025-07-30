@@ -89,6 +89,7 @@ model Evaluation {
   frameworkPrompt  String
   assessmentPrompt String
   feedbackPrompt   String
+  maxValue         Int    @default(10)
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
 
@@ -105,12 +106,12 @@ enum AssessmentType {
 }
 
 model Conversation {
-  uid         String   @id @default(uuid())
+  uid         String    @id @default(uuid())
   simulatorId Int
   workspaceId Int
   name        String
   userId      String
-  startedAt   DateTime @default(now())
+  startedAt   DateTime  @default(now())
   stoppedAt   DateTime
   processedAt DateTime?
 

@@ -47,6 +47,7 @@ export interface IEvaluation {
   frameworkPrompt: string;
   assessmentPrompt: string;
   feedbackPrompt: string;
+  maxValue: number;
 
   simulator?: ISimulator;
 }
