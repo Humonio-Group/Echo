@@ -195,6 +195,7 @@ export async function createEvaluation(simulatorId: number, data: IEvaluationCre
       frameworkPrompt: data.frameworkPrompt,
       assessmentPrompt: data.assessmentPrompt,
       feedbackPrompt: data.feedbackPrompt,
+      maxValue: data.maxValue,
     },
   });
 }
@@ -210,11 +211,7 @@ export async function updateEvaluation(key: string, data: IEvaluationUpdate) {
     where: {
       key,
     },
-    data: {
-      frameworkPrompt: data.frameworkPrompt,
-      assessmentPrompt: data.assessmentPrompt,
-      feedbackPrompt: data.feedbackPrompt,
-    },
+    data,
   });
 }
 

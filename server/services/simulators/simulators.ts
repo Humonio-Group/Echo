@@ -75,6 +75,7 @@ export async function duplicateSimulator(event: HttpEvent) {
         frameworkPrompt: e.frameworkPrompt,
         assessmentPrompt: e.assessmentPrompt,
         feedbackPrompt: e.feedbackPrompt,
+        maxValue: e.maxValue,
       })) ?? [],
     });
 

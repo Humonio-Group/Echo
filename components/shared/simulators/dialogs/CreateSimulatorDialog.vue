@@ -31,6 +31,7 @@ const form = useForm({
       frameworkPrompt: z.string().optional(),
       assessmentPrompt: z.string().optional(),
       feedbackPrompt: z.string().optional(),
+      maxValue: z.number().min(1),
     })).optional(),
   })),
   initialValues: {
@@ -47,6 +48,7 @@ const form = useForm({
       frameworkPrompt: ev.frameworkPrompt,
       assessmentPrompt: ev.assessmentPrompt,
       feedbackPrompt: ev.feedbackPrompt,
+      maxValue: ev.maxValue ?? 10,
     })),
   },
 });
@@ -60,7 +62,6 @@ const { loading } = storeToRefs(store);
 const submit = form.handleSubmit(async (values) => {
   if (editMode.value) await save({
     ...values,
-    // duration: 15,
     picture: null,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
@@ -68,17 +69,18 @@ const submit = form.handleSubmit(async (values) => {
       frameworkPrompt: e.frameworkPrompt || "",
       assessmentPrompt: e.assessmentPrompt || "",
       feedbackPrompt: e.feedbackPrompt || "",
+      maxValue: e.maxValue,
     })) ?? [],
   });
   else await create({
     ...values,
-    // duration: 15,
     picture: null,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
       frameworkPrompt: e.frameworkPrompt ?? "",
       assessmentPrompt: e.assessmentPrompt ?? "",
       feedbackPrompt: e.feedbackPrompt ?? "",
+      maxValue: e.maxValue,
     })) ?? [],
   });
 
@@ -260,6 +262,25 @@ async function save(values: ISimulatorUpdate) {
                   </FormItem>
                 </FormField>
                 <FormField
+                  v-slot="{ value }"
+                  :name="`evaluations.${index}.maxValue`"
+                >
+                  <FormItem>
+                    <FormLabel>{{ $t("labels.fields.max-value") }}</FormLabel>
+                    <NumberField
+                      :min="1"
+                      :model-value="value"
+                      @update:model-value="v => form.setFieldValue(`evaluations[${index}].maxValue`, v ? v : undefined)"
+                    >
+                      <NumberFieldDecrement />
+                      <FormControl>
+                        <NumberFieldInput />
+                      </FormControl>
+                      <NumberFieldIncrement />
+                    </NumberField>
+                  </FormItem>
+                </FormField>
+                <FormField
                   v-slot="{ componentField }"
                   :name="`evaluations.${index}.assessmentPrompt`"
                 >
@@ -293,7 +314,9 @@ async function save(values: ISimulatorUpdate) {
           <Button
             type="button"
             :disabled="loading.creatingSimulator"
-            @click.prevent="pushEvaluation"
+            @click.prevent="pushEvaluation({
+              maxValue: 10,
+            })"
           >
             <Plus />
             {{ $t("btn.add.evaluation") }}

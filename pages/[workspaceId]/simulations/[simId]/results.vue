@@ -39,6 +39,22 @@ const parseJSONToChartData = (json: string) => {
     ],
   };
 };
+const parseJSONToChartOptions = (json: string) => {
+  const init = JSON.parse(json);
+
+  return {
+    responsive: true,
+    scales: {
+      r: {
+        min: Number(init.axes.min),
+        max: Number(init.axes.max),
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+  };
+};
 </script>
 
 <template>
@@ -54,18 +70,7 @@ const parseJSONToChartData = (json: string) => {
       >
         <Radar
           :id="`assessment-${assessment.id}`"
-          :options="{
-            responsive: true,
-            scales: {
-              r: {
-                min: 0,
-                max: 20,
-                ticks: {
-                  stepSize: 1,
-                },
-              },
-            },
-          }"
+          :options="parseJSONToChartOptions(assessment.data)"
           :data="parseJSONToChartData(assessment.data)"
         />
         <p class="whitespace-pre-wrap leading-loose">

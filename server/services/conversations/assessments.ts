@@ -39,6 +39,7 @@ export async function generateAssessment(conversation: IConversation, evaluation
   return generate(replaceVariables(assessmentPrompt, {
     conversation_history: formatMessages(conversation.messages ?? []),
     evaluation_axes: replaceVariables(evaluation.assessmentPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
+    max_value: evaluation.maxValue.toString(),
   }));
 }
 

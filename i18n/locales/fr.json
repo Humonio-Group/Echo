@@ -107,6 +107,7 @@
       "title": "Titre",
       "description": "Description",
       "duration": "Durée (en minutes)",
+      "max-value": "Valeur des scores maximales",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
       "values": "Valeurs",

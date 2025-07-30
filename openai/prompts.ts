@@ -36,7 +36,7 @@ Format attendu du JSON :
   "type": "graph",
   "axes": {
     "min": 0,
-    "max": 10
+    "max": {{max_value}}
   },
   "data": {
     "axis_name": 0, <- note entre min et max
