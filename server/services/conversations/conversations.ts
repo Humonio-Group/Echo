@@ -6,6 +6,10 @@ import { catchError, setOutput } from "~/server/services/globals/errors";
 import type { EchoError } from "~/types/globals/errors";
 import { EchoBadRequestError } from "~/types/globals/errors";
 import type { IConversation, IPrepAnswerCreate } from "~/types/conversations";
+import { broadcast } from "~/server/services/globals/websockets";
+import type { WSConversationAssessmentsGeneratedEvent, WSConversationEndedEvent } from "~/types/globals/websocket";
+import { EventType } from "~/types/globals/websocket";
+import { generateConversationResults } from "~/server/services/conversations/assessments";
 
 export async function createConversation(event: HttpEvent) {
   const user = event.context.user;
@@ -63,4 +67,24 @@ export function gatherPrepAnswersForReplacement(conversation: IConversation): { 
 
   answers.forEach((answer, index) => obj[index.toString()] = answer.answer);
   return obj;
+}
+
+export async function propagateEndedConversations(): Promise<number> {
+  const now = new Date();
+  const endedConversations = await conversations.processEnded(now);
+
+  for (const conv of endedConversations) {
+    broadcast(conv.uid, {
+      type: EventType.CONV_ENDED,
+      endedAt: conv.stoppedAt,
+    } as WSConversationEndedEvent);
+
+    const assessments = await generateConversationResults(conv);
+    broadcast(conv.uid, {
+      type: EventType.ASSESSMENTS_GENERATED,
+      assessments,
+    } as WSConversationAssessmentsGeneratedEvent);
+  }
+
+  return endedConversations.length;
 }

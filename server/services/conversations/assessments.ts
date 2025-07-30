@@ -18,7 +18,8 @@ export async function generateConversationResults(conversation: IConversation): 
   const evaluations = conversation.simulator?.evaluations ?? [];
   const assessments: IAssessments = [];
 
-  for (const evaluation of evaluations) assessments.push(await generateEvaluation(conversation, evaluation));
+  for (const evaluation of evaluations)
+    assessments.push(await generateEvaluation(conversation, evaluation));
   return assessments;
 }
 

@@ -106,6 +106,7 @@
       "name": "Nom",
       "title": "Titre",
       "description": "Description",
+      "duration": "Durée (en minutes)",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
       "values": "Valeurs",

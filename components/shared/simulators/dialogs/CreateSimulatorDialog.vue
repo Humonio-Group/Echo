@@ -20,6 +20,7 @@ const form = useForm({
   validationSchema: toTypedSchema(z.object({
     title: z.string().min(1),
     description: z.string(),
+    duration: z.number().min(1).max(60),
     behaviorPrompt: z.string().min(1),
     prepQuestions: z.array(z.object({
       key: z.string().optional(),
@@ -35,6 +36,7 @@ const form = useForm({
   initialValues: {
     title: props.simulator?.title,
     description: props.simulator?.description,
+    duration: props.simulator?.duration ?? 10,
     behaviorPrompt: props.simulator?.behaviorPrompt,
     prepQuestions: props.simulator?.prepQuestions?.map(pq => ({
       key: pq.key,
@@ -58,7 +60,7 @@ const { loading } = storeToRefs(store);
 const submit = form.handleSubmit(async (values) => {
   if (editMode.value) await save({
     ...values,
-    duration: 15,
+    // duration: 15,
     picture: null,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
@@ -70,7 +72,7 @@ const submit = form.handleSubmit(async (values) => {
   });
   else await create({
     ...values,
-    duration: 15,
+    // duration: 15,
     picture: null,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
@@ -145,6 +147,26 @@ async function save(values: ISimulatorUpdate) {
                 :disabled="loading.creatingSimulator"
               />
             </FormControl>
+          </FormItem>
+        </FormField>
+        <FormField
+          v-slot="{ value }"
+          name="duration"
+        >
+          <FormItem>
+            <FormLabel>{{ $t("labels.fields.duration") }}</FormLabel>
+            <NumberField
+              :min="1"
+              :max="60"
+              :model-value="value"
+              @update:model-value="v => form.setFieldValue('duration', v ? v : undefined)"
+            >
+              <NumberFieldDecrement />
+              <FormControl>
+                <NumberFieldInput />
+              </FormControl>
+              <NumberFieldIncrement />
+            </NumberField>
           </FormItem>
         </FormField>
         <FormField
