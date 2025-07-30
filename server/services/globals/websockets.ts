@@ -103,6 +103,19 @@ export async function handleMessage(peer: any, data: WSEvent) {
         "conversation_history": formatMessages(conv.messages ?? []),
       })) ?? "empty-message";
 
+      const generated = await conversations.message(
+        payload.room,
+        "ai",
+        msg.replaceAll("STOP_CONVERSATION_FROM_FLOW", "").trim(),
+      );
+
+      broadcast(data.room, {
+        type: EventType.MESSAGE,
+        room: data.room,
+        sender: generated.sender,
+        message: generated.content,
+      } as WSMessageEvent);
+
       if (msg.includes("STOP_CONVERSATION_FROM_FLOW")) {
         const conv = await conversations.end(payload.room, new Date(new Date()));
         broadcast(payload.room, {
@@ -115,21 +128,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
           type: EventType.ASSESSMENTS_GENERATED,
           assessments,
         } as WSConversationAssessmentsGeneratedEvent);
-        break;
       }
-
-      const generated = await conversations.message(
-        payload.room,
-        "ai",
-        msg,
-      );
-
-      broadcast(data.room, {
-        type: EventType.MESSAGE,
-        room: data.room,
-        sender: generated.sender,
-        message: generated.content,
-      } as WSMessageEvent);
       break;
     }
 
