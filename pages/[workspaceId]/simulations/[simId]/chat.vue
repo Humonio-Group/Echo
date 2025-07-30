@@ -2,6 +2,7 @@
 import ChatGroup from "~/components/shared/simulations/chat/ChatGroup.vue";
 import ChatControls from "~/components/shared/simulations/chat/ChatControls.vue";
 import { EventType } from "~/types/globals/websocket";
+import type { IConversation } from "~/types/conversations";
 
 const { t } = useI18n();
 
@@ -18,7 +19,8 @@ useHead({
 });
 
 const store = useRoomStore();
-const { messages } = storeToRefs(store);
+const { conversation, messages } = storeToRefs(store);
+const conv = computed(() => conversation.value as IConversation);
 
 const room = useWebSocketRoom(roomId);
 
@@ -37,8 +39,14 @@ watch(stopRequested, (val) => {
 
 <template>
   <main class="flex-1 flex flex-col overflow-hidden">
-    <ChatGroup :messages="messages ?? []" />
+    <ChatGroup
+      :conversation="conv"
+      :messages="messages ?? []"
+    />
 
-    <ChatControls @send="room.sendMessage(userId as string, $event)" />
+    <ChatControls
+      v-if="!store.isStopped"
+      @send="room.sendMessage(userId as string, $event)"
+    />
   </main>
 </template>
