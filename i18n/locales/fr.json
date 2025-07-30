@@ -71,6 +71,10 @@
             "error": "Une erreur est survenue lors de la suppression du simulateur..."
           }
         }
+      },
+      "add-member": {
+        "title": "Nouveau membre",
+        "caption": "Ajouter des membres à votre espace de travail vous permet de collaborder sur la création des simulateurs ou d'évaluer votre éqiupe sur des simulateurs existants."
       }
     },
     "conversations": {
@@ -107,6 +111,7 @@
       "title": "Titre",
       "description": "Description",
       "duration": "Durée (en minutes)",
+      "user-id": "Identifiant utilisateur (clerk)",
       "max-value": "Valeur des scores maximales",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",

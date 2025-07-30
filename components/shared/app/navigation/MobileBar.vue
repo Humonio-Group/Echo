@@ -60,15 +60,14 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
-      disabled
+      as-child
     >
-      <!-- <NuxtLinkLocale
+      <NuxtLinkLocale
         :to="useWorkspacePath('/team')"
         active-class="!text-foreground"
       >
         <Users class="size-5" />
-      </NuxtLinkLocale> -->
-      <Users class="size-5" />
+      </NuxtLinkLocale>
     </Button>
   </div>
 </template>
