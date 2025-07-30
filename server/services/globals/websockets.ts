@@ -97,13 +97,31 @@ export async function handleMessage(peer: any, data: WSEvent) {
         message: sent.content,
       } as WSMessageEvent, peer);
 
+      // STOP_CONVERSATION_FROM_FLOW
+      const msg = await generate(replaceVariables(conversationalPrompt, {
+        "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+        "conversation_history": formatMessages(conv.messages ?? []),
+      })) ?? "empty-message";
+
+      if (msg.includes("STOP_CONVERSATION_FROM_FLOW")) {
+        const conv = await conversations.end(payload.room, new Date(new Date()));
+        broadcast(payload.room, {
+          type: EventType.CONV_ENDED,
+          endedAt: conv.stoppedAt,
+        } as WSConversationEndedEvent);
+
+        const assessments = await generateConversationResults(conv);
+        broadcast(payload.room, {
+          type: EventType.ASSESSMENTS_GENERATED,
+          assessments,
+        } as WSConversationAssessmentsGeneratedEvent);
+        break;
+      }
+
       const generated = await conversations.message(
         payload.room,
         "ai",
-        await generate(replaceVariables(conversationalPrompt, {
-          "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
-          "conversation_history": formatMessages(conv.messages ?? []),
-        })) ?? "empty-message",
+        msg,
       );
 
       broadcast(data.room, {
