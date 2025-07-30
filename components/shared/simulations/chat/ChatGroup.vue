@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ChatBubble from "~/components/shared/simulations/chat/ChatBubble.vue";
 import type { IConversation } from "~/types/conversations";
-import type { ISimulator } from "~/types/simulators";
 
 const props = defineProps<{
   conversation: IConversation;
@@ -17,7 +16,7 @@ watch(props, () => {
   }, 10);
 });
 
-const simulator = computed(() => props.conversation.simulator as ISimulator);
+const simulator = computed(() => props.conversation?.simulator);
 
 const scrollTrigger = ref();
 
@@ -32,7 +31,10 @@ onNuxtReady(() => {
 
 <template>
   <div class="flex-1 flex flex-col py-5 px-4 overflow-auto gap-2">
-    <div class="flex flex-col items-center gap-4 py-16 mb-12">
+    <div
+      v-if="simulator"
+      class="flex flex-col items-center gap-4 py-16 mb-12"
+    >
       <Avatar class="size-20">
         <AvatarImage
           v-if="simulator.picture"
