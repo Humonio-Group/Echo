@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@pinia/nuxt",
     "@clerk/nuxt",
+    "nuxt-scheduler",
   ],
   devtools: { enabled: true },
   app: {
