@@ -112,6 +112,7 @@ model Conversation {
   userId      String
   startedAt   DateTime @default(now())
   stoppedAt   DateTime
+  processedAt DateTime?
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
