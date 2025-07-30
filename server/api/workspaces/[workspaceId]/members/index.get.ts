@@ -1,6 +1,4 @@
-export default defineEventHandler((event) => {
-  event.node.res.statusCode = 501;
-  event.node.res.statusMessage = "Not implemented yet.";
+import { protect } from "~/server/services/globals/protection";
+import { recoverWorkspaceMembers } from "~/server/services/workspaces/members";
 
-  return;
-});
+export default defineEventHandler(async event => await protect(event, recoverWorkspaceMembers, true));

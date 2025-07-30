@@ -50,15 +50,14 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       </Button>
       <Button
         variant="ghost"
-        disabled
+        as-child
       >
-        <!-- <NuxtLinkLocale
+        <NuxtLinkLocale
           :to="useWorkspacePath('/team')"
           active-class="!bg-accent !text-accent-foreground"
         >
           {{ $t("navigation.team") }}
-        </NuxtLinkLocale> -->
-        {{ $t("navigation.team") }}
+        </NuxtLinkLocale>
       </Button>
     </nav>
 

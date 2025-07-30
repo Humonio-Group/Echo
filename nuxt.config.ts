@@ -33,6 +33,9 @@ export default defineNuxtConfig({
     gpt: {
       secretKey: "",
     },
+    api: {
+      key: "",
+    },
     public: {
       environment: "",
       clerk: {
