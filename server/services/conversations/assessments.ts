@@ -4,6 +4,7 @@ import type { IEvaluation } from "~/types/simulators";
 import type { TNull } from "~/types/globals/utils";
 import { generate } from "~/openai";
 import { assessmentPrompt, debriefPrompt, replaceVariables } from "~/openai/prompts";
+import { gatherPrepAnswersForReplacement } from "~/server/services/conversations/conversations";
 
 export const formatMessages = (messages: IMessages): string => messages
   .map(msg => ({
@@ -36,13 +37,13 @@ export async function generateEvaluation(conversation: IConversation, evaluation
 export async function generateAssessment(conversation: IConversation, evaluation: IEvaluation): Promise<TNull<string>> {
   return generate(replaceVariables(assessmentPrompt, {
     conversation_history: formatMessages(conversation.messages ?? []),
-    evaluation_axes: evaluation.assessmentPrompt ?? "",
+    evaluation_axes: replaceVariables(evaluation.assessmentPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
   }));
 }
 
 export async function generateDebrief(conversation: IConversation, evaluation: IEvaluation, assessment: TNull<string>): Promise<TNull<string>> {
   return generate(replaceVariables(debriefPrompt, {
     conversation_history: formatMessages(conversation.messages ?? []),
-    evaluation_result: assessment ?? "",
+    evaluation_result: replaceVariables(assessment ?? "", gatherPrepAnswersForReplacement(conversation)),
   }));
 }

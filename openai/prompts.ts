@@ -73,6 +73,6 @@ Réponds uniquement en **texte brut**, sans format Markdown, sans balisage ni st
 
 export function replaceVariables(prompt: string, variables: { [key: string]: string }): string {
   Object.keys(variables).forEach(variable =>
-    prompt = prompt.replaceAll(variable, variables[variable]));
+    prompt = prompt.replaceAll(`{{${variable}}}`, variables[variable]));
   return prompt;
 }

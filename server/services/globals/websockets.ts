@@ -11,6 +11,7 @@ import * as conversations from "~/server/repositories/conversations";
 import {formatMessages, generateConversationResults} from "~/server/services/conversations/assessments";
 import { conversationalPrompt, replaceVariables } from "~/openai/prompts";
 import { IMessages } from "~/types/conversations";
+import {gatherPrepAnswersForReplacement} from "~/server/services/conversations/conversations";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -66,9 +67,9 @@ export async function handleMessage(peer: any, data: WSEvent) {
         data.room,
         "ai",
         await generate(replaceVariables(conversationalPrompt, {
-        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
-        "conversation_history": formatMessages(conv.messages ?? []),
-      })) ?? "empty-message",
+          "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+          "conversation_history": formatMessages(conv.messages ?? []),
+        })) ?? "empty-message",
       );
       broadcast(data.room, {
         type: EventType.MESSAGE,
@@ -100,9 +101,9 @@ export async function handleMessage(peer: any, data: WSEvent) {
         payload.room,
         "ai",
         await generate(replaceVariables(conversationalPrompt, {
-        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
-        "conversation_history": formatMessages(conv.messages ?? []),
-      })) ?? "empty-message"
+          "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+          "conversation_history": formatMessages(conv.messages ?? []),
+        })) ?? "empty-message",
       );
 
       broadcast(data.room, {
