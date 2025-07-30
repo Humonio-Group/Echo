@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Radar } from "vue-chartjs";
-import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler } from "chart.js";
+import { Chart as ChartJS, RadialLinearScale, PointElement, LineElement, Filler, Tooltip } from "chart.js";
 import branding from "~/branding";
 
 const { t } = useI18n();
@@ -10,7 +10,7 @@ definePageMeta({
   resultButton: false,
 });
 
-ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler);
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip);
 
 const store = useRoomStore();
 const { conversation } = storeToRefs(store);
@@ -39,6 +39,33 @@ const parseJSONToChartData = (json: string) => {
     ],
   };
 };
+const parseJSONToChartOptions = (json: string) => {
+  const init = JSON.parse(json);
+
+  return {
+    responsive: true,
+    scales: {
+      r: {
+        min: Number(init.axes.min),
+        max: Number(init.axes.max),
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          label: function (context: any) {
+            return `${context.label}: ${context.raw}/${Number(init.axes.max)}`;
+          },
+        },
+      },
+    },
+  };
+};
 </script>
 
 <template>
@@ -54,18 +81,7 @@ const parseJSONToChartData = (json: string) => {
       >
         <Radar
           :id="`assessment-${assessment.id}`"
-          :options="{
-            responsive: true,
-            scales: {
-              r: {
-                min: 0,
-                max: 20,
-                ticks: {
-                  stepSize: 1,
-                },
-              },
-            },
-          }"
+          :options="parseJSONToChartOptions(assessment.data)"
           :data="parseJSONToChartData(assessment.data)"
         />
         <p class="whitespace-pre-wrap leading-loose">

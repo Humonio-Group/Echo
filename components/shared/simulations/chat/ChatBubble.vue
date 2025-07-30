@@ -22,7 +22,7 @@ defineProps<{
 
     <div
       class="py-3 px-4 w-fit max-w-[75%] bg-accent text-accent-foreground rounded-xl"
-      :class="{ 'bg-gradient-to-br from-primary to-primary-gradient text-primary-foreground': inverted }"
+      :class="{ 'bg-primary text-primary-foreground': inverted }"
     >
       <p class="whitespace-pre-line">
         <slot />

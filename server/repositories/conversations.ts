@@ -149,9 +149,11 @@ export async function end(uid: string, endDate: Date): Promise<IConversation> {
       stoppedAt: {
         gt: endDate,
       },
+      processedAt: null,
     },
     data: {
       stoppedAt: endDate,
+      processedAt: endDate,
     },
     include: {
       answers: true,
@@ -164,6 +166,51 @@ export async function end(uid: string, endDate: Date): Promise<IConversation> {
         },
       },
       workspace: true,
+    },
+  });
+}
+
+/**
+ * Process each ended conversation by time
+ * @param {Date} now - date to process
+ * @returns {TArray<IConversation>} - the list of updated conversation to propagate
+ */
+export async function processEnded(now: Date): Promise<TArray<IConversation>> {
+  const aMinuteAgo = new Date(now.getTime() - 60_000);
+
+  const list = await prisma.conversation.updateManyAndReturn({
+    where: {
+      stoppedAt: {
+        lte: now,
+        gt: aMinuteAgo,
+      },
+      processedAt: null,
+    },
+    data: {
+      processedAt: now,
+    },
+  });
+
+  return prisma.conversation.findMany({
+    where: {
+      NOT: {
+        processedAt: null,
+      },
+      uid: {
+        in: list.map(conv => conv.uid),
+      },
+    },
+    include: {
+      simulator: {
+        include: {
+          evaluations: true,
+          prepQuestions: true,
+        },
+      },
+      workspace: true,
+      messages: true,
+      answers: true,
+      assessments: true,
     },
   });
 }

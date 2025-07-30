@@ -5,7 +5,6 @@ import type { ISimulatorCreate, ISimulatorUpdate } from "~/types/simulators";
 import { catchError, setOutput } from "~/server/services/globals/errors";
 import type { EchoError } from "~/types/globals/errors";
 import { EchoBadRequestError } from "~/types/globals/errors";
-import { destroy } from "~/server/repositories/simulators";
 
 export async function createSimulator(event: HttpEvent) {
   const user = event.context.user;
@@ -76,6 +75,7 @@ export async function duplicateSimulator(event: HttpEvent) {
         frameworkPrompt: e.frameworkPrompt,
         assessmentPrompt: e.assessmentPrompt,
         feedbackPrompt: e.feedbackPrompt,
+        maxValue: e.maxValue,
       })) ?? [],
     });
 

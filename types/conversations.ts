@@ -1,4 +1,4 @@
-import type { TArray } from "~/types/globals/utils";
+import type { TArray, TNull } from "~/types/globals/utils";
 import type { IEvaluation, IPrepQuestion, ISimulator } from "~/types/simulators";
 import type { IWorkspace } from "~/types/workspaces";
 
@@ -16,6 +16,7 @@ export interface IConversation {
   userId: string;
   startedAt: Date;
   stoppedAt: Date;
+  processedAt?: TNull<Date>;
 
   simulator?: ISimulator;
   workspace?: IWorkspace;

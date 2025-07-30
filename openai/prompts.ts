@@ -13,6 +13,7 @@ Règles à suivre :
 - Tu utilises un ton crédible et professionnel, cohérent avec ton personnage.
 - Tu t’adaptes à l’historique de conversation.
 - Tu appliques strictement les consignes du rôle simulé (objectifs, stratégie, comportements, règles de digression, etc.).
+- Si tu dois mettre fin à la conversation immédiatement, répond à l'utilisateur et inject "STOP_CONVERSATION_FROM_FLOW" à la fin de ta réponse.
 
 Instruction :
 - Si l’historique de conversation est vide, démarre la simulation **en lançant la conversation comme précisé dans le prompt**.
@@ -36,7 +37,7 @@ Format attendu du JSON :
   "type": "graph",
   "axes": {
     "min": 0,
-    "max": 20
+    "max": {{max_value}}
   },
   "data": {
     "axis_name": 0, <- note entre min et max
@@ -48,7 +49,7 @@ Consignes :
 - Analyse uniquement la performance du commercial.
 - Note chaque axe sur l’échelle spécifiée (min, max).
 - Reste neutre, professionnel et exigeant dans l’attribution des notes.
-- Ne commente pas dans ce prompt : tu dois répondre **uniquement** avec un objet JSON valide.`;
+- Ne commente pas dans ce prompt : tu dois répondre **uniquement** avec un objet JSON valide, sans formattage Markdown.`;
 
 export const debriefPrompt = `Tu es un **formateur expert en vente B2B**, habitué à débriefer des négociations avec précision, comme dans un centre de formation ou une école de commerce.
 
@@ -73,6 +74,6 @@ Réponds uniquement en **texte brut**, sans format Markdown, sans balisage ni st
 
 export function replaceVariables(prompt: string, variables: { [key: string]: string }): string {
   Object.keys(variables).forEach(variable =>
-    prompt = prompt.replaceAll(variable, variables[variable]));
+    prompt = prompt.replaceAll(`{{${variable}}}`, variables[variable]));
   return prompt;
 }

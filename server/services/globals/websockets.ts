@@ -11,6 +11,7 @@ import * as conversations from "~/server/repositories/conversations";
 import {formatMessages, generateConversationResults} from "~/server/services/conversations/assessments";
 import { conversationalPrompt, replaceVariables } from "~/openai/prompts";
 import { IMessages } from "~/types/conversations";
+import {gatherPrepAnswersForReplacement} from "~/server/services/conversations/conversations";
 
 const rooms = new Map<string, Set<any>>();
 
@@ -66,9 +67,9 @@ export async function handleMessage(peer: any, data: WSEvent) {
         data.room,
         "ai",
         await generate(replaceVariables(conversationalPrompt, {
-        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
-        "conversation_history": formatMessages(conv.messages ?? []),
-      })) ?? "empty-message",
+          "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+          "conversation_history": formatMessages(conv.messages ?? []),
+        })) ?? "empty-message",
       );
       broadcast(data.room, {
         type: EventType.MESSAGE,
@@ -96,13 +97,16 @@ export async function handleMessage(peer: any, data: WSEvent) {
         message: sent.content,
       } as WSMessageEvent, peer);
 
+      // STOP_CONVERSATION_FROM_FLOW
+      const msg = await generate(replaceVariables(conversationalPrompt, {
+        "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+        "conversation_history": formatMessages(conv.messages ?? []),
+      })) ?? "empty-message";
+
       const generated = await conversations.message(
         payload.room,
         "ai",
-        await generate(replaceVariables(conversationalPrompt, {
-        "user_prompt": conv.simulator?.behaviorPrompt ?? "",
-        "conversation_history": formatMessages(conv.messages ?? []),
-      })) ?? "empty-message"
+        msg.replaceAll("STOP_CONVERSATION_FROM_FLOW", "").trim(),
       );
 
       broadcast(data.room, {
@@ -111,6 +115,20 @@ export async function handleMessage(peer: any, data: WSEvent) {
         sender: generated.sender,
         message: generated.content,
       } as WSMessageEvent);
+
+      if (msg.includes("STOP_CONVERSATION_FROM_FLOW")) {
+        const conv = await conversations.end(payload.room, new Date(new Date()));
+        broadcast(payload.room, {
+          type: EventType.CONV_ENDED,
+          endedAt: conv.stoppedAt,
+        } as WSConversationEndedEvent);
+
+        const assessments = await generateConversationResults(conv);
+        broadcast(payload.room, {
+          type: EventType.ASSESSMENTS_GENERATED,
+          assessments,
+        } as WSConversationAssessmentsGeneratedEvent);
+      }
       break;
     }
 

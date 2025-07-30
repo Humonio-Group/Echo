@@ -47,8 +47,9 @@ export interface IEvaluation {
   frameworkPrompt: string;
   assessmentPrompt: string;
   feedbackPrompt: string;
+  maxValue: number;
 
   simulator?: ISimulator;
 }
 export type IEvaluationCreate = Omit<IEvaluation, "id" | "simulatorId" | "simulator" | "key">;
-export type IEvaluationUpdate = Pick<IEvaluation, "frameworkPrompt" | "assessmentPrompt" | "feedbackPrompt"> & { key?: string };
+export type IEvaluationUpdate = Pick<IEvaluation, "frameworkPrompt" | "assessmentPrompt" | "feedbackPrompt" | "maxValue"> & { key?: string };
