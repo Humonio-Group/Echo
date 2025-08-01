@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ChatBubble from "~/components/shared/simulations/chat/ChatBubble.vue";
 import type { IConversation } from "~/types/conversations";
+import { cn } from "~/lib/utils";
 
 const props = defineProps<{
   conversation: IConversation;
@@ -15,6 +16,9 @@ watch(props, () => {
     scrollBottom();
   }, 10);
 });
+
+const store = useRoomStore();
+const { writing } = storeToRefs(store);
 
 const simulator = computed(() => props.conversation?.simulator);
 
@@ -35,39 +39,32 @@ onNuxtReady(() => {
       v-if="simulator"
       class="flex flex-col items-center gap-4 py-16 mb-12"
     >
-      <Avatar class="size-20">
-        <AvatarImage
-          v-if="simulator.picture"
-          :src="simulator.picture"
-        />
-        <AvatarFallback>{{ simulator.title.substring(0, 2) }}</AvatarFallback>
-      </Avatar>
-
       <div class="flex flex-col gap-1 items-center max-w-[50ch] text-center">
-        <h2 class="text-xl font-bold">
-          {{ simulator.title }}
-        </h2>
         <p class="text-muted-foreground leading-relaxed">
           {{ simulator.description }}
         </p>
       </div>
     </div>
 
-    <template v-if="messages.length">
-      <ChatBubble
-        v-for="entry in messages"
-        :key="entry.id"
-        :sender-name="entry.senderId"
-        :inverted="entry.senderId.startsWith('user')"
-      >
-        {{ entry.message }}
-      </ChatBubble>
-    </template>
-    <template v-else>
-      <p class="text-lg text-muted-foreground m-auto">
-        {{ $t("labels.empty.messages") }}
-      </p>
-    </template>
+    <ChatBubble
+      v-for="entry in messages"
+      :key="entry.id"
+      :sender-name="entry.senderId"
+      :inverted="entry.senderId.startsWith('user')"
+    >
+      {{ entry.message }}
+    </ChatBubble>
+    <div
+      v-if="writing"
+      class="mt-auto py-3 px-3 w-fit max-w-[75%] bg-accent text-accent-foreground rounded-xl flex items-center gap-1"
+    >
+      <span
+        v-for="n in 3"
+        :key="n"
+        class="block aspect-square w-2 rounded-full animate-bounce bg-black/50"
+        :style="`animation-delay: calc(250ms * ${n})`"
+      />
+    </div>
 
     <div
       ref="scrollTrigger"

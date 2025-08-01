@@ -45,13 +45,6 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 <template>
   <div class="relative flex items-center gap-2 p-4">
-    <p
-      v-if="writing"
-      class="absolute left-6 top-0 -translate-y-1/2 text-xs italic font-semibold text-muted-foreground animate-pulse"
-    >
-      {{ $t("labels.thinking") }}
-    </p>
-
     <Textarea
       ref="input"
       v-model="message"
