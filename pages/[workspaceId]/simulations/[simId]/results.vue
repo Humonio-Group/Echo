@@ -21,7 +21,7 @@ useHead({
 
 await store.fetchRoomConversation(useRoute().params.simId as string);
 
-const assessments = computed(() => conversation.value?.assessments ?? []);
+const assessments = computed(() => (conversation.value?.assessments ?? []).sort((a, b) => a.id - b.id));
 const parseJSONToChartData = (json: string) => {
   const init = JSON.parse(json);
 
@@ -80,11 +80,16 @@ const parseJSONToChartOptions = (json: string) => {
         class="flex flex-col p-6"
       >
         <Radar
+          v-if="assessment.type === 'graph'"
           :id="`assessment-${assessment.id}`"
           :options="parseJSONToChartOptions(assessment.data)"
           :data="parseJSONToChartData(assessment.data)"
         />
-        <p class="whitespace-pre-wrap leading-loose">
+
+        <p
+          v-if="assessment.type === 'text'"
+          class="whitespace-pre-wrap leading-loose"
+        >
           {{ assessment.debrief }}
         </p>
       </div>

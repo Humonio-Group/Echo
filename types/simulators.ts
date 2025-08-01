@@ -1,5 +1,6 @@
 import type { TArray, TNull } from "~/types/globals/utils";
 import type { IWorkspace } from "~/types/workspaces";
+import type { EAssessmentType } from "~/types/conversations";
 
 export interface ISimulator {
   id: number;
@@ -43,6 +44,7 @@ export type IPrepQuestionUpdate = Pick<IPrepQuestion, "label"> & { key?: string 
 export interface IEvaluation {
   id: number;
   key: string;
+  type: EAssessmentType;
   simulatorId: number;
   frameworkPrompt: string;
   assessmentPrompt: string;

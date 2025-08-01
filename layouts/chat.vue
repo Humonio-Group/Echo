@@ -2,6 +2,7 @@
 import { ChevronLeft, LoaderCircle, MessageSquare, MessagesSquare, Square } from "lucide-vue-next";
 
 const store = useRoomStore();
+const { conversation } = storeToRefs(store);
 
 const stopRequested = ref<boolean>(false);
 
@@ -33,7 +34,7 @@ const room = computed(() => route.value.params.simId);
           <AvatarImage src="/images/ia-avatar.gif" />
         </Avatar>
         <p class="font-semibold text-muted-foreground">
-          AI
+          {{ conversation?.simulator?.title }}
         </p>
       </div>
 

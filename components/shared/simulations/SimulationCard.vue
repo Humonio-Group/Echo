@@ -47,7 +47,7 @@ const link = computed(() => {
         <AvatarFallback>{{ conversation.name.substring(0, 2) }}</AvatarFallback>
       </Avatar>
 
-      <div class="relative grid">
+      <div class="relative grid flex-1">
         <p class="font-semibold">
           {{ conversation.name }}
         </p>
