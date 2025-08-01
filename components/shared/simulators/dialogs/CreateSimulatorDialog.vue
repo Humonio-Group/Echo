@@ -4,6 +4,8 @@ import { LoaderCircle, Plus, Trash } from "lucide-vue-next";
 import { useFieldArray, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
+import { assessmentTypes } from "~/types/conversations";
+import type { EAssessmentType } from "~/types/conversations";
 
 const open = defineModel<boolean>("open");
 watch(open, (val) => {
@@ -28,10 +30,11 @@ const form = useForm({
     })).optional(),
     evaluations: z.array(z.object({
       key: z.string().optional(),
+      type: z.enum(assessmentTypes),
+      // assessmentPrompt: z.string().optional(),
       frameworkPrompt: z.string().optional(),
-      assessmentPrompt: z.string().optional(),
+      criteria: z.array(z.string()).min(1).optional(),
       feedbackPrompt: z.string().optional(),
-      maxValue: z.number().min(1),
     })).optional(),
   })),
   initialValues: {
@@ -45,10 +48,10 @@ const form = useForm({
     })),
     evaluations: props.simulator?.evaluations?.map(ev => ({
       key: ev.key,
+      type: ev.type,
       frameworkPrompt: ev.frameworkPrompt,
-      assessmentPrompt: ev.assessmentPrompt,
+      criteria: ev.assessmentPrompt?.split("||"),
       feedbackPrompt: ev.feedbackPrompt,
-      maxValue: ev.maxValue ?? 10,
     })),
   },
 });
@@ -66,10 +69,11 @@ const submit = form.handleSubmit(async (values) => {
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
       key: e.key,
+      type: e.type,
       frameworkPrompt: e.frameworkPrompt || "",
-      assessmentPrompt: e.assessmentPrompt || "",
+      assessmentPrompt: e.criteria?.join("||") || "",
       feedbackPrompt: e.feedbackPrompt || "",
-      maxValue: e.maxValue,
+      maxValue: 10,
     })) ?? [],
   });
   else await create({
@@ -77,10 +81,11 @@ const submit = form.handleSubmit(async (values) => {
     picture: null,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
+      type: e.type,
       frameworkPrompt: e.frameworkPrompt ?? "",
-      assessmentPrompt: e.assessmentPrompt ?? "",
+      assessmentPrompt: e.criteria?.join("||") ?? "",
       feedbackPrompt: e.feedbackPrompt ?? "",
-      maxValue: e.maxValue,
+      maxValue: 10,
     })) ?? [],
   });
 
@@ -188,6 +193,141 @@ async function save(values: ISimulatorUpdate) {
 
         <Separator />
         <div class="grid gap-4">
+          <template
+            v-for="(evaluation, index) in evaluations"
+            :key="evaluation.key"
+          >
+            <FormField
+              v-slot="{ value }"
+              :name="`evaluations.${index}`"
+            >
+              <FormItem>
+                <div class="flex items-center justify-between gap-4">
+                  <FormLabel>{{ $t("labels.fields.evaluation-x", { value: index + 1 }) }}</FormLabel>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    :disabled="loading.creatingSimulator"
+                    @click.prevent="removeEvaluation(index)"
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+                <div class="grid gap-4 px-2">
+                  <FormField
+                    v-slot="{ componentField }"
+                    :name="`evaluations.${index}.type`"
+                  >
+                    <FormItem>
+                      <FormLabel>{{ $t("labels.fields.assessment-type") }}</FormLabel>
+                      <FormControl v-bind="componentField">
+                        <Select>
+                          <SelectTrigger class="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+
+                          <SelectContent>
+                            <SelectItem
+                              v-for="type in assessmentTypes"
+                              :key="type"
+                              :value="type"
+                            >
+                              {{ $t(`labels.enums.assessment-type.${type}`) }}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  </FormField>
+                  <FormField
+                    v-slot="{ componentField }"
+                    :name="`evaluations.${index}.frameworkPrompt`"
+                  >
+                    <FormItem>
+                      <FormLabel>{{ $t("labels.fields.framework-prompt") }}</FormLabel>
+                      <FormControl v-bind="componentField">
+                        <Textarea
+                          class="min-h-32"
+                          :disabled="loading.creatingSimulator"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  </FormField>
+                  <FormField
+                    v-if="value['type'] === 'text'"
+                    v-slot="{ componentField }"
+                    :name="`evaluations.${index}.feedbackPrompt`"
+                  >
+                    <FormItem>
+                      <FormLabel>{{ $t("labels.fields.feedback-prompt") }}</FormLabel>
+                      <FormControl v-bind="componentField">
+                        <Textarea
+                          class="min-h-32"
+                          :disabled="loading.creatingSimulator"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  </FormField>
+                  <div
+                    v-else
+                    class="flex flex-col gap-2"
+                  >
+                    <div class="flex items-center justify-between">
+                      <Label>{{ $t("labels.fields.evaluation-criteria") }}</Label>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        @click="() => {
+                          if (!value.criteria) value.criteria = [];
+                          value.criteria.push('');
+                        }"
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                    <FormField
+                      v-for="(criteria, i) in value.criteria"
+                      :key="`${index}-${i}`"
+                      v-slot="{ componentField }"
+                      :name="`evaluations.${index}.criteria.${i}`"
+                    >
+                      <FormItem class="flex gap-2 items-center">
+                        <FormControl v-bind="componentField">
+                          <Input placeholder="ex: Empathie" />
+                        </FormControl>
+                        <Button
+                          v-if="value.criteria.length > 1"
+                          type="button"
+                          size="icon"
+                          variant="outline"
+                          @click="value.criteria.splice(i, 1)"
+                        >
+                          <Trash />
+                        </Button>
+                      </FormItem>
+                    </FormField>
+                  </div>
+                </div>
+              </FormItem>
+            </FormField>
+            <Separator />
+          </template>
+          <Button
+            type="button"
+            :disabled="loading.creatingSimulator"
+            @click.prevent="pushEvaluation({
+              type: 'text',
+              criteria: [''],
+            })"
+          >
+            <Plus />
+            {{ $t("btn.add.evaluation") }}
+          </Button>
+        </div>
+
+        <Separator />
+        <div class="grid gap-4">
           <FormField
             v-for="(prepQuestion, index) in prepQuestions"
             :key="prepQuestion.key"
@@ -224,102 +364,6 @@ async function save(values: ISimulatorUpdate) {
           >
             <Plus />
             {{ $t("btn.add.prep-question") }}
-          </Button>
-        </div>
-
-        <Separator />
-        <div class="grid gap-4">
-          <FormField
-            v-for="(evaluation, index) in evaluations"
-            :key="evaluation.key"
-            :name="`evaluations.${index}`"
-          >
-            <FormItem>
-              <div class="flex items-center justify-between gap-4">
-                <FormLabel>{{ $t("labels.fields.evaluation-x", { value: index + 1 }) }}</FormLabel>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  :disabled="loading.creatingSimulator"
-                  @click.prevent="removeEvaluation(index)"
-                >
-                  <Trash />
-                </Button>
-              </div>
-              <div class="grid gap-4 px-2">
-                <FormField
-                  v-slot="{ componentField }"
-                  :name="`evaluations.${index}.frameworkPrompt`"
-                >
-                  <FormItem>
-                    <FormLabel>{{ $t("labels.fields.framework-prompt") }}</FormLabel>
-                    <FormControl v-bind="componentField">
-                      <Textarea
-                        class="min-h-32"
-                        :disabled="loading.creatingSimulator"
-                      />
-                    </FormControl>
-                  </FormItem>
-                </FormField>
-                <FormField
-                  v-slot="{ value }"
-                  :name="`evaluations.${index}.maxValue`"
-                >
-                  <FormItem>
-                    <FormLabel>{{ $t("labels.fields.max-value") }}</FormLabel>
-                    <NumberField
-                      :min="1"
-                      :model-value="value"
-                      @update:model-value="v => form.setFieldValue(`evaluations[${index}].maxValue`, v ? v : undefined)"
-                    >
-                      <NumberFieldDecrement />
-                      <FormControl>
-                        <NumberFieldInput />
-                      </FormControl>
-                      <NumberFieldIncrement />
-                    </NumberField>
-                  </FormItem>
-                </FormField>
-                <FormField
-                  v-slot="{ componentField }"
-                  :name="`evaluations.${index}.assessmentPrompt`"
-                >
-                  <FormItem>
-                    <FormLabel>{{ $t("labels.fields.assessment-prompt") }}</FormLabel>
-                    <FormControl v-bind="componentField">
-                      <Textarea
-                        class="min-h-32"
-                        :disabled="loading.creatingSimulator"
-                      />
-                    </FormControl>
-                  </FormItem>
-                </FormField>
-                <FormField
-                  v-slot="{ componentField }"
-                  :name="`evaluations.${index}.feedbackPrompt`"
-                >
-                  <FormItem>
-                    <FormLabel>{{ $t("labels.fields.feedback-prompt") }}</FormLabel>
-                    <FormControl v-bind="componentField">
-                      <Textarea
-                        class="min-h-32"
-                        :disabled="loading.creatingSimulator"
-                      />
-                    </FormControl>
-                  </FormItem>
-                </FormField>
-              </div>
-            </FormItem>
-          </FormField>
-          <Button
-            type="button"
-            :disabled="loading.creatingSimulator"
-            @click.prevent="pushEvaluation({
-              maxValue: 10,
-            })"
-          >
-            <Plus />
-            {{ $t("btn.add.evaluation") }}
           </Button>
         </div>
 

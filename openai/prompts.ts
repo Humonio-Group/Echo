@@ -3,6 +3,9 @@ export const conversationalPrompt = `Tu participes à une simulation réaliste d
 Voici ton rôle :
 {{user_prompt}}
 
+L'utilisateur a répondu aux questions préparatoires suivantes :
+{{prep_answers}}
+
 Historique de la conversation jusqu’à maintenant :
 {{conversation_history}}
 
@@ -21,20 +24,37 @@ Instruction :
 
 Important : respecte rigoureusement les règles et le style demandés. Ne t’éloigne jamais du rôle ni de l’objectif.`;
 
-export const assessmentPrompt = `Tu changes de rôle. Tu n’es plus le personnage de la simulation, mais un **formateur senior expert en négociation commerciale B2B**, spécialisé dans le secteur {{secteur}}.
+export const assessmentPrompt = `Tu dois fournir une **analyse textuelle complète (environ 500 mots)** à destination du commercial.
+
+Voici les éléments à ta disposition :
+
+- Historique de la conversation :  
+{{conversation_history}}
+
+- Méthode d'évaluation :
+{{framework_prompt}}
+
+- Comment établir l'évaluation textuelle :
+{{feedback_prompt}}
+
+Réponds uniquement en **texte brut**, sans format Markdown, sans balisage ni structure de type JSON.`;
+
+export const graphBuilding = `Tu changes de rôle. Tu n’es plus le personnage de la simulation, mais un **formateur senior expert en négociation commerciale B2B**.
 
 Ta mission :
 Analyser la conversation suivante et produire une **évaluation structurée** sous la forme d’un objet JSON.
 
-Historique de la conversation :
-{{conversation_history}}
+Voici la méthode d'évaluation :
+{{framework_prompt}}
 
-Axes d’évaluation définis par l’utilisateur :
+Axes d’évaluation :
 {{evaluation_axes}}
+
+Historique de la conversation :
+{{conversation_history}} 
 
 Format attendu du JSON :
 {
-  "type": "graph",
   "axes": {
     "min": 0,
     "max": {{max_value}}
@@ -51,6 +71,9 @@ Consignes :
 - Reste neutre, professionnel et exigeant dans l’attribution des notes.
 - Ne commente pas dans ce prompt : tu dois répondre **uniquement** avec un objet JSON valide, sans formattage Markdown.`;
 
+/**
+ * @deprecated
+ */
 export const debriefPrompt = `Tu es un **formateur expert en vente B2B**, habitué à débriefer des négociations avec précision, comme dans un centre de formation ou une école de commerce.
 
 Tu dois fournir une **analyse textuelle complète (environ 500 mots)** à destination du commercial.
