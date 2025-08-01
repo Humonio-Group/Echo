@@ -113,6 +113,8 @@
       "duration": "Durée (en minutes)",
       "user-id": "Identifiant utilisateur (clerk)",
       "role": "Rôle",
+      "evaluation-criteria": "Critères d'évaluation",
+      "assessment-type": "Type de résultat",
       "max-value": "Valeur des scores maximales",
       "company-info": "Informations de l'entreprise",
       "product-or-service": "Produits ou Services",
@@ -125,6 +127,17 @@
       "feedback-prompt": "Instructions de débriefing",
       "prep-question-x": "Question préparatoire #{value}",
       "label": "Intitulé"
+    },
+    "enums": {
+      "assessment-type": {
+        "text": "Textuel",
+        "graph": "Graphique"
+      },
+      "role": {
+        "member": "Membre",
+        "admin": "Administateur",
+        "observer": "Observateur"
+      }
     },
     "search": "Rechercher...",
     "thinking": "Je réfléchi...",

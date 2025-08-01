@@ -72,7 +72,7 @@ const submit = form.handleSubmit(async ({ userId, role }) => {
                     :value="role"
                     :disabled="role === 'observer'"
                   >
-                    {{ role }}
+                    {{ $t(`labels.enums.role.${role}`) }}
                   </SelectItem>
                 </SelectContent>
               </Select>

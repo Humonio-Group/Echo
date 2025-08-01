@@ -12,7 +12,7 @@ export const columns: ColumnDef<IWorkspaceMember>[] = [
   {
     accessorKey: "role",
     header: () => h("div", "Role"),
-    cell: ({ row }) => h("div", row.getValue("role")),
+    cell: ({ row }) => h("div", useNuxtApp().$i18n.t(`labels.enums.role.${row.getValue("role")}`)),
   },
   {
     id: "actions",
