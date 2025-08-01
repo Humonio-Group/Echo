@@ -83,13 +83,14 @@ model PrepQuestion {
 }
 
 model Evaluation {
-  id               Int    @default(autoincrement())
-  key              String @unique @default(uuid())
+  id               Int            @default(autoincrement())
+  key              String         @unique @default(uuid())
+  type             AssessmentType @default(graph)
   simulatorId      Int
   frameworkPrompt  String
   assessmentPrompt String
   feedbackPrompt   String
-  maxValue         Int    @default(10)
+  maxValue         Int            @default(10)
 
   simulator Simulator @relation(fields: [simulatorId], references: [id], onDelete: Cascade)
 
