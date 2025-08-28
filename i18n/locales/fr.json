@@ -29,7 +29,11 @@
       "default": "Ajouter",
       "workspace": "Ajouter un espace de travail",
       "evaluation": "Ajouter une évaluation",
-      "prep-question": "Ajouter une question préparatoire"
+      "prep-question": "Ajouter une question préparatoire",
+      "simulator": {
+        "from-scratch": "D'une page blanche",
+        "from-library": "De la bibliothèque publique"
+      }
     },
     "delete": {
       "default": "Supprimer",
@@ -147,7 +151,7 @@
   },
   "navigation": {
     "training": "Entraînements",
-    "performance": "Performances",
+    "library": "Bibliothèque",
     "team": "Équipe"
   },
 
@@ -164,5 +168,8 @@
         "no-ongoing": "Aucune session en cours pour l'instant..."
       }
     }
+  },
+  "library": {
+    "title": "Bibliothèque de simulateurs"
   }
 }

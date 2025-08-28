@@ -7,6 +7,6 @@ const { members } = storeToRefs(useMembersStore());
 <template>
   <DataTable
     :columns="columns"
-    :data="members"
+    :data="members ?? []"
   />
 </template>

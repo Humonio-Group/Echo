@@ -5,7 +5,6 @@ import { useFieldArray, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 import { assessmentTypes } from "~/types/conversations";
-import type { EAssessmentType } from "~/types/conversations";
 
 const open = defineModel<boolean>("open");
 watch(open, (val) => {
@@ -118,7 +117,7 @@ async function save(values: ISimulatorUpdate) {
       <slot />
     </DialogTrigger>
 
-    <DialogContent class="max-h-[90dvh] overflow-y-auto">
+    <DialogContent class="max-h-[90dvh] !max-w-4xl overflow-y-auto">
       <DialogHeader>
         <DialogTitle>{{ $t("dialogs.simulators.create-simulator.title") }}</DialogTitle>
         <DialogDescription>{{ $t("dialogs.simulators.create-simulator.caption") }}</DialogDescription>
