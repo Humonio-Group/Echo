@@ -38,15 +38,14 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       </Button>
       <Button
         variant="ghost"
-        disabled
+        as-child
       >
-        <!-- <NuxtLinkLocale
-          :to="useWorkspacePath('/performance')"
+        <NuxtLinkLocale
+          :to="useWorkspacePath('/library')"
           active-class="!bg-accent !text-accent-foreground"
         >
-          {{ $t("navigation.performance") }}
-        </NuxtLinkLocale> -->
-        {{ $t("navigation.performance") }}
+          {{ $t("navigation.library") }}
+        </NuxtLinkLocale>
       </Button>
       <Button
         variant="ghost"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChartArea, Gauge, LayoutDashboard, Plus, Users } from "lucide-vue-next";
+import { Book, Gauge, LayoutDashboard, Plus, Users } from "lucide-vue-next";
 import CreateSimulationDialog from "~/components/shared/simulations/dialogs/CreateSimulationDialog.vue";
 </script>
 
@@ -46,15 +46,14 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
-      disabled
+      as-child
     >
-      <!-- <NuxtLinkLocale
-        :to="useWorkspacePath('/performance')"
+      <NuxtLinkLocale
+        :to="useWorkspacePath('/library')"
         active-class="!text-foreground"
       >
-        <ChartArea class="size-5" />
-      </NuxtLinkLocale> -->
-      <ChartArea class="size-5" />
+        <Book class="size-5" />
+      </NuxtLinkLocale>
     </Button>
     <Button
       size="icon"
