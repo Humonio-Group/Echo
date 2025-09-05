@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ChatBubble from "~/components/shared/simulations/chat/ChatBubble.vue";
 import type { IConversation } from "~/types/conversations";
-import { cn } from "~/lib/utils";
 
 const props = defineProps<{
   conversation: IConversation;

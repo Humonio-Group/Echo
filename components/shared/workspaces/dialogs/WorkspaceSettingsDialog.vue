@@ -13,6 +13,9 @@ function resetFormValues() {
       companyInfo: workspace.value?.companyInfo ?? "",
       productOrService: workspace.value?.productOrService ?? "",
       values: workspace.value?.values ?? "",
+      masterPrompt: workspace.value?.masterPrompt ?? "",
+      graphGenerationPrompt: workspace.value?.graphGenerationPrompt ?? "",
+      textualGenerationPrompt: workspace.value?.textualGenerationPrompt ?? "",
     },
   });
 }
@@ -30,6 +33,9 @@ const { handleSubmit, resetForm } = useForm({
     companyInfo: z.string(),
     productOrService: z.string(),
     values: z.string(),
+    masterPrompt: z.string(),
+    graphGenerationPrompt: z.string(),
+    textualGenerationPrompt: z.string(),
   })),
   initialValues: {
     name: workspace.value?.name ?? "",
@@ -37,12 +43,15 @@ const { handleSubmit, resetForm } = useForm({
     companyInfo: workspace.value?.companyInfo ?? "",
     productOrService: workspace.value?.productOrService ?? "",
     values: workspace.value?.values ?? "",
+    masterPrompt: workspace.value?.masterPrompt ?? "",
+    graphGenerationPrompt: workspace.value?.graphGenerationPrompt ?? "",
+    textualGenerationPrompt: workspace.value?.textualGenerationPrompt ?? "",
   },
 });
 const save = handleSubmit(async (values) => {
   open.value = !await store.saveWorkspaceInfo({
     ...values,
-    description: values.description ?? null,
+    description: values.description || null,
   });
   if (open.value) resetFormValues();
 });
@@ -130,6 +139,54 @@ const save = handleSubmit(async (values) => {
           >
             <FormItem>
               <FormLabel>{{ $t("labels.fields.values") }}</FormLabel>
+              <FormControl v-bind="componentField">
+                <Textarea
+                  class="min-h-32"
+                  :placeholder="`ex. ${$t('welcome-on', { brand: $t('brand.name') })}`"
+                  :disabled="loading.savingWorkspace"
+                />
+              </FormControl>
+            </FormItem>
+          </FormField>
+
+          <Separator />
+
+          <FormField
+            v-slot="{ componentField }"
+            name="masterPrompt"
+          >
+            <FormItem>
+              <FormLabel>Master Prompt</FormLabel>
+              <FormControl v-bind="componentField">
+                <Textarea
+                  class="min-h-32"
+                  :placeholder="`ex. ${$t('welcome-on', { brand: $t('brand.name') })}`"
+                  :disabled="loading.savingWorkspace"
+                />
+              </FormControl>
+            </FormItem>
+          </FormField>
+          <FormField
+            v-slot="{ componentField }"
+            name="graphGenerationPrompt"
+          >
+            <FormItem>
+              <FormLabel>{{ $t("dialogs.workspaces.settings.prompt-fields.graph-generation") }}</FormLabel>
+              <FormControl v-bind="componentField">
+                <Textarea
+                  class="min-h-32"
+                  :placeholder="`ex. ${$t('welcome-on', { brand: $t('brand.name') })}`"
+                  :disabled="loading.savingWorkspace"
+                />
+              </FormControl>
+            </FormItem>
+          </FormField>
+          <FormField
+            v-slot="{ componentField }"
+            name="textualGenerationPrompt"
+          >
+            <FormItem>
+              <FormLabel>Textual generation prompt</FormLabel>
               <FormControl v-bind="componentField">
                 <Textarea
                   class="min-h-32"

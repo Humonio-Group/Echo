@@ -17,13 +17,16 @@ export interface IWorkspace {
   productOrService: string;
   values: string;
   ownerId: string;
+  masterPrompt: string;
+  graphGenerationPrompt: string;
+  textualGenerationPrompt: string;
   createdAt: Date;
   updatedAt: Date;
 
   members?: TArray<IWorkspaceMember>;
   simulators?: TArray<ISimulator>;
 }
-export type IWorkspaceCreate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "companyInfo" | "productOrService" | "values" | "createdAt" | "updatedAt" | "members" | "simulators">;
+export type IWorkspaceCreate = Omit<IWorkspace, "id" | "picture" | "ownerId" | "companyInfo" | "productOrService" | "values" | "createdAt" | "updatedAt" | "members" | "simulators" | "masterPrompt" | "graphGenerationPrompt" | "textualGenerationPrompt">;
 export type IWorkspaceUpdate = Partial<Omit<IWorkspace, "id" | "picture" | "ownerId" | "createdAt" | "updatedAt" | "members" | "simulators">>;
 
 export interface IWorkspaceMember {

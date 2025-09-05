@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { BookDashed, LibraryBig, Plus, Search } from "lucide-vue-next";
 import LibraryTable from "~/components/shared/simulators/tables/LibraryTable.vue";
-import SimulatorsLibraryDialog from "~/components/shared/simulators/dialogs/SimulatorsLibraryDialog.vue";
 import SimulatorsMarketplace from "~/components/shared/simulators/dialogs/SimulatorsMarketplace.vue";
 import CreateSimulatorDialog from "~/components/shared/simulators/dialogs/CreateSimulatorDialog.vue";
 
