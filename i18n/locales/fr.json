@@ -58,7 +58,12 @@
       },
       "settings": {
         "title": "Paramètres de l'espace de travail",
-        "caption": "Personnalise ton espace pour qu’il reflète ta manière de travailler. Nom, description, objectifs… ajuste les éléments clés avant de te lancer."
+        "caption": "Personnalise ton espace pour qu’il reflète ta manière de travailler. Nom, description, objectifs… ajuste les éléments clés avant de te lancer.",
+        "prompt-fields": {
+          "master": "Prompt de discussion",
+          "graph-generation": "Prompt de génération de résultats graphiques",
+          "textual-generation": "Prompt de génération de résultats textuels"
+        }
       },
       "library-dialog": {
         "title": "Bibliothèque de simulateurs",

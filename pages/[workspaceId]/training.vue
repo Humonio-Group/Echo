@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { LoaderCircle, Settings2 } from "lucide-vue-next";
+import { LoaderCircle } from "lucide-vue-next";
 import SimulationCard from "~/components/shared/simulations/SimulationCard.vue";
-import SimulatorsLibraryDialog from "~/components/shared/simulators/dialogs/SimulatorsLibraryDialog.vue";
 
 const { t } = useI18n();
 
@@ -26,13 +25,6 @@ store.loadConversations();
       <h1 class="text-2xl font-bold">
         {{ $t("training.title") }}
       </h1>
-
-      <SimulatorsLibraryDialog>
-        <Button variant="secondary">
-          <Settings2 />
-          {{ $t("training.btn.manage-library") }}
-        </Button>
-      </SimulatorsLibraryDialog>
     </header>
 
     <main class="grid auto-rows-min md:grid-cols-2 gap-4 md:gap-8">

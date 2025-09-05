@@ -9,8 +9,7 @@ import {
 import { generate } from "~/openai";
 import * as conversations from "~/server/repositories/conversations";
 import {formatMessages, generateConversationResults} from "~/server/services/conversations/assessments";
-import { conversationalPrompt, replaceVariables } from "~/openai/prompts";
-import { IMessages } from "~/types/conversations";
+import { CONVERSATIONAL_PROMPT, replaceVariables } from "~/openai/prompts";
 import {gatherPrepAnswersForReplacement} from "~/server/services/conversations/conversations";
 
 const rooms = new Map<string, Set<any>>();
@@ -66,7 +65,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
       const generated = await conversations.message(
         data.room,
         "ai",
-        await generate(replaceVariables(conversationalPrompt, {
+        await generate(replaceVariables(conv.workspace?.masterPrompt || CONVERSATIONAL_PROMPT, {
           "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
           "conversation_history": formatMessages(conv.messages ?? []),
         })) ?? "empty-message",
@@ -98,8 +97,8 @@ export async function handleMessage(peer: any, data: WSEvent) {
       } as WSMessageEvent, peer);
 
       // STOP_CONVERSATION_FROM_FLOW
-      const msg = await generate(replaceVariables(conversationalPrompt, {
-        "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+      const msg = await generate(replaceVariables(conv.workspace?.masterPrompt || CONVERSATIONAL_PROMPT, {
+        "behavior_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
         "conversation_history": formatMessages(conv.messages ?? []),
       })) ?? "empty-message";
 

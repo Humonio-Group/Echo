@@ -15,16 +15,19 @@ enum Role {
 }
 
 model Workspace {
-  id               Int      @id @default(autoincrement())
-  name             String
-  description      String?
-  picture          String?
-  companyInfo      String   @default("")
-  productOrService String   @default("")
-  values           String   @default("")
-  ownerId          String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                      Int      @id @default(autoincrement())
+  name                    String
+  description             String?
+  picture                 String?
+  companyInfo             String   @default("")
+  productOrService        String   @default("")
+  values                  String   @default("")
+  ownerId                 String
+  masterPrompt            String   @default("")
+  graphGenerationPrompt   String   @default("")
+  textualGenerationPrompt String   @default("")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   members       WorkspaceMember[]
   simulators    Simulator[]

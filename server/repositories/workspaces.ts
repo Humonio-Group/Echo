@@ -2,6 +2,7 @@ import type { IWorkspace, IWorkspaceCreate, IWorkspaceUpdate } from "~/types/wor
 import prisma from "~/prisma";
 import { EchoNotFoundError } from "~/types/globals/errors";
 import type { TArray } from "~/types/globals/utils";
+import { CONVERSATIONAL_PROMPT, GRAPH_BUILDING_PROMPT, TEXT_RESULT_BUILDER_PROMPT } from "~/openai/prompts";
 
 /**
  * Create a workspace and add the owner as admin user.
@@ -14,6 +15,9 @@ export async function create(userId: string, data: IWorkspaceCreate): Promise<IW
     data: {
       ...data,
       ownerId: userId,
+      masterPrompt: CONVERSATIONAL_PROMPT,
+      graphGenerationPrompt: TEXT_RESULT_BUILDER_PROMPT,
+      textualGenerationPrompt: GRAPH_BUILDING_PROMPT,
       members: {
         create: {
           userId,

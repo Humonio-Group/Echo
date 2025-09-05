@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SimulatorElement from "~/components/shared/simulators/cards/SimulatorElement.vue";
 import PublicSimulatorCard from "~/components/shared/simulators/cards/PublicSimulatorCard.vue";
 
 const open = defineModel<boolean>("open");
@@ -34,7 +33,7 @@ const { library } = storeToRefs(store);
               v-for="sim in library"
               :key="sim.id"
               :simulator="sim"
-              @duplicated="open = false"
+              @duplicated="() => open = false"
             />
           </template>
           <div

@@ -3,7 +3,7 @@ import type { IAssessment, IAssessments, IConversation, IMessages } from "~/type
 import type { IEvaluation } from "~/types/simulators";
 import type { TNull } from "~/types/globals/utils";
 import { generate } from "~/openai";
-import { assessmentPrompt, debriefPrompt, graphBuilding, replaceVariables } from "~/openai/prompts";
+import { TEXT_RESULT_BUILDER_PROMPT, GRAPH_BUILDING_PROMPT, replaceVariables } from "~/openai/prompts";
 import { gatherPrepAnswersForReplacement } from "~/server/services/conversations/conversations";
 
 export const formatMessages = (messages: IMessages): string => messages
@@ -47,7 +47,7 @@ export async function generateEvaluation(conversation: IConversation, evaluation
 }
 
 export async function generateGraphResult(conversation: IConversation, evaluation: IEvaluation): Promise<TNull<string>> {
-  return await generate(replaceVariables(graphBuilding, {
+  return await generate(replaceVariables(conversation.workspace?.graphGenerationPrompt || GRAPH_BUILDING_PROMPT, {
     conversation_history: formatMessages(conversation.messages ?? []),
     framework_prompt: evaluation.frameworkPrompt ?? "",
     evaluation_axes: evaluation.assessmentPrompt ?? "",
@@ -56,30 +56,9 @@ export async function generateGraphResult(conversation: IConversation, evaluatio
 }
 
 export async function generateTextResult(conversation: IConversation, evaluation: IEvaluation): Promise<TNull<string>> {
-  return await generate(replaceVariables(assessmentPrompt, {
+  return await generate(replaceVariables(conversation.workspace?.textualGenerationPrompt || TEXT_RESULT_BUILDER_PROMPT, {
     conversation_history: formatMessages(conversation.messages ?? []),
     framework_prompt: replaceVariables(evaluation.frameworkPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
     feedback_prompt: replaceVariables(evaluation.feedbackPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
-  }));
-}
-
-/**
- * @deprecated
- */
-export async function generateAssessment(conversation: IConversation, evaluation: IEvaluation): Promise<TNull<string>> {
-  return generate(replaceVariables(assessmentPrompt, {
-    conversation_history: formatMessages(conversation.messages ?? []),
-    evaluation_axes: replaceVariables(evaluation.assessmentPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
-    max_value: evaluation.maxValue.toString(),
-  }));
-}
-
-/**
- * @deprecated
- */
-export async function generateDebrief(conversation: IConversation, evaluation: IEvaluation, assessment: TNull<string>): Promise<TNull<string>> {
-  return generate(replaceVariables(debriefPrompt, {
-    conversation_history: formatMessages(conversation.messages ?? []),
-    evaluation_result: replaceVariables(assessment ?? "", gatherPrepAnswersForReplacement(conversation)),
   }));
 }
