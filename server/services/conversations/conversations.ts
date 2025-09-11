@@ -65,7 +65,10 @@ export function gatherPrepAnswersForReplacement(conversation: IConversation): { 
   const answers = conversation.answers ?? [];
   const obj: { [key: string]: string } = {};
 
-  answers.forEach((answer, index) => obj[`answer_${index + 1}`] = answer.answer);
+  answers.forEach((answer, index) => {
+    obj[`answer_${index + 1}`] = `${answer.answer}`;
+    obj[`question_${index + 1}`] = `${answer.prepQuestion?.label}`;
+  });
   return obj;
 }
 
