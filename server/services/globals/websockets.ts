@@ -66,8 +66,11 @@ export async function handleMessage(peer: any, data: WSEvent) {
         data.room,
         "ai",
         await generate(replaceVariables(conv.workspace?.masterPrompt || CONVERSATIONAL_PROMPT, {
-          "user_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
+          "behavior_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
           "conversation_history": formatMessages(conv.messages ?? []),
+          company_info: conv.workspace?.companyInfo ?? "",
+          company_pands: conv.workspace?.productOrService ?? "",
+          company_values: conv.workspace?.values ?? "",
         })) ?? "empty-message",
       );
       broadcast(data.room, {
@@ -100,6 +103,9 @@ export async function handleMessage(peer: any, data: WSEvent) {
       const msg = await generate(replaceVariables(conv.workspace?.masterPrompt || CONVERSATIONAL_PROMPT, {
         "behavior_prompt": replaceVariables(conv.simulator?.behaviorPrompt ?? "", gatherPrepAnswersForReplacement(conv)),
         "conversation_history": formatMessages(conv.messages ?? []),
+        company_info: conv.workspace?.companyInfo ?? "",
+        company_pands: conv.workspace?.productOrService ?? "",
+        company_values: conv.workspace?.values ?? "",
       })) ?? "empty-message";
 
       const generated = await conversations.message(
