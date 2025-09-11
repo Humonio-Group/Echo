@@ -35,7 +35,7 @@ async function send() {
 
 const handleInput = () => nextTick(autoResize);
 const handleKeydown = (event: KeyboardEvent) => {
-  if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+  if (!event.shiftKey && event.key === "Enter") {
     event.preventDefault();
     send();
     return;
