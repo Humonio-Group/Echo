@@ -86,8 +86,8 @@ const submit = form.handleSubmit(async (values) => {
       key: e.key,
       type: e.type,
       frameworkPrompt: e.frameworkPrompt || "",
-      assessmentPrompt: e.criteria?.join("||") || "",
-      feedbackPrompt: e.feedbackPrompt || "",
+      assessmentPrompt: e.type === "graph" ? e.criteria?.join("||") || "" : "",
+      feedbackPrompt: e.type === "text" ? e.feedbackPrompt || "" : "",
       maxValue: 10,
     })) ?? [],
   });
