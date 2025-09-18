@@ -8,6 +8,7 @@ const props = defineProps<{
     id: number;
     senderId: string;
     message: string;
+    sentAt: string;
   }[];
 }>();
 watch(props, () => {
@@ -18,8 +19,6 @@ watch(props, () => {
 
 const store = useRoomStore();
 const { writing } = storeToRefs(store);
-
-const simulator = computed(() => props.conversation?.simulator);
 
 const scrollTrigger = ref();
 
@@ -40,7 +39,12 @@ onNuxtReady(() => {
       :sender-name="entry.senderId"
       :inverted="entry.senderId.startsWith('user')"
     >
-      {{ entry.message }}
+      <template #message>
+        {{ entry.message }}
+      </template>
+      <template #timestamp>
+        {{ entry.sentAt }}
+      </template>
     </ChatBubble>
     <div
       v-if="writing"
