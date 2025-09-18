@@ -12,7 +12,7 @@ import AppLogo from "~/components/shared/app/AppLogo.vue";
     </NuxtLinkLocale>
 
     <nav class="flex-1 items-center gap-1 hidden md:flex">
-      <Button
+      <!-- <Button
         size="icon"
         variant="ghost"
         as-child
@@ -23,7 +23,7 @@ import AppLogo from "~/components/shared/app/AppLogo.vue";
         >
           <Home />
         </NuxtLinkLocale>
-      </Button>
+      </Button> -->
       <Button
         variant="ghost"
         as-child
