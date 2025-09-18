@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
 
   // Retourner l'URL publique
   return {
-    url: `/uploads/avatars/${filename}`,
+    url: `/api/files/${filename}`,
     filename,
     size: avatarFile.data.length,
     type: avatarFile.type,
