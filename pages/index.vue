@@ -59,7 +59,7 @@ store.clearWorkspace();
           {{ $t("labels.empty.workspaces") }}
         </p>
 
-        <template v-if="!store.isFirstLoading">
+        <template v-if="!store.isFirstLoading && isAuthorized()">
           <CreateWorkspaceDialog>
             <Button>
               <Plus />
@@ -74,7 +74,7 @@ store.clearWorkspace();
       v-if="!store.isFirstLoading && workspaces?.length"
       class="flex flex-col sm:items-center py-4"
     >
-      <CreateWorkspaceDialog>
+      <CreateWorkspaceDialog v-if="isAuthorized()">
         <Button>
           <Plus />
           {{ $t("btn.add.workspace") }}
