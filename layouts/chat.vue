@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeft, LoaderCircle, MessageSquare, MessagesSquare, Square } from "lucide-vue-next";
+import { ChevronLeft, MessageSquare, MessagesSquare } from "lucide-vue-next";
 
 const store = useRoomStore();
 const { conversation } = storeToRefs(store);
@@ -11,6 +11,39 @@ provide<Ref<boolean, boolean>>("stopRequested", stopRequested);
 const route = computed(() => useRoute());
 const resultButton = computed(() => route.value.meta.resultButton);
 const room = computed(() => route.value.params.simId);
+
+const timeLeft = ref<string>("00:00");
+let interval: null | NodeJS.Timeout = null;
+
+watch(stopRequested, (value) => {
+  if (!value) return;
+  clearTimer();
+});
+
+const clearTimer = (stop: boolean = false) => {
+  if (!interval) return;
+  clearInterval(interval);
+  interval = null;
+
+  if (stop) stopRequested.value = true;
+};
+
+onMounted(() => {
+  interval = setInterval(() => {
+    const now = Date.now();
+    const end = new Date(conversation.value?.stoppedAt ?? "").getTime();
+
+    const diff = end - now;
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    timeLeft.value = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    if (minutes <= 0 && seconds <= 0) clearTimer(true);
+  }, 500);
+});
+onBeforeUnmount(() => {
+  clearTimer();
+});
 </script>
 
 <template>
@@ -39,6 +72,13 @@ const room = computed(() => route.value.params.simId);
       </div>
 
       <div class="flex justify-end">
+        <p
+          v-if="!store.isStopped && !stopRequested"
+          class="text-muted-foreground"
+        >
+          {{ timeLeft }}
+        </p>
+
         <Button
           v-if="store.isStopped && store.hasResult && resultButton"
           variant="ghost"
