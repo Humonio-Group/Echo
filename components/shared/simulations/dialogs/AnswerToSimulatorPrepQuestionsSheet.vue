@@ -34,7 +34,7 @@ function submit() {
     :open="!!selectedSimulator"
     @update:open="selectedSimulator = $event ? selectedSimulator : null"
   >
-    <DialogContent>
+    <DialogContent class="max-h-[80dvh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle class="flex items-center gap-2">
           <Avatar class="rounded-md size-8 text-xs text-muted-foreground">
