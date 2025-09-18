@@ -11,7 +11,7 @@ export const formatMessages = (messages: IMessages): string => messages
     sender: msg.sender,
     message: msg.content,
   }))
-  .map(msg => `${["ia", "ai"].includes(msg.sender.toLowerCase()) ? "SIMULATOR" : "USER"} - ${msg.message}`)
+  .map(msg => `${["ia", "ai"].includes(msg.sender.toLowerCase()) ? "SIMULATEUR" : "UTILISATEUR"} - ${msg.message}`)
   .join("\n") ?? "";
 
 export async function generateConversationResults(conversation: IConversation): Promise<IAssessments> {
