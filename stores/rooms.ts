@@ -7,6 +7,7 @@ interface RoomState {
     id: number;
     senderId: string;
     message: string;
+    sentAt: string;
   }>>;
   writing: boolean;
   conversation: TNull<IConversation>;
@@ -41,6 +42,7 @@ export const useRoomStore = defineStore("room", {
         id: m.id,
         senderId: m.sender,
         message: m.content,
+        sentAt: new Date(m.sentAt).toLocaleTimeString(),
       })) ?? [];
       this.writing = this.messages.length % 2 === 0;
       this.conversation = conv;
@@ -63,6 +65,7 @@ export const useRoomStore = defineStore("room", {
         id: this.messages.length + 1,
         senderId: sender,
         message,
+        sentAt: (new Date()).toLocaleTimeString(),
       }];
     },
     stopConversationAt(date: Date) {

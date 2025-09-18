@@ -69,7 +69,11 @@ onBeforeUnmount(() => {
       >
         <div class="flex items-center gap-3 flex-1">
           <Avatar class="size-10">
-            <AvatarImage src="/images/ia-avatar.gif" />
+            <AvatarImage
+              v-if="conversation?.simulator?.picture"
+              :src="conversation?.simulator?.picture"
+            />
+            <AvatarFallback>{{ conversation?.simulator?.title.substring(0, 2) }}</AvatarFallback>
           </Avatar>
           <p class="font-semibold text-muted-foreground">
             {{ conversation?.simulator?.title }}

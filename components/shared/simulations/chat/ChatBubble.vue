@@ -15,8 +15,12 @@ defineProps<{
       :class="{ 'bg-primary text-primary-foreground': inverted }"
     >
       <p class="whitespace-pre-line">
-        <slot />
+        <slot name="message" />
       </p>
+
+      <span class="text-muted-foreground text-xs">
+        <slot name="timestamp" />
+      </span>
     </div>
   </div>
 </template>

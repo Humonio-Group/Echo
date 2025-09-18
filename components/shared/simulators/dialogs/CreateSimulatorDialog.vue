@@ -5,17 +5,22 @@ import { useFieldArray, useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
 import { assessmentTypes } from "~/types/conversations";
+import AvatarUpload from "~/components/shared/avatars/AvatarUpload.vue";
 
 const open = defineModel<boolean>("open");
 watch(open, (val) => {
   if (!val) return;
   form.resetForm();
+  avatarUrl.value = props.simulator?.picture ?? null;
 });
 
 const props = defineProps<{
   simulator?: ISimulator;
 }>();
 const editMode = computed(() => !!props.simulator);
+
+const { uploadAvatar, isUploading } = useAvatarUpload();
+const avatarUrl = ref<string | null>(props.simulator?.picture || null);
 
 const form = useForm({
   validationSchema: toTypedSchema(z.object({
@@ -61,10 +66,21 @@ const { fields: evaluations, remove: removeEvaluation, push: pushEvaluation } = 
 const store = useWorkspaceStore();
 const { loading } = storeToRefs(store);
 
+async function handleAvatarUpload(file: File) {
+  const url = await uploadAvatar(file);
+  if (url) {
+    avatarUrl.value = url;
+  }
+}
+
+function handleAvatarRemove() {
+  avatarUrl.value = null;
+}
+
 const submit = form.handleSubmit(async (values) => {
   if (editMode.value) await save({
     ...values,
-    picture: null,
+    picture: avatarUrl.value,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
       key: e.key,
@@ -77,7 +93,7 @@ const submit = form.handleSubmit(async (values) => {
   });
   else await create({
     ...values,
-    picture: null,
+    picture: avatarUrl.value,
     prepQuestions: values.prepQuestions ?? [],
     evaluations: values.evaluations?.map(e => ({
       type: e.type,
@@ -127,6 +143,27 @@ async function save(values: ISimulatorUpdate) {
         class="grid gap-4"
         @submit="submit"
       >
+        <!-- Section Avatar -->
+        <div class="flex items-start gap-4 p-4 border rounded-lg bg-muted/30">
+          <AvatarUpload
+            v-model="avatarUrl"
+            size="lg"
+            :disabled="loading.creatingSimulator || isUploading"
+            placeholder="Avatar du simulateur"
+            @upload="handleAvatarUpload"
+            @remove="handleAvatarRemove"
+          />
+          <div class="flex-1">
+            <h3 class="font-medium mb-1">
+              Avatar du simulateur
+            </h3>
+            <p class="text-sm text-muted-foreground">
+              Téléchargez une image pour personnaliser votre simulateur.
+              Formats supportés : JPG, PNG, WebP, GIF (max 5MB)
+            </p>
+          </div>
+        </div>
+
         <FormField
           v-slot="{ componentField }"
           name="title"

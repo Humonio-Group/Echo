@@ -7,8 +7,9 @@ import SimulatorActions from "~/components/shared/simulators/menus/SimulatorActi
 export const columns: TArray<ColumnDef<ISimulator>> = [
   {
     id: "picture",
+    accessorKey: "picture",
     cell: ({ row }) => {
-      const url = row.getValue("picture");
+      const url = `${row.getValue("picture")}`;
       const fallback = h(AvatarFallback, row.original.title.substring(0, 2));
 
       if (url) {

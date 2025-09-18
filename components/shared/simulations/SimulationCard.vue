@@ -19,14 +19,6 @@ const lastMessage = computed(() => {
   const messages = props.conversation.messages ?? [];
   return !messages.length ? null : messages[messages.length - 1];
 });
-const start = computed(() => ({
-  date: df.format(new Date(props.conversation.startedAt)),
-  time: tf.format(new Date(props.conversation.startedAt)),
-}));
-const end = computed(() => ({
-  date: df.format(new Date(props.conversation.stoppedAt)),
-  time: tf.format(new Date(props.conversation.stoppedAt)),
-}));
 
 const isStopped = computed(() => new Date(props.conversation.stoppedAt).getTime() <= Date.now());
 
@@ -57,6 +49,10 @@ const dates = computed(() => {
   <Card class="relative select-none overflow-hidden">
     <CardContent class="flex gap-4">
       <Avatar class="rounded-md shadow-sm size-12">
+        <AvatarImage
+          v-if="conversation.simulator?.picture"
+          :src="conversation.simulator?.picture"
+        />
         <AvatarFallback>{{ conversation.name.substring(0, 2) }}</AvatarFallback>
       </Avatar>
 

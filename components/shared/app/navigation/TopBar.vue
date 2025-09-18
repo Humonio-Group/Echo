@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Home, Plus, Settings } from "lucide-vue-next";
+import { Plus, Settings } from "lucide-vue-next";
 import WorkspaceSettingsDialog from "~/components/shared/workspaces/dialogs/WorkspaceSettingsDialog.vue";
 import CreateSimulationDialog from "~/components/shared/simulations/dialogs/CreateSimulationDialog.vue";
 import AppLogo from "~/components/shared/app/AppLogo.vue";
