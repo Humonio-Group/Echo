@@ -41,6 +41,7 @@ export default defineNuxtConfig({
       clerk: {
         publishableKey: "",
       },
+      authorizedUserIds: "",
     },
   },
   compatibilityDate: "2025-05-15",
