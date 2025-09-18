@@ -34,17 +34,6 @@ onNuxtReady(() => {
 
 <template>
   <div class="flex-1 flex flex-col py-5 px-4 overflow-auto gap-2">
-    <div
-      v-if="simulator"
-      class="flex flex-col items-center gap-4 py-16 mb-12"
-    >
-      <div class="flex flex-col gap-1 items-center max-w-[50ch] text-center">
-        <p class="text-muted-foreground leading-relaxed">
-          {{ simulator.description }}
-        </p>
-      </div>
-    </div>
-
     <ChatBubble
       v-for="entry in messages"
       :key="entry.id"

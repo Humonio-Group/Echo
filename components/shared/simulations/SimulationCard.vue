@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ArrowRight } from "lucide-vue-next";
 import type { IConversation } from "~/types/conversations";
 
 const { locale } = useI18n();
@@ -38,16 +39,28 @@ const link = computed(() => {
   if (hasResults.value) return `${base}/results`;
   return undefined;
 });
+const dates = computed(() => {
+  const { startedAt, stoppedAt } = props.conversation;
+  const started = new Date(startedAt);
+  const stopped = new Date(stoppedAt);
+
+  const sameDay = started.getDate() === stopped.getDate() && started.getMonth() === stopped.getMonth() && started.getFullYear() === stopped.getFullYear();
+
+  return {
+    started: `${df.format(started)} ${tf.format(started)}`,
+    stopped: `${sameDay ? "" : `${df.format(stopped)}`} ${tf.format(stopped)}`,
+  };
+});
 </script>
 
 <template>
-  <Card class="relative select-none">
+  <Card class="relative select-none overflow-hidden">
     <CardContent class="flex gap-4">
-      <Avatar class="rounded-md shadow-sm">
+      <Avatar class="rounded-md shadow-sm size-12">
         <AvatarFallback>{{ conversation.name.substring(0, 2) }}</AvatarFallback>
       </Avatar>
 
-      <div class="relative grid flex-1">
+      <div class="relative flex flex-col flex-1 overflow-hidden">
         <p class="font-semibold">
           {{ conversation.name }}
         </p>
@@ -62,29 +75,14 @@ const link = computed(() => {
         >
           {{ $t("labels.empty.results") }}
         </Badge>
+
+        <div class="flex items-center gap-2 font-medium text-sm mt-2 self-end">
+          {{ dates.started }}
+          <ArrowRight class="size-3" />
+          {{ dates.stopped.trim() }}
+        </div>
       </div>
     </CardContent>
-    <Separator />
-    <CardFooter class="grid grid-cols-2 divide-x">
-      <div class="flex flex-col items-center">
-        <span class="text-xs font-semibold text-muted-foreground">{{ $t("labels.start") }}</span>
-        <div class="text-center leading-snug">
-          <p>{{ start.date }}</p>
-          <p class="text-sm">
-            {{ start.time }}
-          </p>
-        </div>
-      </div>
-      <div class="flex flex-col items-center">
-        <span class="text-xs font-semibold text-muted-foreground">{{ $t("labels.end") }}</span>
-        <div class="text-center leading-snug">
-          <p>{{ end.date }}</p>
-          <p class="text-sm">
-            {{ end.time }}
-          </p>
-        </div>
-      </div>
-    </CardFooter>
 
     <NuxtLinkLocale
       v-if="link"

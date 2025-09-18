@@ -1,30 +1,29 @@
 <script setup lang="ts">
 import { Home, Plus, Settings } from "lucide-vue-next";
-import BrandName from "~/components/shared/statuses/BrandName.vue";
 import WorkspaceSettingsDialog from "~/components/shared/workspaces/dialogs/WorkspaceSettingsDialog.vue";
 import CreateSimulationDialog from "~/components/shared/simulations/dialogs/CreateSimulationDialog.vue";
+import AppLogo from "~/components/shared/app/AppLogo.vue";
 </script>
 
 <template>
   <div class="flex items-center justify-between md:justify-start gap-4 md:gap-12">
     <NuxtLinkLocale to="/">
-      <BrandName />
+      <AppLogo class="h-8 w-auto" />
     </NuxtLinkLocale>
 
     <nav class="flex-1 items-center gap-1 hidden md:flex">
-      <Button
+      <!-- <Button
         size="icon"
         variant="ghost"
-        disabled
+        as-child
       >
-        <!-- <NuxtLinkLocale
-          :to="useWorkspacePath('/')"
+        <NuxtLinkLocale
+          to="/"
           active-class="!bg-accent !text-accent-foreground"
         >
           <Home />
-        </NuxtLinkLocale> -->
-        <Home />
-      </Button>
+        </NuxtLinkLocale>
+      </Button> -->
       <Button
         variant="ghost"
         as-child
@@ -37,6 +36,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
         </NuxtLinkLocale>
       </Button>
       <Button
+        v-if="isAuthorized()"
         variant="ghost"
         as-child
       >
@@ -48,6 +48,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
         </NuxtLinkLocale>
       </Button>
       <Button
+        v-if="isAuthorized()"
         variant="ghost"
         as-child
       >
@@ -61,7 +62,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
     </nav>
 
     <div class="flex items-center gap-2">
-      <WorkspaceSettingsDialog>
+      <WorkspaceSettingsDialog v-if="isAuthorized()">
         <Button
           size="icon"
           variant="ghost"
@@ -69,7 +70,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
           <Settings />
         </Button>
       </WorkspaceSettingsDialog>
-      <CreateSimulationDialog>
+      <CreateSimulationDialog v-if="false">
         <Button
           size="icon"
           class="hidden md:flex mr-4"
