@@ -39,10 +39,12 @@
       "default": "Supprimer",
       "workspace": "Supprimer l'espace de travail"
     },
+    "start": "Commencer",
     "stop": "Stop",
     "chat": "Conversation",
     "edit": "Modifier",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "new-simulation": "Nouvelle simulation"
   },
   "dialogs": {
     "globals": {
@@ -88,10 +90,9 @@
     },
     "conversations": {
       "create-conversation": {
-        "title": "Nouvelle conversation",
-        "caption": "Caption",
+        "title": "Nouvelle simulation",
         "toasters": {
-          "loading": "Création de la discussion...",
+          "loading": "Création de la simulation...",
           "success": "C'est partit pour converser !",
           "error": "Une erreur est survenue pendant la création..."
         }

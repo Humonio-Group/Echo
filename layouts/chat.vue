@@ -40,20 +40,7 @@ const room = computed(() => route.value.params.simId);
 
       <div class="flex justify-end">
         <Button
-          v-if="!store.isStopped"
-          variant="ghost"
-          :disabled="stopRequested"
-          @click="stopRequested = true"
-        >
-          <LoaderCircle
-            v-if="stopRequested"
-            class="animate-spin"
-          />
-          <Square v-else />
-          {{ $t("btn.stop") }}
-        </Button>
-        <Button
-          v-else-if="store.isStopped && store.hasResult && resultButton"
+          v-if="store.isStopped && store.hasResult && resultButton"
           variant="ghost"
           as-child
         >

@@ -30,7 +30,7 @@ function submit(id: number) {
       <DialogContent class="max-h-[75dvh] flex flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle>{{ $t("dialogs.conversations.create-conversation.title") }}</DialogTitle>
-          <DialogDescription>{{ $t("dialogs.conversations.create-conversation.caption") }}</DialogDescription>
+          <!-- <DialogDescription>{{ $t("dialogs.conversations.create-conversation.caption") }}</DialogDescription> -->
         </DialogHeader>
 
         <section class="flex-1 overflow-y-auto relative flex flex-col gap-4">

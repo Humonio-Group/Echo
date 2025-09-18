@@ -30,17 +30,28 @@ function submit() {
 </script>
 
 <template>
-  <Sheet
+  <Dialog
     :open="!!selectedSimulator"
     @update:open="selectedSimulator = $event ? selectedSimulator : null"
   >
-    <SheetContent>
-      <SheetHeader>
-        <SheetTitle>{{ $t("dialogs.conversations.answer-questions.title") }}</SheetTitle>
-        <SheetDescription>{{ $t("dialogs.conversations.answer-questions.caption") }}</SheetDescription>
-      </SheetHeader>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle class="flex items-center gap-2">
+          <Avatar class="rounded-md size-8 text-xs text-muted-foreground">
+            <AvatarImage
+              v-if="selectedSimulator?.picture"
+              :src="selectedSimulator?.picture"
+            />
+            <AvatarFallback>{{ selectedSimulator?.title.substring(0, 2) }}</AvatarFallback>
+          </Avatar>
+          {{ selectedSimulator?.title }}
+        </DialogTitle>
+        <DialogDescription>{{ selectedSimulator?.description }}</DialogDescription>
+      </DialogHeader>
 
-      <div class="px-4 flex flex-col flex-1 gap-4">
+      <Separator />
+
+      <div class="flex flex-col flex-1 gap-4">
         <div class="flex flex-col gap-4 flex-1 overflow-y-auto">
           <div
             v-for="question in questions"
@@ -48,27 +59,30 @@ function submit() {
             class="flex flex-col gap-2"
           >
             <Label :for="question.key">{{ question.label }}</Label>
-            <Input
+            <Textarea
               :id="question.key"
               v-model="fields[question.key]"
             />
           </div>
         </div>
 
-        <SheetFooter>
-          <SheetClose as-child>
-            <Button variant="secondary">
+        <DialogFooter>
+          <DialogClose as-child>
+            <Button
+              type="button"
+              variant="secondary"
+            >
               {{ $t("btn.cancel") }}
             </Button>
-          </SheetClose>
+          </DialogClose>
           <Button
             :disabled="!canSubmit"
             @click="submit"
           >
-            {{ $t("btn.add.default") }}
+            {{ $t("btn.start") }}
           </Button>
-        </SheetFooter>
+        </DialogFooter>
       </div>
-    </SheetContent>
-  </Sheet>
+    </DialogContent>
+  </Dialog>
 </template>

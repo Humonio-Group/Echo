@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Send } from "lucide-vue-next";
+import { LoaderCircle, Send, Square } from "lucide-vue-next";
 
 const emit = defineEmits<{
   send: [string];
@@ -10,6 +10,7 @@ const input = ref<HTMLTextAreaElement>();
 
 const store = useRoomStore();
 const { writing } = storeToRefs(store);
+const stopRequested = inject("stopRequested") as Ref<boolean, boolean>;
 
 const canSend = computed(() => !!message.value?.trim().length);
 
@@ -61,6 +62,18 @@ const handleKeydown = (event: KeyboardEvent) => {
       @click="send"
     >
       <Send />
+    </Button>
+    <Button
+      size="icon"
+      variant="destructive"
+      :disabled="stopRequested"
+      @click="stopRequested = true"
+    >
+      <LoaderCircle
+        v-if="stopRequested"
+        class="animate-spin"
+      />
+      <Square v-else />
     </Button>
   </div>
 </template>
