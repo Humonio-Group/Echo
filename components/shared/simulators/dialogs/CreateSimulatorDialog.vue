@@ -10,13 +10,54 @@ import AvatarUpload from "~/components/shared/avatars/AvatarUpload.vue";
 const open = defineModel<boolean>("open");
 watch(open, (val) => {
   if (!val) return;
-  form.resetForm();
+  form.resetForm({
+    values: {
+      title: props.simulator?.title,
+      description: props.simulator?.description,
+      duration: props.simulator?.duration ?? 10,
+      behaviorPrompt: props.simulator?.behaviorPrompt,
+      prepQuestions: props.simulator?.prepQuestions?.map(pq => ({
+        key: pq.key,
+        label: pq.label,
+      })),
+      evaluations: props.simulator?.evaluations?.map(ev => ({
+        key: ev.key,
+        type: ev.type,
+        frameworkPrompt: ev.frameworkPrompt,
+        criteria: ev.assessmentPrompt?.split("||"),
+        feedbackPrompt: ev.feedbackPrompt,
+      })),
+    },
+  });
   avatarUrl.value = props.simulator?.picture ?? null;
 });
 
 const props = defineProps<{
   simulator?: ISimulator;
 }>();
+watch(props, (val) => {
+  form.resetForm({
+    values: {
+      title: val.simulator?.title,
+      description: val.simulator?.description,
+      duration: val.simulator?.duration ?? 10,
+      behaviorPrompt: val.simulator?.behaviorPrompt,
+      prepQuestions: val.simulator?.prepQuestions?.map(pq => ({
+        key: pq.key,
+        label: pq.label,
+      })),
+      evaluations: val.simulator?.evaluations?.map(ev => ({
+        key: ev.key,
+        type: ev.type,
+        frameworkPrompt: ev.frameworkPrompt,
+        criteria: ev.assessmentPrompt?.split("||"),
+        feedbackPrompt: ev.feedbackPrompt,
+      })),
+    },
+  });
+  avatarUrl.value = val.simulator?.picture ?? null;
+});
+
 const editMode = computed(() => !!props.simulator);
 
 const { uploadAvatar, isUploading } = useAvatarUpload();
