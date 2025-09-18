@@ -11,7 +11,7 @@ export const formatMessages = (messages: IMessages): string => messages
     sender: msg.sender,
     message: msg.content,
   }))
-  .map(msg => `${["ia", "ai"].includes(msg.sender.toLowerCase())} -- ${msg.message}`)
+  .map(msg => `${["ia", "ai"].includes(msg.sender.toLowerCase()) ? "SIMULATOR" : "USER"} - ${msg.message}`)
   .join("\n") ?? "";
 
 export async function generateConversationResults(conversation: IConversation): Promise<IAssessments> {
@@ -56,6 +56,7 @@ export async function generateGraphResult(conversation: IConversation, evaluatio
     company_info: conversation.workspace?.companyInfo ?? "",
     company_pands: conversation.workspace?.productOrService ?? "",
     company_values: conversation.workspace?.values ?? "",
+    prep_answers: (conversation.answers ?? []).map(a => `${a.prepQuestion?.label} -> ${a.answer}`).join("\n"),
   }));
 }
 
@@ -65,6 +66,7 @@ export async function generateTextResult(conversation: IConversation, evaluation
     framework_prompt: replaceVariables(evaluation.frameworkPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
     feedback_prompt: replaceVariables(evaluation.feedbackPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
     ...gatherPrepAnswersForReplacement(conversation),
+    prep_answers: (conversation.answers ?? []).map(a => `${a.prepQuestion?.label} -> ${a.answer}`).join("\n"),
     company_info: conversation.workspace?.companyInfo ?? "",
     company_pands: conversation.workspace?.productOrService ?? "",
     company_values: conversation.workspace?.values ?? "",

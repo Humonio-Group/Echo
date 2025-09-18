@@ -8,6 +8,7 @@ export const columns: TArray<ColumnDef<ISimulator>> = [
   {
     id: "picture",
     accessorKey: "picture",
+    header: () => h("div", ""),
     cell: ({ row }) => {
       const url = `${row.getValue("picture")}`;
       const fallback = h(AvatarFallback, row.original.title.substring(0, 2));
