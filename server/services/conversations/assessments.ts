@@ -11,7 +11,7 @@ export const formatMessages = (messages: IMessages): string => messages
     sender: msg.sender,
     message: msg.content,
   }))
-  .map(msg => `${msg.sender} -- ${msg.message}`)
+  .map(msg => `${["ia", "ai"].includes(msg.sender.toLowerCase())} -- ${msg.message}`)
   .join("\n") ?? "";
 
 export async function generateConversationResults(conversation: IConversation): Promise<IAssessments> {
@@ -52,6 +52,10 @@ export async function generateGraphResult(conversation: IConversation, evaluatio
     framework_prompt: evaluation.frameworkPrompt ?? "",
     evaluation_axes: evaluation.assessmentPrompt ?? "",
     max_value: "10",
+    ...gatherPrepAnswersForReplacement(conversation),
+    company_info: conversation.workspace?.companyInfo ?? "",
+    company_pands: conversation.workspace?.productOrService ?? "",
+    company_values: conversation.workspace?.values ?? "",
   }));
 }
 
@@ -60,5 +64,9 @@ export async function generateTextResult(conversation: IConversation, evaluation
     conversation_history: formatMessages(conversation.messages ?? []),
     framework_prompt: replaceVariables(evaluation.frameworkPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
     feedback_prompt: replaceVariables(evaluation.feedbackPrompt ?? "", gatherPrepAnswersForReplacement(conversation)),
+    ...gatherPrepAnswersForReplacement(conversation),
+    company_info: conversation.workspace?.companyInfo ?? "",
+    company_pands: conversation.workspace?.productOrService ?? "",
+    company_values: conversation.workspace?.values ?? "",
   }));
 }

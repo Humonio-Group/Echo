@@ -71,7 +71,11 @@ export async function get(uid: string): Promise<IConversation> {
       uid,
     },
     include: {
-      answers: true,
+      answers: {
+        include: {
+          prepQuestion: true,
+        },
+      },
       messages: true,
       assessments: true,
       simulator: {
