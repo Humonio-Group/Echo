@@ -71,6 +71,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
           company_info: conv.workspace?.companyInfo ?? "",
           company_pands: conv.workspace?.productOrService ?? "",
           company_values: conv.workspace?.values ?? "",
+          prep_answers: (conv.answers ?? []).map(a => `${a.prepQuestion?.label} -> ${a.answer}`).join("\n"),
         })) ?? "empty-message",
       );
       broadcast(data.room, {
@@ -106,6 +107,7 @@ export async function handleMessage(peer: any, data: WSEvent) {
         company_info: conv.workspace?.companyInfo ?? "",
         company_pands: conv.workspace?.productOrService ?? "",
         company_values: conv.workspace?.values ?? "",
+        prep_answers: (conv.answers ?? []).map(a => `${a.prepQuestion?.label} -> ${a.answer}`).join("\n"),
       })) ?? "empty-message";
 
       const generated = await conversations.message(

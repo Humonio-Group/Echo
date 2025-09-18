@@ -20,7 +20,7 @@ store.loadConversations();
 <template>
   <main
     data-page="workspace.home"
-    class="grid auto-rows-auto gap-8 mx-auto w-full max-w-5xl pt-4 pb-6"
+    class="grid auto-rows-min gap-8 mx-auto w-full max-w-5xl pt-4 pb-6"
   >
     <header class="flex items-center justify-between">
       <h1 class="text-2xl font-bold">
@@ -35,7 +35,7 @@ store.loadConversations();
       </CreateSimulationDialog>
     </header>
 
-    <section class="grid auto-rows-auto gap-4">
+    <section class="grid auto-rows-min gap-4">
       <SimulationCard
         v-for="conv in store.ongoingConversations"
         :key="conv.uid"
@@ -56,7 +56,7 @@ store.loadConversations();
       </p>
     </section>
     <Separator />
-    <section class="grid auto-rows-auto gap-4">
+    <section class="grid auto-rows-min gap-4">
       <h2 class="text-sm font-semibold text-muted-foreground">
         {{ $t("training.labels.sessions.past") }}
       </h2>

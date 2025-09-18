@@ -43,7 +43,7 @@ export const useRoomStore = defineStore("room", {
         senderId: m.sender,
         message: m.content,
         sentAt: new Date(m.sentAt).toLocaleTimeString(),
-      })) ?? [];
+      })).sort((a, b) => a.id - b.id) ?? [];
       this.writing = this.messages.length % 2 === 0;
       this.conversation = conv;
     },
@@ -66,7 +66,7 @@ export const useRoomStore = defineStore("room", {
         senderId: sender,
         message,
         sentAt: (new Date()).toLocaleTimeString(),
-      }];
+      }].sort((a, b) => a.id - b.id);
     },
     stopConversationAt(date: Date) {
       if (!this.conversation) return;
