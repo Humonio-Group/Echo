@@ -7,6 +7,8 @@ export const gpt = new OpenAI({
 });
 
 export async function generate(prompt: string): Promise<TNull<string>> {
+  console.log("Prompt used:", prompt);
+
   return (await gpt.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
