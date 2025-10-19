@@ -48,7 +48,7 @@ import AppLogo from "~/components/shared/app/AppLogo.vue";
         </NuxtLinkLocale>
       </Button>
       <Button
-        v-if="isAuthorized()"
+        v-if="isAdminUser()"
         variant="ghost"
         as-child
       >
@@ -62,7 +62,7 @@ import AppLogo from "~/components/shared/app/AppLogo.vue";
     </nav>
 
     <div class="flex items-center gap-2">
-      <WorkspaceSettingsDialog v-if="isAuthorized()">
+      <WorkspaceSettingsDialog v-if="isAdminUser()">
         <Button
           size="icon"
           variant="ghost"

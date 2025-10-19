@@ -43,6 +43,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
     </CreateSimulationDialog>
 
     <Button
+      v-if="isAuthorized()"
       size="icon"
       variant="ghost"
       class="text-muted-foreground"
@@ -56,6 +57,7 @@ import CreateSimulationDialog from "~/components/shared/simulations/dialogs/Crea
       </NuxtLinkLocale>
     </Button>
     <Button
+      v-if="isAdminUser()"
       size="icon"
       variant="ghost"
       class="text-muted-foreground"

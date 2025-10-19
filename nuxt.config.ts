@@ -42,6 +42,7 @@ export default defineNuxtConfig({
         publishableKey: "",
       },
       authorizedUserIds: "",
+      betaUserIds: "",
     },
   },
   compatibilityDate: "2025-05-15",
