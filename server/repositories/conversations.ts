@@ -72,16 +72,45 @@ export async function get(uid: string): Promise<IConversation> {
     },
     include: {
       answers: {
+        orderBy: [
+          {
+            id: "asc",
+          },
+        ],
         include: {
           prepQuestion: true,
         },
       },
-      messages: true,
-      assessments: true,
+      messages: {
+        orderBy: [
+          {
+            sentAt: "asc",
+          },
+        ],
+      },
+      assessments: {
+        orderBy: [
+          {
+            id: "asc",
+          },
+        ],
+      },
       simulator: {
         include: {
-          evaluations: true,
-          prepQuestions: true,
+          evaluations: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
+          prepQuestions: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
         },
       },
       workspace: true,
