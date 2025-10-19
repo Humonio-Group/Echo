@@ -9,15 +9,10 @@ export const gpt = new OpenAI({
 export async function generate(prompt: string): Promise<TNull<string>> {
   console.log("Prompt used:", prompt);
 
-  return (await gpt.chat.completions.create({
+  return (await gpt.responses.create({
     model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "user",
-        content: prompt,
-      },
-    ],
-  })).choices[0].message.content;
+    input: prompt,
+  })).output_text;
 }
 
 export async function generateAnswer(userId: string, conversation: IConversation): Promise<TNull<string>> {

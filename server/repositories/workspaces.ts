@@ -102,9 +102,26 @@ export async function find(id: number): Promise<IWorkspace> {
     include: {
       members: true,
       simulators: {
+        orderBy: [
+          {
+            id: "asc",
+          },
+        ],
         include: {
-          prepQuestions: true,
-          evaluations: true,
+          prepQuestions: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
+          evaluations: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
         },
       },
     },
@@ -128,9 +145,26 @@ export async function findForUser(userId: string): Promise<TArray<IWorkspace>> {
     include: {
       members: true,
       simulators: {
+        orderBy: [
+          {
+            id: "asc",
+          },
+        ],
         include: {
-          prepQuestions: true,
-          evaluations: true,
+          prepQuestions: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
+          evaluations: {
+            orderBy: [
+              {
+                id: "asc",
+              },
+            ],
+          },
         },
       },
     },
